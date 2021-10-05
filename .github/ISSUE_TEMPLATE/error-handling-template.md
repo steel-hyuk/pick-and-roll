@@ -1,7 +1,7 @@
 ---
 name: Error Handling Template
 about: 에러 핸들링 템플릿
-title: ''
+title: "[Error]"
 labels: ''
 assignees: ''
 
