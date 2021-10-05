@@ -1,7 +1,7 @@
 ---
 name: Issus Task Template
 about: 이슈 태스크 템플릿
-title: "[CHANGE] need this"
+title: "[Task] need this"
 labels: ''
 assignees: ''
 
