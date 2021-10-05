@@ -1,7 +1,7 @@
 ---
 name: Dev Log Template
 about: Dev Log Template
-title: ''
+title: "[Dev Log] 이름 / 2021-00-00"
 labels: ''
 assignees: ''
 
