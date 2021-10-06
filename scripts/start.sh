@@ -1,5 +1,5 @@
 #!/bin/bash
-cd /home/ubuntu/im-sprint-practice-deploy/server
+cd /home/ubuntu/pick-and-roll/server
 
 export COOKIE_SECRET=$(aws ssm get-parameters --region ap-northeast-2 --names COOKIE_SECRET --query Parameters[0].Value | sed 's/"//g')
 export DB_DBNAME=$(aws ssm get-parameters --region ap-northeast-2 --names DB_DBNAME --query Parameters[0].Value | sed 's/"//g')
