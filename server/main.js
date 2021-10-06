@@ -10,7 +10,7 @@ const router = require('./routes/index')
 
 dotenv.config()
 const app = express()
-const port =  process.env.PORT || 4000
+const port =  process.env.PORT || 80
 
 if (process.env.NODE_ENV === 'production') {
   app.use(morgan('combined'))
