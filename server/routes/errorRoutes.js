@@ -1,5 +1,5 @@
 const router = require('express').Router()
-const errorController = require('../controllers/errorController')
+const errorController = require('../controllers/errorControllers')
 
 router.use(errorController.logErrors)
 router.use(errorController.respondNoResourceFound)

@@ -4,12 +4,9 @@ const cookieParser = require('cookie-parser')
 const session = require('express-session')
 const dotenv = require('dotenv')
 const cors = require('cors')
-const fs = require('fs')
-const https = require('https')
 const helmet = require('helmet')
 const hpp = require('hpp')
 const router = require('./routes/index')
-const db = require('./models')
 
 dotenv.config()
 const app = express()
@@ -46,7 +43,7 @@ app.use(session(sessionOption))
 app.use(
   cors({
     origin: true,
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    methods: ['GET', 'POST', 'PUT', 'PATCH','DELETE'],
     credentials: true
   })
 )
