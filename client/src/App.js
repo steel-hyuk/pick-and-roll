@@ -3,7 +3,8 @@ import React from 'react'
 function App() {
   return (
     <div>
-      hello world
+      <input type='text' />
+      <button>버튼</button>
     </div>
   )
 }
