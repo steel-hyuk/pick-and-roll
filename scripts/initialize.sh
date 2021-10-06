@@ -1,4 +1,5 @@
-cd /home/ubuntu/im-sprint-practice-deploy/server
+#!/bin/bash
+cd /home/ubuntu/pick-and-roll/server
 npm install
 npm install pm2@latest -g
 sudo apt-get update
