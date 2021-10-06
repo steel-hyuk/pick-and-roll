@@ -1,3 +1,4 @@
+#!/bin/bash
 cd /home/ubuntu/pick-and-roll/server
 npm install
 npm install pm2@latest -g
