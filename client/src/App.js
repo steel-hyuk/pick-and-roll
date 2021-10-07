@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from 'react'
-import api from './api'
+import axios from 'axios'
 
 function App() {
   const [text, setText] = useState('')
@@ -9,7 +9,7 @@ function App() {
   })
 
   const submitText = async () => {
-    await api.post('/text', {
+    await axios.post('https://pickandroll.link/text', {
       text: text
     }, {
       'Content-Type': 'application/json'
