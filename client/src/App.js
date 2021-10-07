@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from 'react'
-import api from '../api'
+import api from './api'
 
 function App() {
   const [text, setText] = useState('')
