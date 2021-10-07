@@ -21,6 +21,7 @@ function App() {
     <div>
       <input type='text' value={text} onChange={onChangeText} />
       <button onClick={submitText}>버튼</button>
+      <button>그냥버튼</button>
     </div>
   )
 }
