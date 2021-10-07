@@ -6,7 +6,7 @@ function App() {
 
   const onChangeText = useCallback((event) => {
     setText(event.target.value)
-  })
+  }, [])
 
   const submitText = async () => {
     await api.post('/text', {
