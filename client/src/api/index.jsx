@@ -1,5 +1,5 @@
 import axios from 'axios'
 
 export default axios.create({
-  baseURL: 'pickandroll.link'
+  baseURL: 'https://pickandroll.link'
 })
