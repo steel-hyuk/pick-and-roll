@@ -19,7 +19,7 @@ function App() {
 
   return (
     <div>
-      <input type='text' value={text} placeholder='입력' onChange={onChangeText} />
+      <input type='text' value={text} onChange={onChangeText} />
       <button onClick={submitText}>버튼</button>
     </div>
   )
