@@ -1,6 +1,5 @@
 import React from 'react'
 
-
 const ImageComponent = ({ url }) => {
   return (
     <div>

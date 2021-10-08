@@ -24,5 +24,4 @@ const SideMenuComponent = (props) => {
   )
 }
 
-
 export default SideMenuComponent
