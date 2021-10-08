@@ -5,6 +5,7 @@ import { NavLink } from 'react-router-dom'
 import { AuthContext } from '../context/authContext'
 import { UserContext } from '../context/userContext'
 
+
 const NavbarComponent = () => {
   const { isLoggedIn, setIsLoggedIn } = useContext(AuthContext)
   const { userInfo, setUserInfo } = useContext(UserContext)
