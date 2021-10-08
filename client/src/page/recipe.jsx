@@ -1,7 +1,8 @@
 import React from 'react'
+import GetImgComponent from '../component/getImagesComponent'
 
 const Recipe = (props) => {
-  return <h1>Recipe</h1>
+  return <GetImgComponent />
 }
 
 export default Recipe
