@@ -1,8 +1,9 @@
 import React from 'react'
+import styled from 'styled-components'
 
 const FooterComponent = () => {
   return (
-    <div>
+    <Main>
       <div className="void"></div>
       <footer className="container">
         <ul className="foote_bottom">
@@ -38,8 +39,59 @@ const FooterComponent = () => {
           </li>
         </ul>
       </footer>
-    </div>
+    </Main>
   )
 }
+
+const Main = styled.div`
+  position: relative;
+  display: flex;
+  min-height: 70vh;
+  flex-direction: column;
+  .void {
+    flex: 1;
+  }
+  .container {
+    border-top: solid 0.7mm #e7e9eb;
+  }
+  p {
+    padding-bottom: 0px;
+    margin-bottom: 4px;
+    text-align: center;
+  }
+  .foote_bottom {
+    list-style-type: none;
+    padding: 0px;
+    display: table;
+    margin-top: 5px;
+    margin-right: auto;
+    margin-bottom: 5px;
+    margin-left: auto;
+  }
+  .foote_bottom li {
+    display: inline;
+  }
+  .foote_bottom li a {
+    color: #4b3add;
+    margin: 0 7px;
+  }
+  .social {
+    display: table;
+    margin: 15px auto 0 auto;
+    padding-left: 3px;
+    list-style-type: none;
+  }
+  .social li {
+    padding-left: 20px;
+    padding-top: 10px;
+    float: left;
+  }
+  .social li a {
+    color: #1f1818;
+    border: 1px solid #ccc;
+    padding: 8px;
+    border-radius: 50%;
+  }
+`
 
 export default FooterComponent
