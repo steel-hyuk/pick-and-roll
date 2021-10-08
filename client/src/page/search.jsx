@@ -1,7 +1,8 @@
 import React from 'react'
+import SearchComponent from '../component/searchComponent'
 
 const Search = (props) => {
-  return <h1>Search</h1>
+  return <SearchComponent />
 }
 
 export default Search
