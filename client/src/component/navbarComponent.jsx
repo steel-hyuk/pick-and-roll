@@ -29,7 +29,9 @@ const NavbarComponent = ({ handleLogin, handleLogout }) => {
           <MenuLinks>
             <TestBtn onClick={() => setIsLoggedIn(!isLoggedIn)}>test</TestBtn>
             <NavElement to="/Recipe">레시피</NavElement>
-            <ChangeClick>검색</ChangeClick>
+            <ChangeClick onClick={() => setShowSearchBox(true)}>
+              검색
+            </ChangeClick>
             <SearchBoxModal
               showSearchBox={showSearchBox}
               setShowSearchBox={setShowSearchBox}
@@ -52,7 +54,9 @@ const NavbarComponent = ({ handleLogin, handleLogout }) => {
           <MenuLinks>
             <TestBtn onClick={() => setIsLoggedIn(!isLoggedIn)}>test</TestBtn>
             <NavElement to="/recipe">레시피</NavElement>
-            <ChangeClick>검색</ChangeClick>
+            <ChangeClick onClick={() => setShowSearchBox(true)}>
+              검색
+            </ChangeClick>
             <SearchBoxModal
               showSearchBox={showSearchBox}
               setShowSearchBox={setShowSearchBox}
