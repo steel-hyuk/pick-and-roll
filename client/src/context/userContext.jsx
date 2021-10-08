@@ -13,4 +13,3 @@ export const UserContextProvider = (props) => {
     </div>
   )
 }
-

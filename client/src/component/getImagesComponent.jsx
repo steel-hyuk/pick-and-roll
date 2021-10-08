@@ -1,14 +1,9 @@
 import React, { useState, useEffect } from 'react'
 
-function GetImagesComponent () {
-
+function GetImagesComponent() {
   const [images, setImages] = useState([])
-  
-  return (
-    <div>
-     infinite Scroll
-    </div>
-  )
+
+  return <div>infinite Scroll</div>
 }
 
 export default GetImagesComponent
