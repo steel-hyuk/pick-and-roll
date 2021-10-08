@@ -1,47 +1,150 @@
-import React, { useContext } from 'react'
-
-import { NavLink } from 'react-router-dom'
-
+import React, { useContext, useState } from 'react'
+import styled from 'styled-components'
+import { NavLink as NavLinkLogo } from 'react-router-dom'
+import { NavLink as NavLinkElement } from 'react-router-dom'
 import { AuthContext } from '../context/authContext'
 import { UserContext } from '../context/userContext'
+import LoginModal from './modal/loginModal'
 
-
-const NavbarComponent = () => {
+const NavbarComponent = ({ handleLogin }) => {
   const { isLoggedIn, setIsLoggedIn } = useContext(AuthContext)
   const { userInfo, setUserInfo } = useContext(UserContext)
+  const [openLogin, setOpenLogin] = useState(false)
 
   return (
-    <nav>
-      { !isLoggedIn 
-        ? (
-        <div>
-          <NavLink className='logo' to='/'>
+    <Nav>
+      {!isLoggedIn ? (
+        <BeforeLoginView>
+          <Logo className="logo" to="/">
             Pick & Roll
-          </NavLink>
-          <div>
-            <button onClick={ () => setIsLoggedIn(!isLoggedIn) }>test</button>
-            <NavLink to='/Recipe'>레시피</NavLink>
-            <div>검색</div>
-            <div to='/'>로그인</div>
-          </div>
-        </div>
+          </Logo>
+          <MenuLinks>
+            <TestBtn onClick={() => setIsLoggedIn(!isLoggedIn)}>test</TestBtn>
+            <NavElement to="/Recipe">레시피</NavElement>
+            <ChangeClick>검색</ChangeClick>
+            <ChangeClick to="/" onClick={() => setOpenLogin(true)}>
+              로그인
+            </ChangeClick>
+            {openLogin ? (
+              <LoginModal
+                handleLogin={handleLogin}
+                openLogin={openLogin}
+                setOpenLogin={setOpenLogin}
+              />
+            ) : null}
+          </MenuLinks>
+        </BeforeLoginView>
       ) : (
-        <div>
-          <NavLink to='/'>Pick & Roll</NavLink>
-          <div>
-            <button onClick={ () => setIsLoggedIn(!isLoggedIn) }>test</button> <br />
-            <NavLink to='/recipe'>레시피</NavLink> <br />
-            <div>검색</div> <br />
-            <NavLink to='/write'>새 글 작성</NavLink> <br />
-            <NavLink to='/mypage'>사용자</NavLink>
-            <br />
-            <NavLink to='/'>로그아웃</NavLink>
-          </div>
-          <div></div>
-        </div>
-      ) }
-    </nav>
+        <AfterLoginView>
+          <Logo to="/">Pick & Roll</Logo>
+          <MenuLinks>
+            <TestBtn onClick={() => setIsLoggedIn(!isLoggedIn)}>test</TestBtn>
+            <NavElement to="/recipe">레시피</NavElement>
+            <ChangeClick>검색</ChangeClick>
+            <NavElement to="/write">새 글 작성</NavElement>
+            <NavElement to={`/mypage/${userInfo.email}`}>
+              {userInfo.name}님
+            </NavElement>
+            <NavElement to="/">로그아웃</NavElement>
+          </MenuLinks>
+        </AfterLoginView>
+      )}
+    </Nav>
   )
 }
+
+const Nav = styled.nav`
+  background-color: white;
+  margin: 0px;
+  box-shadow: 0px 1px 10px 1px rgb(243, 200, 18);
+`
+
+const MenuLinks = styled.div`
+  display: flex;
+  @media (max-width: 750px) {
+    display: none;
+  }
+`
+
+const BeforeLoginView = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 70px;
+  @media (max-width: 750px) {
+    height: 43px;
+  }
+`
+
+const AfterLoginView = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 70px;
+  @media (max-width: 750px) {
+    height: 43px;
+  }
+`
+
+const Logo = styled(NavLinkLogo)`
+  text-decoration: none;
+  font-size: 40px;
+  font-family: 'Noto Sans KR', sans-serif;
+  font-weight: bold;
+  color: rgb(243, 200, 18);
+  margin-left: 16px;
+  @media (max-width: 1200px) {
+    margin-left: 2px;
+    font-size: 30px;
+  }
+`
+
+const ChangeClick = styled.div`
+  text-align: end;
+  margin: 10px 15px;
+  font-size: 15px;
+  padding: 10px 15px;
+  font-family: 'Noto Sans KR', sans-serif;
+  text-decoration: none;
+  color: rgb(243, 200, 18);
+  :hover {
+    cursor: pointer;
+    background-color: rgb(243, 200, 18);
+    color: white;
+    border-radius: 10%;
+    font-weight: bold;
+  }
+`
+
+const NavElement = styled(NavLinkElement)`
+  text-align: end;
+  margin: 10px 15px;
+  font-size: 15px;
+  padding: 10px 15px;
+  font-family: 'Noto Sans KR', sans-serif;
+  text-decoration: none;
+  color: rgb(243, 200, 18);
+  :hover {
+    cursor: pointer;
+    background-color: rgb(243, 200, 18);
+    color: white;
+    border-radius: 10%;
+    font-weight: bold;
+  }
+`
+
+const TestBtn = styled.button`
+  border: solid, 1px, gray;
+  text-decoration: none;
+  background-color: rgb(235, 235, 235);
+  height: 25px;
+  margin-top: 8px;
+  color: rgb(243, 200, 18);
+  border: 1px solid transparent;
+  padding: 5px 12px;
+  .testbtn:hover {
+    cursor: pointer;
+  }
+`
 
 export default NavbarComponent
