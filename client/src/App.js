@@ -9,10 +9,11 @@ function App() {
   }, [])
 
   const submitText = async () => {
-    await axios.post('https://pickandroll/link/text', {
+    await axios.post('pickandroll/link/text', {
       text: text
     }, {
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
+      'authority': ''
     })
     .then((res) => console.log('res : ', res))
   }
