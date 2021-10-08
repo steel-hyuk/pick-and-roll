@@ -18,7 +18,7 @@ function GetImagesComponent({ isValue, selectCategory }) {
       <Wrapper>
         <InfiniteScroll
           dataLength={images.length}
-          next={fetchImages}
+          next=""
           hasMore={true}
           loader={<LoadingComponent />}
         >
