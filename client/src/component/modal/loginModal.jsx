@@ -1,11 +1,34 @@
-import React from 'react'
+import React, { useState, useContext } from 'react'
+import axios from 'axios'
 import styled from 'styled-components'
 import { useHistory } from 'react-router'
 import { FaRegTimesCircle } from 'react-icons/fa'
+import Swal from 'sweetalert2'
+import { AuthContext } from '../../context/authContext'
 
-const LoginModal = ({ openLogin, setOpenLogin }) => {
+const LoginModal = ({ handleLogin, openLogin, setOpenLogin }) => {
+  const { isLoggedIn, setIsLoggedIn } = useContext(AuthContext)
+
   const history = useHistory()
 
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+
+  // (axios) 로그인 요청
+  const logIn = async (event) => {
+    if (email === '' || password === '') {
+      Swal.fire({
+        text: '이메일과 비밀번호를 모두 입력해주세요!',
+        icon: 'warning',
+        confirmButtonColor: '#d2d2d2',
+        confirmButtonText: '확인',
+      })
+    } else {
+      setIsLoggedIn(!isLoggedIn)
+      event.preventDefault()
+    }
+  }
+  
   return openLogin ? (
     <Modal>
       <Left onClick={() => setOpenLogin(false)}></Left>
@@ -14,12 +37,32 @@ const LoginModal = ({ openLogin, setOpenLogin }) => {
           <Login>Login</Login>
           <LoginC>
             <InputC>
-              <Input type="text" placeholder="이메일을 입력해주세요" />
+              <Input
+                type="text"
+                placeholder="이메일을 입력해주세요"
+                value={email}
+                onChange={(event) => {
+                  setEmail(event.target.value)
+                }}
+              />
             </InputC>
             <InputC>
-              <Input type="password" placeholder="비밀번호를 입력해주세요" />
+              <Input
+                type="password"
+                placeholder="비밀번호를 입력해주세요"
+                value={password}
+                onChange={(event) => {
+                  setPassword(event.target.value)
+                }}
+                onKeyPress={(event) => {
+                  if (event.key === 'Enter') {
+                    logIn(event)
+                  }
+                }}
+              />
             </InputC>
-            <LoginBtn>Login</LoginBtn>
+
+            <LoginBtn onClick={logIn}>Login</LoginBtn>
             <SignUpBtn onClick={() => setOpenLogin(false)}>
               <p>회원가입을 원하시나요?</p>
               <div

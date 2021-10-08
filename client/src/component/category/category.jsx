@@ -1,14 +1,16 @@
 import React from 'react'
 import styled from 'styled-components'
+import Dropdown from './dropdown'
 
-const Category = ({ setSelectCateogry }) => {
+const Category = ({ selected, setSelected, setSelectCateogry }) => {
   return (
     <Wrap>
+      <Dropdown selected={selected} setSelected={setSelected} />
       <ListWrap>
         <List onClick={() => {setSelectCateogry('korean')}}>Korean</List>
         <List onClick={() => {setSelectCateogry('Western')}}>Western</List>
         <List onClick={() => {setSelectCateogry('Chinese')}}>Chinese</List>
-        <List onClick={() => {setSelectCateogry('Janpanese')}}>Janpanese</List>
+        <List onClick={() => {setSelectCateogry('Japanese')}}>Japanese</List>
         <List onClick={() => {setSelectCateogry('etc')}}>etc</List>
       </ListWrap>
     </Wrap>
