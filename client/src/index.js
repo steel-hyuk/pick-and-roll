@@ -1,6 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import App from './app'
+import App from './App'
 import { AuthContextProvider } from './context/authContext'
 import { UserContextProvider } from './context/userContext'
 import { SearchValueContextProvider } from './context/searchValueContext'
