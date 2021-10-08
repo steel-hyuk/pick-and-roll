@@ -6,11 +6,13 @@ import { NavLink as NavLinkElement } from 'react-router-dom'
 import { AuthContext } from '../context/authContext'
 import { UserContext } from '../context/userContext'
 import LoginModal from './modal/loginModal'
+import SearchBoxModal from './modal/searchBoxModal'
 
 const NavbarComponent = ({ handleLogin, handleLogout }) => {
   const { isLoggedIn, setIsLoggedIn } = useContext(AuthContext)
   const { userInfo, setUserInfo } = useContext(UserContext)
   const [openLogin, setOpenLogin] = useState(false)
+  const [showSearchBox, setShowSearchBox] = useState(false)
 
   // (axios) 로그아웃 요청
   // const logout = () => {
@@ -28,6 +30,10 @@ const NavbarComponent = ({ handleLogin, handleLogout }) => {
             <TestBtn onClick={() => setIsLoggedIn(!isLoggedIn)}>test</TestBtn>
             <NavElement to="/Recipe">레시피</NavElement>
             <ChangeClick>검색</ChangeClick>
+            <SearchBoxModal
+              showSearchBox={showSearchBox}
+              setShowSearchBox={setShowSearchBox}
+            />
             <ChangeClick to="/" onClick={() => setOpenLogin(true)}>
               로그인
             </ChangeClick>
@@ -47,6 +53,10 @@ const NavbarComponent = ({ handleLogin, handleLogout }) => {
             <TestBtn onClick={() => setIsLoggedIn(!isLoggedIn)}>test</TestBtn>
             <NavElement to="/recipe">레시피</NavElement>
             <ChangeClick>검색</ChangeClick>
+            <SearchBoxModal
+              showSearchBox={showSearchBox}
+              setShowSearchBox={setShowSearchBox}
+            />
             <NavElement to="/write">새 글 작성</NavElement>
             <NavElement to={`/mypage/${userInfo.email}`}>
               {userInfo.name}님
