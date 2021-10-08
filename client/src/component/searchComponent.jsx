@@ -1,5 +1,6 @@
 import React, { useContext } from 'react'
-import { SearchValueContext } from '../context/searchValueContext' 
+
+import { SearchValueContext } from '../context/searchValueContext'
 
 const SearchComponent = () => {
   const { isValue, setIsValue } = useContext(SearchValueContext)
