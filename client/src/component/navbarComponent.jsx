@@ -1,15 +1,21 @@
 import React, { useContext, useState } from 'react'
 import styled from 'styled-components'
+import axios from 'axios'
 import { NavLink as NavLinkLogo } from 'react-router-dom'
 import { NavLink as NavLinkElement } from 'react-router-dom'
 import { AuthContext } from '../context/authContext'
 import { UserContext } from '../context/userContext'
 import LoginModal from './modal/loginModal'
 
-const NavbarComponent = ({ handleLogin }) => {
+const NavbarComponent = ({ handleLogin, handleLogout }) => {
   const { isLoggedIn, setIsLoggedIn } = useContext(AuthContext)
   const { userInfo, setUserInfo } = useContext(UserContext)
   const [openLogin, setOpenLogin] = useState(false)
+
+  // (axios) 로그아웃 요청
+  // const logout = () => {
+  //   handleLogout()
+  // }
 
   return (
     <Nav>

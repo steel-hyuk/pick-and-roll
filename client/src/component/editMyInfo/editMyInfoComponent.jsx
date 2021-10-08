@@ -1,28 +1,92 @@
-import React from 'react'
+import React, { useState, useContext } from 'react'
 import styled from 'styled-components'
+import Swal from 'sweetalert2'
+import { UserContext } from '../../context/userContext'
 
 const EditMyInfoComponent = () => {
+  const [changeNickname, setChangeNickname] = useState('')
+  const [changeDescription, setChangeDescription] = useState('자기소개 입니다.')
+
+  const { userInfo, setUserInfo } = useContext(UserContext)
+  const { id, email, createdAt } = userInfo
+
+  // 닉네임 형식을 체크하는 정규 표현식
+  const nickname_Reg = /^([a-zA-Z0-9ㄱ-ㅎ|ㅏ-ㅣ|가-힣]).{1,10}$/
+
+  // axios를 통해 이미 등록된 닉네임인지 체크
+  const checkNickname = () => {
+    if (!nickname_Reg.test(changeNickname) || changeNickname === '') {
+      Swal.fire({
+        title: '닉네임을 다시 정해주세요',
+        text: '닉네임은 한글, 영문, 숫자만 가능하며 2-10자리까지 가능합니다!',
+        icon: 'warning',
+        showCancelButton: false,
+        focusConfirm: false,
+        confirmButtonText: '확인',
+        confirmButtonColor: '#e8b229',
+      })
+      return
+    }
+    Swal.fire({
+      title: '사용할 수 있는 닉네임입니다. ',
+      icon: 'success',
+      showCancelButton: false,
+      focusConfirm: false,
+      confirmButtonText: '확인',
+      confirmButtonColor: '#e8b229',
+    })
+  }
+
+  // (axios) 회원정보 업데이트 요청 추가 
+  const editDone = () => {
+    setUserInfo({
+      id,
+      email,
+      createdAt,
+      name: changeNickname,
+      description: changeDescription,
+    })
+
+    Swal.fire({
+      title: '정보가 수정되었습니다.',
+      icon: 'success',
+      showCancelButton: false,
+      focusConfirm: false,
+      confirmButtonText: '확인',
+      confirmButtonColor: '#e8b229',
+    })
+  }
+
   return (
     <Wrap>
       <NameArea>
         <Name>새로운 닉네임</Name>
-        <NameInput />
-        <CheckBtn>확인</CheckBtn>
+        <NameInput
+          onChange={(e) => {
+            setChangeNickname(e.target.value)
+          }}
+        />
+        <CheckBtn onClick={checkNickname}>확인</CheckBtn>
       </NameArea>
       <IntroArea>
         <Name>자기 소개</Name>
-        <Textarea placeholder="자기소개를 입력해주세요." />
+        <Textarea
+          onChange={(e) => {
+            setChangeDescription(e.target.value)
+          }}
+          placeholder="자기소개를 입력해주세요."
+        />
       </IntroArea>
       <BottomArea>
         <DateArea>
           <DateP>활동 시작일</DateP>
-          <Data>2021-07-01</Data>
+          <Data>{createdAt}</Data>
         </DateArea>
         <EmailArea>
           <EmailP>이메일</EmailP>
-          <Data>qwert@abc.com</Data>
+          <Data>{email}</Data>
         </EmailArea>
-        <CheckBtn>수정 완료</CheckBtn>
+        <CheckBtn onClick={editDone}>수정 완료</CheckBtn>
       </BottomArea>
     </Wrap>
   )

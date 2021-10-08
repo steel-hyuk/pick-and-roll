@@ -1,25 +1,28 @@
-import React from 'react'
+import React, {useContext} from 'react'
 import styled from 'styled-components'
+import {UserContext} from '../../context/userContext'
 
 const ShowInfoComponent = () => {
+  const { userInfo, setUserInfo } = useContext(UserContext)
+
   return (
     <Wrap>
       <NameArea>
         <Name>닉네임</Name>
-        <NameInput></NameInput>
+        <NameInput>{userInfo.name}</NameInput>
       </NameArea>
       <IntroArea>
         <Name>자기 소개</Name>
-        <Textarea></Textarea>
+        <Textarea>{userInfo.description}</Textarea>
       </IntroArea>
       <BottomArea>
         <DateArea>
           <DateP>활동 시작일</DateP>
-          <Data>2021-07-01</Data>
+          <Data>{userInfo.createdAt}</Data>
         </DateArea>
         <EmailArea>
           <EmailP>이메일</EmailP>
-          <Data>qwert@abc.com</Data>
+          <Data>{userInfo.email}</Data>
         </EmailArea>
       </BottomArea>
     </Wrap>

@@ -45,7 +45,7 @@ const MyInfoComponent = () => {
               <FaKey onClick={() => setPwModal(!pwModal)} />
             </ReviseBtn>
             {pwModal ? (
-              <PasswordModal setPage={setPage} setPwModal={setPwModal} />
+              <PasswordModal pwModal={pwModal} setPage={setPage} setPwModal={setPwModal} />
             ) : null}
             <ReviseText className="fixed">비밀번호 수정</ReviseText>
           </ReviseForm>
