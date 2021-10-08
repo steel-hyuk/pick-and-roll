@@ -1,11 +1,13 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Category from '../component/category/category'
 import GetImgComponent from '../component/getImagesComponent'
 
-const Recipe = (props) => {
+const Recipe = () => {
+  const [selectCategory, setSelectCateogry] = useState('')
+
   return (
     <>
-      <Category />
+      <Category setSelectCateogry={setSelectCateogry} />
       <GetImgComponent />
     </>
   )
