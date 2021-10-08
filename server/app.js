@@ -7,6 +7,7 @@ const cors = require('cors')
 const helmet = require('helmet')
 const hpp = require('hpp')
 const router = require('./routes/index')
+const db = require('./models')
 
 dotenv.config()
 const app = express()
@@ -39,6 +40,13 @@ if (process.env.NODE_ENV === 'production') {
   sessionOption.cookie.secure = true
 }
 app.use(session(sessionOption))
+
+db.sequelize
+  .sync()
+  .then(() => {
+    console.log('db 연결 성공')
+  })
+  .catch(console.error)
 
 app.use(
   cors({
