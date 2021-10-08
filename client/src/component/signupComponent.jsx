@@ -1,8 +1,4 @@
-import React, { useRef, useState } from 'react'
-import { useHistory } from 'react-router'
-import styled from 'styled-components'
-import Swal from 'sweetalert2'
-import axios from 'axios'
+import React from 'react'
 
 const SignupComponent = () => {
   
@@ -19,11 +15,11 @@ const SignupComponent = () => {
         <div>
           <div>
             이메일
-            <span className="require">*</span>
+            <span className='require'>*</span>
           </div>
           <input
-            type="text"
-            placeholder="이메일을 입력해주세요"
+            type='text'
+            placeholder='이메일을 입력해주세요'
             onChange={(e) => {
               // setEmail(e.target.value)
             }}
@@ -35,11 +31,11 @@ const SignupComponent = () => {
         <div>
           <div>
             비밀번호
-            <span className="require">*</span>
+            <span className='require'>*</span>
           </div>
           <input
-            type="password"
-            placeholder="비밀번호를 입력해주세요"
+            type='password'
+            placeholder='비밀번호를 입력해주세요'
             onChange={(e) => {
               // setPassword(e.target.value)
             }}
@@ -51,11 +47,11 @@ const SignupComponent = () => {
         <div>
           <div>
             비밀번호 확인
-            <span className="require">*</span>
+            <span className='require'>*</span>
           </div>
           <input
-            type="password"
-            placeholder="비밀번호를 다시 입력해주세요"
+            type='password'
+            placeholder='비밀번호를 다시 입력해주세요'
             onChange={(e) => {
               // setPwCheck(e.target.value)
             }}
@@ -67,11 +63,11 @@ const SignupComponent = () => {
         <div>
           <div>
             닉네임
-            <span className="require">*</span>
+            <span className='require'>*</span>
           </div>
           <input
-            type="text"
-            placeholder="닉네임을 입력해주세요"
+            type='text'
+            placeholder='닉네임을 입력해주세요'
             onChange={(e) => {
               // setNickname(e.target.value)
             }}
@@ -83,10 +79,10 @@ const SignupComponent = () => {
         <div>
           <div>
             자기소개
-            <span className="require">*</span>
+            <span className='require'>*</span>
           </div>
           <textarea
-            placeholder="ex) 김치찌개와 계란말이를 좋아합니다"
+            placeholder='ex) 김치찌개와 계란말이를 좋아합니다'
           ></textarea>
           <div>messageDescription</div>
         </div>
