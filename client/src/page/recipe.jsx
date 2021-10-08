@@ -1,7 +1,14 @@
 import React from 'react'
+import Category from '../component/category/category'
+import GetImgComponent from '../component/getImagesComponent'
 
 const Recipe = (props) => {
-  return <h1>Recipe</h1>
+  return (
+    <>
+      <Category />
+      <GetImgComponent />
+    </>
+  )
 }
 
 export default Recipe

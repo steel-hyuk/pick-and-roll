@@ -1,7 +1,7 @@
 import React from 'react'
-
+import SideMenuComponent from '../component/sideMenuComponent'
 const Mypage = (props) => {
-  return <h1>Mypage</h1>
+  return <SideMenuComponent />
 }
 
 export default Mypage
