@@ -1,17 +1,35 @@
-import React from 'react'
+import React, { useState } from 'react'
+import axios from 'axios'
 import styled from 'styled-components'
+import { FaRegTimesCircle } from 'react-icons/fa'
 
-const PasswordModal = ({ setPwModal, setPage }) => {
+const PasswordModal = ({ pwModal, setPwModal, setPage }) => {
+  const [password, setPassword] = useState('')
+
+  // (axios) 비밀번호 확인 요청
+  const checkPw = () => {
+    console.log(password)
+  }
+
   return (
     <Modal>
-      <Left />
+      <Left onClick={() => setPwModal(!pwModal)} />
       <Form>
         <Wrapper>
+          <CheckIcon>
+            <FaRegTimesCircle onClick={() => setPwModal(!pwModal)} />
+          </CheckIcon>
           <Pwcheck>현재 비밀번호</Pwcheck>
           <PwcheckC>
-            <Input type="password"></Input>
+            <Input
+              type="password"
+              onChange={(e) => {
+                setPassword(e.target.value)
+              }}
+            ></Input>
             <CheckBtn
               onClick={() => {
+                checkPw()
                 setPwModal(false)
                 setPage('changePassword')
               }}
@@ -21,7 +39,7 @@ const PasswordModal = ({ setPwModal, setPage }) => {
           </PwcheckC>
         </Wrapper>
       </Form>
-      <Right />
+      <Right onClick={() => setPwModal(!pwModal)} />
     </Modal>
   )
 }
@@ -105,6 +123,13 @@ const CheckBtn = styled.button`
   border-radius: 13px;
   color: white;
   font-size: 17px;
+`
+
+const CheckIcon = styled.div`
+  position: absolute;
+  margin-left: 410px;
+  margin-top: 15px;
+  color: #6f6f6f;
 `
 
 export default PasswordModal

@@ -4,16 +4,19 @@ import App from './app'
 import { AuthContextProvider } from './context/authContext'
 import { UserContextProvider } from './context/userContext'
 import { SearchValueContextProvider } from './context/searchValueContext'
+import {AccessTokenContextProvider} from './context/accessTokenContext'
 
 ReactDOM.render(
   <React.StrictMode>
-    <SearchValueContextProvider>
-      <AuthContextProvider>
-        <UserContextProvider>
-          <App />
-        </UserContextProvider>
-      </AuthContextProvider>
-    </SearchValueContextProvider>
+  <AuthContextProvider>
+    <AccessTokenContextProvider>
+      <UserContextProvider>
+        <SearchValueContextProvider>
+            <App />
+        </SearchValueContextProvider>
+      </UserContextProvider>
+    </AccessTokenContextProvider>
+  </AuthContextProvider>
   </React.StrictMode>,
   document.getElementById('root')
 )

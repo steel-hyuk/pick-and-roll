@@ -1,21 +1,94 @@
-import React from 'react'
+import React, { useState, useRef } from 'react'
+import axios from 'axios'
+import Swal from 'sweetalert2'
 import styled from 'styled-components'
+import { useHistory } from 'react-router'
 
 const ChangePasswordComponent = () => {
+  const [password, setPassword] = useState('')
+  const [pwCheck, setPwCheck] = useState('')
+
+  const history = useHistory()
+
+  const [messagePassword, setMessagePassword] = useState('')
+  const [messagePwCheck, setMessagePwCheck] = useState('')
+
+  // 비밀번호 형식을 체크하는 정규 표현식
+  const password_Reg = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&])[A-Za-z\d$@$!%*?&]{8,15}/
+
+  // focus 이벤트를 주기 위한 Ref
+  const _pw = useRef()
+  const _pwChk = useRef()
+
+  // 비밀번호를 체크하기 위한 함수
+  const checkPassWord = () => {
+    if (!password_Reg.test(password)) {
+      setMessagePassword('(8~15자) 영문 대소문자/숫자/특수문자 모두 포함해야합니다!')
+      return
+    }
+    setMessagePassword('✔ 사용 가능한 비밀번호입니다!')
+  }
+
+  // 비밀번호 확인을 체크하기 위한 함수
+  const doubleCheckPassWord = () => {
+    if (password === '') {
+      setMessagePassword('비밀번호를 먼저 입력해주세요!')
+    } else if (password !== '' && !pwCheck) setMessagePwCheck('')
+    else if (password !== pwCheck || !password_Reg.test(password))
+      setMessagePwCheck('비밀번호를 다시 확인해주세요!')
+    else if (password === pwCheck && password_Reg.test(password))
+      setMessagePwCheck('✔ 비밀번호가 확인되었습니다!')
+  }
+
+  // 비밀번호 변경을 위한 함수 
+  // (axios) 변경된 비밀번호 업데이트 요청 추가
+  const changePw = () => {
+    if (password === '' || !password_Reg.test(password)) {
+      _pw.current.focus()
+      setMessagePassword('(8~15자) 영문 대소문자/숫자/특수문자 모두 포함해야합니다!')
+      return
+    } else if (pwCheck === '' || password !== pwCheck) {
+      _pwChk.current.focus()
+      setMessagePwCheck('비밀번호를 다시 확인해주세요!')
+      return
+    }
+    Swal.fire({
+      title: '비밀번호가 변경되었습니다.',
+      icon: 'success',
+      showCancelButton: false,
+      focusConfirm: false,
+      confirmButtonText: '확인',
+      confirmButtonColor: '#e8b229',
+    })
+    history.push('/mypage')
+  }
+
   return (
     <Wrap>
       <NameArea>
         <Name>새로운 비밀번호를 입력하세요.</Name>
-        <NameInput type="password" />
-        <CheckText></CheckText>
-        <CheckBtn>확인</CheckBtn>
+        <NameInput
+          type="password"
+          onChange={(e) => {
+            setPassword(e.target.value)
+          }}
+          ref={_pw}
+        />
+        <CheckText>{messagePassword}</CheckText>
+        <CheckBtn onClick={checkPassWord}>확인</CheckBtn>
       </NameArea>
       <NameArea>
         <Name>비밀번호를 다시 입력해주세요.</Name>
-        <NameInput type="password" />
-        <CheckText></CheckText>
-        <CheckBtn>확인</CheckBtn>
-        <ChangeBtn>변경 완료</ChangeBtn>
+        <NameInput
+          type="password"
+          onChange={(e) => {
+            setPwCheck(e.target.value)
+          }}
+          ref={_pwChk}
+        />
+        <CheckText>{messagePwCheck}</CheckText>
+        <CheckBtn onClick={doubleCheckPassWord}>확인</CheckBtn>
+        <ChangeBtn onClick={changePw}> 변경 완료</ChangeBtn>
       </NameArea>
     </Wrap>
   )

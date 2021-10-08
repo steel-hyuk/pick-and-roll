@@ -4,11 +4,16 @@ import GetImgComponent from '../component/getImagesComponent'
 
 const Recipe = () => {
   const [selectCategory, setSelectCateogry] = useState('')
-
+  const [selected, setSelected] = useState('최신')
+  
   return (
     <>
-      <Category setSelectCateogry={setSelectCateogry} />
-      <GetImgComponent />
+      <Category
+        selected={selected}
+        setSelected={setSelected}
+        setSelectCateogry={setSelectCateogry}
+      />
+      <GetImgComponent selectCategory={selectCategory} />
     </>
   )
 }
