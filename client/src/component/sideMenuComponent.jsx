@@ -20,9 +20,15 @@ const SideMenuComponent = () => {
     <Wrap>
       <Menu className={show ? 'showM' : ''}>
         <MenuTitle>Menu</MenuTitle>
-        <List className="favorite" onClick={changeFavorite}>즐겨찾기</List>
-        <List className="myRecipe" onClick={changeMyRecipe}>나의 레시피</List>
-        <List className="myInfo" onClick={changeMyInfo}>나의 정보</List>
+        <List className="favorite" onClick={changeFavorite}>
+          즐겨찾기
+        </List>
+        <List className="myRecipe" onClick={changeMyRecipe}>
+          나의 레시피
+        </List>
+        <List className="myInfo" onClick={changeMyInfo}>
+          나의 정보
+        </List>
       </Menu>
       <ContentWapper>
         {(() => {
