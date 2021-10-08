@@ -16,7 +16,6 @@ const LoadingComponent = () => {
 
 const Loader = styled.div`
   text-align: center;
-
   .lds-ellipsis {
     display: inline-block;
     position: relative;
