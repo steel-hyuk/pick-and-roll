@@ -7,7 +7,7 @@ import LoadingComponent from './loadingComponent'
 
 function GetImagesComponent({ isValue, selectCategory }) {
   const [images, setImages] = useState([])
-  const [pageNumber, setPageNumber] = useState(1)
+  const [offset, setOffset] = useState(1) // 데이터를 받으면 then에서 offset +1
 
   useEffect(() => {
     // fetchImages()
@@ -19,7 +19,7 @@ function GetImagesComponent({ isValue, selectCategory }) {
         <InfiniteScroll
           dataLength={images.length}
           next=""
-          hasMore={true}
+          hasMore={images.length >= 10}
           loader={<LoadingComponent />}
         >
           <WrapperImage>
@@ -55,7 +55,7 @@ const WrapperImage = styled.section`
   max-width: 70rem;
   margin: 3rem 7rem;
   display: grid;
-  grid-gap: 1em;
+  grid-gap: 2em;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   grid-auto-rows: 300px;
 
