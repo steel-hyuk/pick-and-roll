@@ -103,7 +103,6 @@ const SignupComponent = () => {
     }, {
       'ContentType': 'application/json'
     })
-    .then((res) => console.log(res));
 
     Swal.fire({
       title: '회원가입이 완료되었습니다.',
