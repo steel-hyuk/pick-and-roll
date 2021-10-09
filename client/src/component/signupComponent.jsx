@@ -2,7 +2,8 @@ import React, { useRef, useState } from 'react'
 import { useHistory } from 'react-router'
 import styled from 'styled-components'
 import Swal from 'sweetalert2'
-import axios from 'axios'
+
+import api from '../api'
 
 const SignupComponent = () => {
   const history = useHistory()
@@ -73,7 +74,7 @@ const SignupComponent = () => {
   }
 
   // 회원가입 버튼
-  const signUp = (event) => {
+  const signUp = async (event) => {
     if (email === '' || !email_Reg.test(email)) {
       _email.current.focus()
       setMessageEmail('이메일 형식에 맞게 작성해 주시기 바랍니다!')
@@ -97,7 +98,11 @@ const SignupComponent = () => {
     }
     event.preventDefault()
 
-    //axios signup 요청 
+    await api.post('/users/signup', {
+      email, password, nickname, description
+    }, {
+      'ContentType': 'application/json'
+    })
 
     Swal.fire({
       title: '회원가입이 완료되었습니다.',
