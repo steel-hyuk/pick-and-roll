@@ -1,9 +1,11 @@
 const router = require('express').Router()
+const recipesRoutes = require('./recipesRoutes')
 const homeRoutes = require('./homeRoutes')
 const errorRoutes = require('./errorRoutes')
-const textRoutes = require('./textRoutes')
+const usersRoutes = require('./usersRoutes')
 
-router.use('/text', textRoutes)
+router.use('/recipes', recipesRoutes)
+router.use('/users', usersRoutes)
 router.use('/', homeRoutes)
 router.use('/', errorRoutes)
 
