@@ -61,11 +61,11 @@ module.exports = {
     let category = req.query.category
     let division = req.query.division
     let searchName = req.query.searchName
-    let pageNum = req.query.offset
+    let pageNum = Number(req.query.offset)
     let offset = 0
-    let limit = req.query.limit
+    let limit = Number(req.query.limit)
     let id = req.query.id
-    if(pageNum > 1) offset = limit * (pageNum - 1) 
+    if (pageNum > 1) offset = limit * (pageNum - 1)
     //카테고리별로 먼저 나눈 뒤 => 정렬항목으로 나누기 => 페이지네이션
 
     if (category && division && offset !== undefined && limit !== undefined) {
@@ -142,11 +142,50 @@ module.exports = {
                 ],
                 order: ['createdAt'],
                 where: { category: category },
-              }          
-        )        
+              }
+        )
+        let avgAdd = await Promise.all(
+          categorySort.map(async (el) => {
+            let tasteNum = el.TasteScores.length
+            let tasteAvg =
+              tasteNum === 0 ? 0 : everyScoreSum(el.TasteScores) / tasteNum
+            let easyNum = el.EasyScores.length
+            let easyAvg =
+              easyNum === 0 ? 0 : everyScoreSum(el.EasyScores) / easyNum
+            const {
+              id,
+              title,
+              mainImg,
+              introduction,
+              category,
+              createdAt,
+              updatedAt,
+            } = el
+            return {
+              id,
+              title,
+              mainImg,
+              introduction,
+              category,
+              tasteAvg: tasteAvg.toFixed(2),
+              easyAvg: easyAvg.toFixed(2),
+              createdAt,
+              updatedAt,
+            }
+          })
+        )
+        let sortAvg = avgAdd.sort((a, b) => {
+          if (division === 'taste') return b.tasteAvg - a.tasteAvg
+          else if (division === 'easy') return b.easyAvg - a.easyAvg
+        })
+        let newArr = []
+        console.log(offset, limit)
+        for(let n=offset; n<offset+limit; n++) {
+          newArr.push(sortAvg[n])
+        }
+        result = newArr
       }
-      res.send(categorySort)
-      //res.send(result)
+      res.send(result)
     }
-  },
+  }
 }
