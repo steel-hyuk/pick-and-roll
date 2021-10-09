@@ -39,12 +39,18 @@ function App() {
     <div>
       <GlogbalStyle />
       <Router>
-        <NavbarComponent handleLogin={handleLogin}
-          handleLogout={handleLogout} />
+        <NavbarComponent
+          handleLogin={handleLogin}
+          handleLogout={handleLogout}
+        />
         <Switch>
           <Route exact path="/" component={Info} />
           <Route exact path="/signup" component={Signup} />
-          <Route exact path="/mypage/:id" render={() => <Mypage userInfo={userInfo} />} />
+          <Route
+            exact
+            path="/mypage/:id"
+            render={() => <Mypage userInfo={userInfo} />}
+          />
           <Route exact path="/write" component={Write} />
           <Route exact path="/recipe" component={Recipe} />
           <Route exact path="/search/:id" component={Search} />
