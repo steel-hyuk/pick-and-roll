@@ -1,5 +1,5 @@
 const sequelize = require('sequelize')
-const { Recipe, TasteScore, EasyScore, Comment } = require('../models')
+const { Recipe, TasteScore, EasyScore, Comment, User } = require('../models')
 const { isAuthorized } = require('../controllers/token/tokenController')
 const { everyScoreSum } = require('../controllers/function/function')
 
@@ -65,7 +65,7 @@ module.exports = {
     let pageNum = Number(req.query.offset)
     let offset = 0
     let limit = Number(req.query.limit)
-    let id = req.query.id
+    let recipeNum = req.query.id
     if (pageNum > 1) offset = limit * (pageNum - 1)
 
     //* 메인페이지에서 카테고리별, 분류별 데이터를 담당합니다 *//
@@ -81,7 +81,7 @@ module.exports = {
                 limit: Number(limit),
                 include: [
                   { model: TasteScore, attributes: ['score'] },
-                  { model: EasyScore, attributes: ['score'] }
+                  { model: EasyScore, attributes: ['score'] },
                 ],
                 order: ['createdAt'],
               }
@@ -183,64 +183,132 @@ module.exports = {
         let newArr = []
         console.log(offset, limit)
         for (let n = offset; n < offset + limit; n++) {
-          if(sortAvg[n]) newArr.push(sortAvg[n])
+          if (sortAvg[n]) newArr.push(sortAvg[n])
         }
         result = newArr
       }
-      res.send(result)
     } else if (searchName && offset !== undefined && limit !== undefined) {
       //* 검색어 정렬 *//
-      let  searchData = await Recipe.findAll({
+      let searchData = await Recipe.findAll({
         offset: Number(offset),
         limit: Number(limit),
         include: [
           { model: TasteScore, attributes: ['score'] },
-          { model: EasyScore, attributes: ['score'] }
+          { model: EasyScore, attributes: ['score'] },
         ],
         where: {
           title: {
-            [sequelize.Op.like]: "%" + searchName + "%"
-          }          
-        }
+            [sequelize.Op.like]: '%' + searchName + '%',
+          },
+        },
       })
 
       let addAvg = await Promise.all(
         searchData.map(async (el) => {
           let tasteNum = el.TasteScores.length
-            let tasteAvg =
-              tasteNum === 0 ? 0 : everyScoreSum(el.TasteScores) / tasteNum
-            let easyNum = el.EasyScores.length
-            let easyAvg =
-              easyNum === 0 ? 0 : everyScoreSum(el.EasyScores) / easyNum
-            const {
-              id,
-              title,
-              mainImg,
-              introduction,
-              category,
-              createdAt,
-              updatedAt,
-            } = el
-            return {
-              id,
-              title,
-              mainImg,
-              introduction,
-              category,
-              tasteAvg: tasteAvg.toFixed(2),
-              easyAvg: easyAvg.toFixed(2),
-              createdAt,
-              updatedAt,
-            }          
+          let tasteAvg =
+            tasteNum === 0 ? 0 : everyScoreSum(el.TasteScores) / tasteNum
+          let easyNum = el.EasyScores.length
+          let easyAvg =
+            easyNum === 0 ? 0 : everyScoreSum(el.EasyScores) / easyNum
+          const {
+            id,
+            title,
+            mainImg,
+            introduction,
+            category,
+            createdAt,
+            updatedAt,
+          } = el
+          return {
+            id,
+            title,
+            mainImg,
+            introduction,
+            category,
+            tasteAvg: tasteAvg.toFixed(2),
+            easyAvg: easyAvg.toFixed(2),
+            createdAt,
+            updatedAt,
+          }
         })
       )
-    
+
       let newArr = []
       for (let n = offset; n < offset + limit; n++) {
-        if(addAvg[n]) newArr.push(addAvg[n])
+        if (addAvg[n]) newArr.push(addAvg[n])
       }
       result = newArr
+    } else if (recipeNum) {
+      let recipeData = await Recipe.findOne({
+        include: [
+          { model: TasteScore, attributes: ['score'] },
+          { model: EasyScore, attributes: ['score'] },
+          {
+            model: Comment,
+            attributes: ['id', 'content', 'createdAt', 'userId'],
+          },
+        ],
+        where: { id: recipeNum },
+      })
+      console.log(recipeData)
+      let tasteNum = recipeData.dataValues.TasteScores.length
+      let tasteAvg = tasteNum === 0 ? 0 : everyScoreSum(recipeData.dataValues.TasteScores) / tasteNum
+      let easyNum = recipeData.dataValues.EasyScores.length
+      let easyAvg = easyNum === 0 ? 0 : everyScoreSum(recipeData.dataValues.EasyScores) / easyNum
+      let seperateWords = recipeData.dataValues.content.split('@')
+      let isMyPost = false
+      let isMyFavorite = false
+      //사용자 처리하면 다시 여기도 추가요
+
+      const {
+        id,
+        userId,
+        title,
+        introduction,
+        category,
+        requiredTime,
+        createdAt,
+        updatedAt,
+        mainImg,
+        contentImg,
+        ingredients,
+        Comments
+      } = recipeData
+
+      let commentData = await Promise.all(
+        Comments.map(async (el) => {
+          let value = await User.findOne({
+            where: { id: el.userId }
+          })
+          let newObj = { name: value.name }
+          let result = { ...el.dataValues, ...newObj }
+
+          return result
+        })
+      )
+
+       result = {
+         id,
+         userId,
+         title,
+         introduction,
+         category,
+         requiredTime,
+         content: seperateWords,
+         createdAt,
+         updatedAt,
+         tasteAvg: tasteAvg.toFixed(2),
+         easyAvg: easyAvg.toFixed(2),
+         mainImg,
+         contentImg,
+         ingredients,
+         commentData
+       }
     }
     res.send(result)
   },
+  update: (req, res, next) => {
+        
+  }
 }
