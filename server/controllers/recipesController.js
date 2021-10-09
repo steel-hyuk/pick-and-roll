@@ -27,7 +27,7 @@ module.exports = {
       ingredients,
       content,
       contentImg,
-      userId,
+      userId
     } = postData
 
     Recipe.findOrCreate({
@@ -40,8 +40,8 @@ module.exports = {
         ingredients,
         content,
         contentImg,
-        userId,
-      },
+        userId
+      }
     })
       .then(async ([data, created]) => {
         if (created) {
@@ -67,11 +67,12 @@ module.exports = {
     let limit = Number(req.query.limit)
     let recipeNum = req.query.id
     if (pageNum > 1) offset = limit * (pageNum - 1)
+    let result
 
     //* 메인페이지에서 카테고리별, 분류별 데이터를 담당합니다 *//
     if (category && division && offset !== undefined && limit !== undefined) {
       let categorySort
-      let result
+
       //* 최신순 정렬 *//
       if (division === 'createdAt') {
         categorySort = await Recipe.findAll(
@@ -81,19 +82,19 @@ module.exports = {
                 limit: Number(limit),
                 include: [
                   { model: TasteScore, attributes: ['score'] },
-                  { model: EasyScore, attributes: ['score'] },
+                  { model: EasyScore, attributes: ['score'] }
                 ],
-                order: ['createdAt'],
+                order: ['createdAt']
               }
             : {
                 offset: Number(offset),
                 limit: Number(limit),
                 include: [
                   { model: TasteScore, attributes: ['score'] },
-                  { model: EasyScore, attributes: ['score'] },
+                  { model: EasyScore, attributes: ['score'] }
                 ],
                 order: ['createdAt'],
-                where: { category: category },
+                where: { category: category }
               }
         )
         result = await Promise.all(
@@ -111,7 +112,7 @@ module.exports = {
               introduction,
               category,
               createdAt,
-              updatedAt,
+              updatedAt
             } = el
             return {
               id,
@@ -122,7 +123,7 @@ module.exports = {
               tasteAvg: tasteAvg.toFixed(2),
               easyAvg: easyAvg.toFixed(2),
               createdAt,
-              updatedAt,
+              updatedAt
             }
           })
         )
@@ -133,17 +134,17 @@ module.exports = {
             ? {
                 include: [
                   { model: TasteScore, attributes: ['score'] },
-                  { model: EasyScore, attributes: ['score'] },
+                  { model: EasyScore, attributes: ['score'] }
                 ],
-                order: ['createdAt'],
+                order: ['createdAt']
               }
             : {
                 include: [
                   { model: TasteScore, attributes: ['score'] },
-                  { model: EasyScore, attributes: ['score'] },
+                  { model: EasyScore, attributes: ['score'] }
                 ],
                 order: ['createdAt'],
-                where: { category: category },
+                where: { category: category }
               }
         )
         let avgAdd = await Promise.all(
@@ -161,7 +162,7 @@ module.exports = {
               introduction,
               category,
               createdAt,
-              updatedAt,
+              updatedAt
             } = el
             return {
               id,
@@ -172,7 +173,7 @@ module.exports = {
               tasteAvg: tasteAvg.toFixed(2),
               easyAvg: easyAvg.toFixed(2),
               createdAt,
-              updatedAt,
+              updatedAt
             }
           })
         )
@@ -194,13 +195,13 @@ module.exports = {
         limit: Number(limit),
         include: [
           { model: TasteScore, attributes: ['score'] },
-          { model: EasyScore, attributes: ['score'] },
+          { model: EasyScore, attributes: ['score'] }
         ],
         where: {
           title: {
-            [sequelize.Op.like]: '%' + searchName + '%',
-          },
-        },
+            [sequelize.Op.like]: '%' + searchName + '%'
+          }
+        }
       })
 
       let addAvg = await Promise.all(
@@ -218,7 +219,7 @@ module.exports = {
             introduction,
             category,
             createdAt,
-            updatedAt,
+            updatedAt
           } = el
           return {
             id,
@@ -229,7 +230,7 @@ module.exports = {
             tasteAvg: tasteAvg.toFixed(2),
             easyAvg: easyAvg.toFixed(2),
             createdAt,
-            updatedAt,
+            updatedAt
           }
         })
       )
@@ -239,24 +240,35 @@ module.exports = {
         if (addAvg[n]) newArr.push(addAvg[n])
       }
       result = newArr
-    } else if (recipeNum) {
+    } else if (recipeNum) { 
       let recipeData = await Recipe.findOne({
         include: [
           { model: TasteScore, attributes: ['score'] },
           { model: EasyScore, attributes: ['score'] },
           {
             model: Comment,
-            attributes: ['id', 'content', 'createdAt', 'userId'],
-          },
+            attributes: ['id', 'content', 'createdAt', 'userId']
+          }
         ],
-        where: { id: recipeNum },
+        where: { id: recipeNum }
       })
       console.log(recipeData)
       let tasteNum = recipeData.dataValues.TasteScores.length
-      let tasteAvg = tasteNum === 0 ? 0 : everyScoreSum(recipeData.dataValues.TasteScores) / tasteNum
+      let tasteAvg =
+        tasteNum === 0
+          ? 0
+          : everyScoreSum(recipeData.dataValues.TasteScores) / tasteNum
       let easyNum = recipeData.dataValues.EasyScores.length
-      let easyAvg = easyNum === 0 ? 0 : everyScoreSum(recipeData.dataValues.EasyScores) / easyNum
+      let easyAvg =
+        easyNum === 0
+          ? 0
+          : everyScoreSum(recipeData.dataValues.EasyScores) / easyNum
       let seperateWords = recipeData.dataValues.content.split('@')
+      let seperateContentImg = recipeData.dataValues.contentImg.split(',')
+      let seperateIngredients1 = recipeData.dataValues.ingredients.split('@')
+      let seperateIngredients2 = seperateIngredients1.map((el) => {
+        return el.split(',')
+      })
       let isMyPost = false
       let isMyFavorite = false
       //사용자 처리하면 다시 여기도 추가요
@@ -271,8 +283,6 @@ module.exports = {
         createdAt,
         updatedAt,
         mainImg,
-        contentImg,
-        ingredients,
         Comments
       } = recipeData
 
@@ -281,34 +291,32 @@ module.exports = {
           let value = await User.findOne({
             where: { id: el.userId }
           })
-          let newObj = { name: value.name }
+          let newObj = { nickname: value.nickname }
           let result = { ...el.dataValues, ...newObj }
 
           return result
         })
       )
 
-       result = {
-         id,
-         userId,
-         title,
-         introduction,
-         category,
-         requiredTime,
-         content: seperateWords,
-         createdAt,
-         updatedAt,
-         tasteAvg: tasteAvg.toFixed(2),
-         easyAvg: easyAvg.toFixed(2),
-         mainImg,
-         contentImg,
-         ingredients,
-         commentData
-       }
+      result = {
+        id,
+        userId,
+        title,
+        introduction,
+        category,
+        requiredTime,
+        content: seperateWords,
+        createdAt,
+        updatedAt,
+        tasteAvg: tasteAvg.toFixed(2),
+        easyAvg: easyAvg.toFixed(2),
+        mainImg,
+        contentImg: seperateContentImg,
+        ingredients: seperateIngredients2,
+        commentData
+      }
     }
     res.send(result)
   },
-  update: (req, res, next) => {
-        
-  }
+  update: (req, res, next) => {}
 }

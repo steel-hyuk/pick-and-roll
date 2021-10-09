@@ -27,7 +27,7 @@ module.exports = {
         email: email,
         nickname: nickname,
         password: password,
-        description: description
+        description: description,
       },
     })
       .then(([data, created]) => {
@@ -48,7 +48,7 @@ module.exports = {
   signIn: (req, res, next) => {
     const { email, password } = req.body
     User.findOne({
-      where: { email, password }
+      where: { email, password },
     })
       .then((user) => {
         if (!user) {
@@ -84,14 +84,14 @@ module.exports = {
       if (!refreshToken) {
         res.status(403).send({
           message:
-            "refresh token does not exist, you've never logged in before"
+            "refresh token does not exist, you've never logged in before",
         })
       }
       const refreshTokenData = checkRefeshToken(refreshToken)
       if (!refreshTokenData) {
         res.json({
           data: null,
-          message: 'invalid refresh token, please log in again'
+          message: 'invalid refresh token, please log in again',
         })
       }
       const { email } = refreshTokenData
@@ -99,7 +99,7 @@ module.exports = {
       if (!findUser) {
         res.json({
           data: null,
-          message: 'refresh token has been tempered'
+          message: 'refresh token has been tempered',
         })
       }
       delete findUser.dataValues.password
@@ -128,11 +128,11 @@ module.exports = {
     //사용자의 가입시 입력한 email은 수정 할 수 없습니다!
     userParams = {
       nickname: req.body.nickname,
-      description: req.body.description
+      description: req.body.description,
     }
 
     User.update(userParams, {
-      where: { id: userId }
+      where: { id: userId },
     })
       .then(async () => {
         let updatedData = await User.findOne({ where: { id: userId } })
@@ -183,10 +183,10 @@ module.exports = {
       include: [
         {
           model: Recipe,
-          attributes: ['id', 'title', 'introduction', 'category', 'createdAt']
+          attributes: ['id', 'title', 'introduction', 'category', 'createdAt'],
         },
       ],
-      where: { id: userId }
+      where: { id: userId },
     })
       .then(async (info) => {
         let Data = await Promise.all(
@@ -194,9 +194,9 @@ module.exports = {
             let value = await Recipe.findOne({
               include: [
                 { model: TasteScore, attributes: ['score'] },
-                { model: EasyScore, attributes: ['score'] }
+                { model: EasyScore, attributes: ['score'] },
               ],
-              where: { id: el.id }
+              where: { id: el.id },
             })
 
             let tasteNum = value.TasteScores.length
@@ -212,7 +212,7 @@ module.exports = {
               introduction,
               category,
               createdAt,
-              mainImg
+              mainImg,
             } = value
 
             return {
@@ -223,7 +223,7 @@ module.exports = {
               category,
               tasteAvg: tasteAvg.toFixed(2),
               easyAvg: easyAvg.toFixed(2),
-              createdAt
+              createdAt,
             }
           })
         )
@@ -241,7 +241,7 @@ module.exports = {
     let userId = res.locals.userId
     User.findAll({
       include: [{ model: Favorite, attributes: ['recipeId'] }],
-      where: { id: userId }
+      where: { id: userId },
     })
       .then(async (info) => {
         let Data = await Promise.all(
@@ -280,7 +280,7 @@ module.exports = {
               tasteAvg: tasteAvg.toFixed(2),
               easyAvg: easyAvg.toFixed(2),
               createdAt,
-              updatedAt
+              updatedAt,
             }
           })
         )
@@ -300,7 +300,7 @@ module.exports = {
       where: {
         userId: userId,
         recipeId: recipeId,
-      }
+      },
     })
       .then(([data, created]) => {
         if (!created) {
@@ -320,7 +320,7 @@ module.exports = {
       where: {
         userId: userId,
         recipeId: recipeId,
-      }
+      },
     })
       .then(() => {
         res.status(200).send({ message: '즐겨찾기가 성공적으로 삭제됐습니다!' })
