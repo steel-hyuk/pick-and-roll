@@ -28,7 +28,7 @@ const LoginModal = ({ handleLogin, openLogin, setOpenLogin }) => {
       event.preventDefault()
     }
   }
-  
+
   return openLogin ? (
     <Modal>
       <Left onClick={() => setOpenLogin(false)}></Left>
@@ -61,7 +61,6 @@ const LoginModal = ({ handleLogin, openLogin, setOpenLogin }) => {
                 }}
               />
             </InputC>
-
             <LoginBtn onClick={logIn}>Login</LoginBtn>
             <SignUpBtn onClick={() => setOpenLogin(false)}>
               <p>회원가입을 원하시나요?</p>
