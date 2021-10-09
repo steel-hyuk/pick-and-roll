@@ -12,6 +12,7 @@ import Search from './page/search'
 import Signup from './page/signup'
 import Write from './page/write'
 import NavbarComponent from './component/navbarComponent'
+import FooterComponent from './component/footerComponent';
 
 function App() {
   const { isLoggedIn, setIsLoggedIn } = useContext(AuthContext)
@@ -56,6 +57,7 @@ function App() {
           <Route exact path="/posts" component={Posts} />
         </Switch>
       </Router>
+      <FooterComponent />
     </div>
   )
 }

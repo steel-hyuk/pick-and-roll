@@ -14,6 +14,39 @@ const LoginModal = ({ handleLogin, openLogin, setOpenLogin }) => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
 
+  const kakaoClick = async () => {
+    const scope = 'profile_nickname'
+    window.Kakao.Auth.login({
+      success: function (response) {
+        window.Kakao.Auth.setAccessToken(response.access_token)
+        console.log(`is set?: ${window.Kakao.Auth.getAccessToken()}`)
+        const ACCESS_TOKEN = window.Kakao.Auth.getAccessToken()
+        window.Kakao.API.request({
+          url: '/v2/user/me',
+          success: function ({ kakao_account }) {
+            console.log(ACCESS_TOKEN)
+            console.log(kakao_account)
+            const { email, profile } = kakao_account
+            console.log(email)
+            console.log(profile.nickname)
+            axios
+              .get('https://localhost:4000/users/kakao', {
+                email,
+                name: profile.nickname,
+              })
+              .then((res) => {
+                console.log(res)
+              })
+              .catch((error) => {
+                console.error(error)
+                alert('카카오 로그인 에러?')
+              })
+          },
+        })
+      },
+    })
+  }
+
   // (axios) 로그인 요청
   const logIn = async (event) => {
     if (email === '' || password === '') {
@@ -73,7 +106,7 @@ const LoginModal = ({ handleLogin, openLogin, setOpenLogin }) => {
                 Sign Up
               </div>
             </SignUpBtn>
-            <SocialLoginBtn>kakao</SocialLoginBtn>
+            <SocialLoginBtn onClick={kakaoClick}>kakao</SocialLoginBtn>
             <CancelBtn onClick={() => setOpenLogin(false)}>
               <FaRegTimesCircle />
             </CancelBtn>
