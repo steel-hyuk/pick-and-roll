@@ -18,13 +18,13 @@ const {
         if (!refreshToken) {
           return res
             .status(403)
-            .send({ message: "refresh token does not exist, you've never logged in before"})
+            .send({ message: '로그인이 필요한 권한입니다.'})
         }
         const refreshTokenData = checkRefeshToken(refreshToken)
         if (!refreshTokenData) {
           return res.status(401).send({
             data: null,
-            message: 'invalid refresh token, please log in again'
+            message: '권한이 확인되지 않습니다. 다시 로그인해주세요'
           })
         }
         const { email } = refreshTokenData
