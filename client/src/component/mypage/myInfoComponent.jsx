@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useState, useEffect } from 'react'
 import styled from 'styled-components'
 import { FaKey, FaCog } from 'react-icons/fa'
 import { UserContext } from '../../context/userContext'
@@ -6,6 +6,7 @@ import ShowInfoComponent from '../editMyInfo/showInfoComponent'
 import EditMyInfoComponent from '../editMyInfo/editMyInfoComponent'
 import ChangePasswordComponent from '../editMyInfo/changePasswordComponent'
 import PasswordModal from '../modal/passwordModal'
+import api from '../../api/index'
 
 const MyInfoComponent = () => {
   const { userInfo, setUserInfo } = useContext(UserContext)
@@ -15,6 +16,31 @@ const MyInfoComponent = () => {
 
   const changeInfo = () => setPage('showInfo')
   const changeEdit = () => setPage('EditInfo')
+
+  //(axios) get 요청으로 토큰, 데이터 업데이트
+  const updateUser = async () => {
+    await api
+      .get(
+        '/users',
+        {},
+        {
+          'Content-Type': 'application/json',
+        }
+      )
+      .then((res) => {
+        console.log(res.data)
+        api.defaults.headers.common[
+          'Authorization'
+        ] = `Bearer ${res.data.accessToken}`
+        let { id, email, nickname, description, createdAt } = res.data.userData
+        let user = { id, email, nickname, description, createdAt }
+        setUserInfo(user)
+      })
+  }
+
+  useEffect(() => {
+    updateUser()
+  }, [])
 
   return (
     <Contents>
@@ -45,7 +71,11 @@ const MyInfoComponent = () => {
               <FaKey onClick={() => setPwModal(!pwModal)} />
             </ReviseBtn>
             {pwModal ? (
-              <PasswordModal pwModal={pwModal} setPage={setPage} setPwModal={setPwModal} />
+              <PasswordModal
+                pwModal={pwModal}
+                setPage={setPage}
+                setPwModal={setPwModal}
+              />
             ) : null}
             <ReviseText className="fixed">비밀번호 수정</ReviseText>
           </ReviseForm>

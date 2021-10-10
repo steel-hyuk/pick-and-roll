@@ -1,14 +1,31 @@
-import React, { useState } from 'react'
-import axios from 'axios'
+import React, { useState, useContext, useRef } from 'react'
 import styled from 'styled-components'
 import { FaRegTimesCircle } from 'react-icons/fa'
+import api from '../../api/index'
+import Swal from 'sweetalert2'
 
 const PasswordModal = ({ pwModal, setPwModal, setPage }) => {
   const [password, setPassword] = useState('')
+  const [checkPwMessage, setCheckPwMessage] = useState('')
 
-  // (axios) 비밀번호 확인 요청
-  const checkPw = () => {
-    console.log(password)
+  const checkPw = async () => {
+    await api
+      .post('/users/security', { password })
+      .then((res) => {
+        Swal.fire({
+          title: '비밀번호가 확인되었습니다.',
+          icon: 'success',
+          showCancelButton: false,
+          focusConfirm: false,
+          confirmButtonText: '확인',
+          confirmButtonColor: '#e8b229',
+        })
+        setPwModal(false)
+        setPage('changePassword')
+      })
+      .catch((res) => {
+        setCheckPwMessage('비밀번호가 일치하지 않습니다!')
+      })
   }
 
   return (
@@ -27,11 +44,10 @@ const PasswordModal = ({ pwModal, setPwModal, setPage }) => {
                 setPassword(e.target.value)
               }}
             ></Input>
+            <CheckText>{checkPwMessage}</CheckText>
             <CheckBtn
               onClick={() => {
                 checkPw()
-                setPwModal(false)
-                setPage('changePassword')
               }}
             >
               확인
@@ -90,6 +106,14 @@ const Pwcheck = styled.div`
   font-size: 20px;
   margin-bottom: 20px;
   margin-top: 30px;
+`
+
+const CheckText = styled.p`
+  height: 20px;
+  text-align: left;
+  font-size: 13px;
+  margin: 0;
+  color: rgb(255, 162, 0);
 `
 
 const Input = styled.input`

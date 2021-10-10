@@ -1,19 +1,25 @@
-import React, { useState, useContext } from 'react'
+import React, { useState, useContext, useRef } from 'react'
 import styled from 'styled-components'
 import Swal from 'sweetalert2'
+import api from '../../api/index'
 import { UserContext } from '../../context/userContext'
 
 const EditMyInfoComponent = () => {
   const [changeNickname, setChangeNickname] = useState('')
   const [changeDescription, setChangeDescription] = useState('자기소개 입니다.')
 
+  const [messageNickname, setMessageNickname] = useState('')
+  const [messageDescription, setMessageDescription] = useState('')
+
+  const _nick = useRef()
+  const _des = useRef()
+
   const { userInfo, setUserInfo } = useContext(UserContext)
-  const { id, email, createdAt } = userInfo
+  const { email, createdAt } = userInfo
 
   // 닉네임 형식을 체크하는 정규 표현식
   const nickname_Reg = /^([a-zA-Z0-9ㄱ-ㅎ|ㅏ-ㅣ|가-힣]).{1,10}$/
 
-  // axios를 통해 이미 등록된 닉네임인지 체크
   const checkNickname = () => {
     if (!nickname_Reg.test(changeNickname) || changeNickname === '') {
       Swal.fire({
@@ -27,8 +33,28 @@ const EditMyInfoComponent = () => {
       })
       return
     }
+    api
+      .post('users/signup/nick-check', {
+        nickname: changeNickname,
+      })
+      .then((res) => {
+        console.log(changeNickname)
+        console.log(res.data.message)
+        if (res.data.message === '동일한 닉네임이 존재합니다!') {
+          console.log(res)
+          Swal.fire({
+            title: '중복된 닉네임입니다.',
+            icon: 'warning',
+            showCancelButton: false,
+            focusConfirm: false,
+            confirmButtonText: '확인',
+            confirmButtonColor: '#e8b229',
+          })
+          return
+        }
+      })
     Swal.fire({
-      title: '사용할 수 있는 닉네임입니다. ',
+      title: '사용할 수 있는 닉네임입니다.',
       icon: 'success',
       showCancelButton: false,
       focusConfirm: false,
@@ -37,16 +63,32 @@ const EditMyInfoComponent = () => {
     })
   }
 
-  // (axios) 회원정보 업데이트 요청 추가 
   const editDone = () => {
-    setUserInfo({
-      id,
-      email,
-      createdAt,
-      name: changeNickname,
-      description: changeDescription,
+    if (changeNickname === '' || !nickname_Reg.test(changeNickname)) {
+      _nick.current.focus()
+      setMessageNickname(
+        '닉네임은 한글, 영문, 숫자만 가능하며 2-10자리까지 가능합니다!'
+      )
+      return
+    }
+    if (changeDescription === '') {
+      _des.current.focus()
+      setMessageDescription('자기소개를 입력해주세요!')
+      return
+    }
+    api.patch('/users', {
+      nickname : changeNickname,
+      description : changeDescription
+    }).then(res => {
+      let { id, email, nickname, description, createdAt } = res.data.userData
+      setUserInfo({
+        id,
+        email,
+        nickname : changeNickname,
+        description : changeDescription,
+        createdAt
+      })
     })
-
     Swal.fire({
       title: '정보가 수정되었습니다.',
       icon: 'success',
@@ -65,6 +107,8 @@ const EditMyInfoComponent = () => {
           onChange={(e) => {
             setChangeNickname(e.target.value)
           }}
+          placeholder="닉네임을 입력해주세요."
+          ref={_nick}
         />
         <CheckBtn onClick={checkNickname}>확인</CheckBtn>
       </NameArea>
@@ -75,6 +119,7 @@ const EditMyInfoComponent = () => {
             setChangeDescription(e.target.value)
           }}
           placeholder="자기소개를 입력해주세요."
+          ref={_des}
         />
       </IntroArea>
       <BottomArea>
@@ -114,9 +159,14 @@ const Name = styled.h3`
 const NameInput = styled.input`
   width: 60%;
   margin: 5px 0 0 0;
-  padding: 0;
+  padding: 3px;
+  font-size: 11px;
   border: solid 2px #d2d2d2;
   border-radius: 5px;
+  :focus {
+    border: 2px solid rgb(243, 200, 18);
+    outline: none;
+  }
 `
 
 const CheckBtn = styled.button`
@@ -143,8 +193,13 @@ const Textarea = styled.textarea`
   resize: none;
   width: 95%;
   height: 130px;
-  padding: 5px;
+  padding: 0 0 5px 0;
   border: solid 2px #d2d2d2;
+  border-radius: 5px;
+  :focus {
+    border: 2px solid rgb(243, 200, 18);
+    outline: none;
+  }
 `
 
 const DateArea = styled.div`

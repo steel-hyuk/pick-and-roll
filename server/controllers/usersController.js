@@ -10,7 +10,7 @@ const {
   resendAccessToken,
   sendRefreshToken,
   isAuthorized,
-  checkRefeshToken,
+  checkRefeshToken
 } = require('../controllers/token/tokenController')
 const { everyScoreSum } = require('../controllers/function/function')
 
@@ -28,7 +28,7 @@ module.exports = {
         nickname: nickname,
         password: password,
         description: description
-      },
+      }
     })
       .then(([data, created]) => {
         if (!created) {
@@ -38,15 +38,46 @@ module.exports = {
         }
         res
           .status(201)
-          .send({ message: '회원가입이 성곡적으로 이루어졌습니다!' })
+          .send({ message: '회원가입이 성공적으로 이루어졌습니다!' })
       })
       .catch((err) => {
         console.log('signUp accessToken error!')
         next(err)
       })
   },
+  mailCheck: (req, res, next) => {
+    User.findOne({
+      where: { email: req.body.email }
+    })
+      .then((user) => {
+        if (!user) {
+          return res.send({ message: '✔ 사용 가능한 이메일입니다!' })
+        }
+        res.send({ message: '동일한 이메일이 존재합니다!' })
+      })
+      .catch((err) => {
+        console.log('메일 유효성 검사 오류')
+        next(err)
+      })
+  },
+  nickCheck: (req, res, next) => {
+    User.findOne({
+      where: { nickname: req.body.nickname }
+    })
+      .then((user) => {
+        if (!user) {
+          return res.send({ message: '✔ 사용 가능한 닉네임입니다!' })
+        }
+        res.send({ message: '동일한 닉네임이 존재합니다!' })
+      })
+      .catch((err) => {
+        console.log('닉네임 유효성 검사 오류')
+        next(err)
+      })
+  },
   signIn: (req, res, next) => {
     const { email, password } = req.body
+    console.log(email, password)
     User.findOne({
       where: { email, password }
     })
@@ -83,15 +114,14 @@ module.exports = {
     if (!accessTokenData) {
       if (!refreshToken) {
         res.status(403).send({
-          message:
-            "refresh token does not exist, you've never logged in before"
+          message: '로그인이 필요한 권한입니다.'
         })
       }
       const refreshTokenData = checkRefeshToken(refreshToken)
       if (!refreshTokenData) {
         res.json({
           data: null,
-          message: 'invalid refresh token, please log in again'
+          message: '권한이 확인되지 않습니다. 다시 로그인해주세요.'
         })
       }
       const { email } = refreshTokenData
@@ -109,7 +139,7 @@ module.exports = {
     }
     const { email } = accessTokenData
     User.findOne({
-      where: { email },
+      where: { email }
     })
       .then((user) => {
         let userData = user.dataValues
@@ -123,8 +153,6 @@ module.exports = {
   },
   update: async (req, res, next) => {
     let userId = res.locals.userId
-    let message = res.locals.message
-    let token = res.locals.isAuth
     //사용자의 가입시 입력한 email은 수정 할 수 없습니다!
     userParams = {
       nickname: req.body.nickname,
@@ -138,8 +166,7 @@ module.exports = {
         let updatedData = await User.findOne({ where: { id: userId } })
         let userData = updatedData.dataValues
         delete userData.password
-        if (message === 'Auth Ok!') res.send({ userData })
-        else res.send({ token, userData })
+        res.send({ userData })
       })
       .catch((err) => {
         console.log('mypage update error!')
@@ -153,10 +180,10 @@ module.exports = {
       let findData = await User.findOne({ where: { id: userId } })
       let userData = findData.dataValues
 
-      if (Number(userData.password) !== req.body.password) {
-        res.status(404).send({ message: false })
-      } else if (Number(userData.password) === req.body.password) {
-        res.send({ message: true })
+      if (userData.password !== req.body.password) {
+        res.status(404).send({ message: '비밀번호가 일치하지 않습니다' })
+      } else if (userData.password === req.body.password) {
+        res.send({ message: '비밀번호가 일치합니다' })
       }
     } catch (err) {
       console.log('비밀번호 확인 오류')
@@ -165,13 +192,21 @@ module.exports = {
   },
   passwordChange: async (req, res, next) => {
     try {
+      let changePasswordData = req.body.password
       let userId = res.locals.userId
       delete res.locals.isAuth
+      let userData = await User.findOne({ where: { id: userId } })
+      console.log(userData)
+      if (changePasswordData === userData.dataValues.password) {
+        return res.send({
+          message: '이전 비밀번호와 동일합니다. 다른 비밀번호로 변경해주세요.'
+        })
+      }
       await User.update(
-        { password: req.body.password },
+        { password: changePasswordData },
         { where: { id: userId } }
       )
-      res.send({ message: true })
+      res.send({ message: '비밀번호 변경이 완료됐습니다' })
     } catch (err) {
       console.log('비밀번호 변경 오류')
       next(err)
@@ -184,7 +219,7 @@ module.exports = {
         {
           model: Recipe,
           attributes: ['id', 'title', 'introduction', 'category', 'createdAt']
-        },
+        }
       ],
       where: { id: userId }
     })
@@ -249,9 +284,9 @@ module.exports = {
             let value = await Recipe.findOne({
               include: [
                 { model: TasteScore, attributes: ['score'] },
-                { model: EasyScore, attributes: ['score'] },
+                { model: EasyScore, attributes: ['score'] }
               ],
-              where: { id: el.recipeId },
+              where: { id: el.recipeId }
             })
 
             let tasteNum = value.TasteScores.length
@@ -268,7 +303,7 @@ module.exports = {
               category,
               createdAt,
               updatedAt,
-              mainImg,
+              mainImg
             } = value
 
             return {
@@ -294,17 +329,17 @@ module.exports = {
       })
   },
   addFavorite: (req, res, next) => {
-    let recipeId = req.params.recipesId
+    let recipeId = Number(req.params.recipesId)
     let userId = res.locals.userId
     Favorite.findOrCreate({
       where: {
         userId: userId,
-        recipeId: recipeId,
+        recipeId: recipeId
       }
     })
       .then(([data, created]) => {
         if (!created) {
-          res.status(409).send({ message: '이미 등록 된 즐겨찾기입니다!' })
+          res.status(409).send({ message: '이미 등록된 즐겨찾기입니다!' })
         }
         res.status(201).send(data)
       })
@@ -314,12 +349,12 @@ module.exports = {
       })
   },
   deleteFavorite: (req, res, next) => {
-    let recipeId = req.params.recipesId
+    let recipeId = Number(req.params.recipesId)
     let userId = res.locals.userId
     Favorite.destroy({
       where: {
         userId: userId,
-        recipeId: recipeId,
+        recipeId: recipeId
       }
     })
       .then(() => {
@@ -329,5 +364,5 @@ module.exports = {
         console.log('Favorite Delete Error!')
         next(err)
       })
-  },
+  }
 }

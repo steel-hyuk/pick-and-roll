@@ -35,12 +35,14 @@ const SignupComponent = () => {
   const nickname_Reg = /^([a-zA-Z0-9ㄱ-ㅎ|ㅏ-ㅣ|가-힣]).{1,10}$/
 
   // (axios) 이미 등록된 이메일인지 체크
-  const checkEmail = () => {
+  const checkEmail = async () => {
     if (!email_Reg.test(email)) {
       setMessageEmail('이메일 형식에 맞게 작성해 주시기 바랍니다!')
       return
+    } else {
+      await api.post('/users/signup/mail-check', { email })
+      .then((res) => setMessageEmail(res.data.message))
     }
-    setMessageEmail('✔ 사용 가능한 이메일입니다!')
   }
 
   // 비밀번호 체크
@@ -65,12 +67,14 @@ const SignupComponent = () => {
   }
 
   // (axios) 이미 등록된 닉네임인지 체크
-  const checkNickname = () => {
+  const checkNickname = async () => {
     if (!nickname_Reg.test(nickname)) {
       setMessageNickname('닉네임은 한글, 영문, 숫자만 가능하며 2-10자리까지 가능합니다!')
       return
+    } else {
+      await api.post('/users/signup/nick-check', { nickname })
+      .then((res) => setMessageNickname(res.data.message))
     }
-    setMessageNickname('✔ 사용 가능한 닉네임입니다!')
   }
 
   // 회원가입 버튼
@@ -112,7 +116,7 @@ const SignupComponent = () => {
     })
     history.push('/')
   }
-
+  
   return (
     <Wrapper>
       <TitleArea>

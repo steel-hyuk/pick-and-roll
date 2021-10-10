@@ -1,7 +1,28 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
+import api from '../../api/index'
 
 const MyRecipeComponent = () => {
+  const [myRecipe, setMyRecipe] = useState('')
+
+  const showMyRecipe = () => {
+    api
+      .get(
+        '/users/myrecipe',
+        {},
+        {
+          'Content-Type': 'application/json',
+        }
+      )
+      .then((res) => {
+        console.log(res)
+      })
+  }
+
+  useEffect(() => {
+    showMyRecipe()
+  }, [])
+
   return (
     <Contents>
       <TitleWrap>

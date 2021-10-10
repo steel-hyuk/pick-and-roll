@@ -1,8 +1,8 @@
 import React, { useState, useRef } from 'react'
-import axios from 'axios'
 import Swal from 'sweetalert2'
 import styled from 'styled-components'
 import { useHistory } from 'react-router'
+import api from '../../api/index'
 
 const ChangePasswordComponent = () => {
   const [password, setPassword] = useState('')
@@ -23,7 +23,9 @@ const ChangePasswordComponent = () => {
   // 비밀번호를 체크하기 위한 함수
   const checkPassWord = () => {
     if (!password_Reg.test(password)) {
-      setMessagePassword('(8~15자) 영문 대소문자/숫자/특수문자 모두 포함해야합니다!')
+      setMessagePassword(
+        '(8~15자) 영문 대소문자/숫자/특수문자 모두 포함해야합니다!'
+      )
       return
     }
     setMessagePassword('✔ 사용 가능한 비밀번호입니다!')
@@ -32,6 +34,7 @@ const ChangePasswordComponent = () => {
   // 비밀번호 확인을 체크하기 위한 함수
   const doubleCheckPassWord = () => {
     if (password === '') {
+      _pw.current.focus()
       setMessagePassword('비밀번호를 먼저 입력해주세요!')
     } else if (password !== '' && !pwCheck) setMessagePwCheck('')
     else if (password !== pwCheck || !password_Reg.test(password))
@@ -40,56 +43,85 @@ const ChangePasswordComponent = () => {
       setMessagePwCheck('✔ 비밀번호가 확인되었습니다!')
   }
 
-  // 비밀번호 변경을 위한 함수 
-  // (axios) 변경된 비밀번호 업데이트 요청 추가
-  const changePw = () => {
+  // 비밀번호 변경을 위한 함수
+  const changePw = async () => {
     if (password === '' || !password_Reg.test(password)) {
       _pw.current.focus()
-      setMessagePassword('(8~15자) 영문 대소문자/숫자/특수문자 모두 포함해야합니다!')
+      setMessagePassword(
+        '(8~15자) 영문 대소문자/숫자/특수문자 모두 포함해야합니다!'
+      )
       return
     } else if (pwCheck === '' || password !== pwCheck) {
       _pwChk.current.focus()
       setMessagePwCheck('비밀번호를 다시 확인해주세요!')
       return
     }
-    Swal.fire({
-      title: '비밀번호가 변경되었습니다.',
-      icon: 'success',
-      showCancelButton: false,
-      focusConfirm: false,
-      confirmButtonText: '확인',
-      confirmButtonColor: '#e8b229',
-    })
-    history.push('/mypage')
+    await api
+      .patch(
+        '/users/security',
+        {
+          password,
+        },
+        {
+          ContentType: 'application/json',
+        }
+      )
+      .then((res) => {
+        console.log(res.data.message)
+        if (res.data.message !== '비밀번호 변경이 완료됐습니다') {
+          setMessagePassword('이전 비밀번호 입니다.')
+          setMessagePwCheck('비밀번호를 다시 확인해주세요!')
+          setPassword('')
+          setPwCheck('')
+          Swal.fire({
+            title: '이전 비밀번호와 일치합니다.',
+            icon: 'warning',
+            showCancelButton: false,
+            focusConfirm: false,
+            confirmButtonText: '확인',
+            confirmButtonColor: '#e8b229',
+          })
+          return
+        }
+        Swal.fire({
+          title: '비밀번호가 변경되었습니다.',
+          icon: 'success',
+          showCancelButton: false,
+          focusConfirm: false,
+          confirmButtonText: '확인',
+          confirmButtonColor: '#e8b229',
+        })
+        history.push('/mypage')
+      })
   }
 
   return (
     <Wrap>
-      <NameArea>
-        <Name>새로운 비밀번호를 입력하세요.</Name>
-        <NameInput
+      <PasswordArea>
+        <PwText>새로운 비밀번호를 입력하세요.</PwText>
+        <PwInput
           type="password"
           onChange={(e) => {
             setPassword(e.target.value)
           }}
           ref={_pw}
+          onBlur={checkPassWord}
         />
         <CheckText>{messagePassword}</CheckText>
-        <CheckBtn onClick={checkPassWord}>확인</CheckBtn>
-      </NameArea>
-      <NameArea>
-        <Name>비밀번호를 다시 입력해주세요.</Name>
-        <NameInput
+      </PasswordArea>
+      <PasswordArea>
+        <PwText>비밀번호를 다시 입력해주세요.</PwText>
+        <PwInput
           type="password"
           onChange={(e) => {
             setPwCheck(e.target.value)
           }}
           ref={_pwChk}
+          onBlur={doubleCheckPassWord}
         />
         <CheckText>{messagePwCheck}</CheckText>
-        <CheckBtn onClick={doubleCheckPassWord}>확인</CheckBtn>
         <ChangeBtn onClick={changePw}> 변경 완료</ChangeBtn>
-      </NameArea>
+      </PasswordArea>
     </Wrap>
   )
 }
@@ -103,23 +135,27 @@ const Wrap = styled.div`
   flex-direction: column;
 `
 
-const NameArea = styled.div`
+const PasswordArea = styled.div`
   margin: 20px 0;
   text-align: center;
 `
 
-const Name = styled.h3`
+const PwText = styled.h3`
   color: #616161;
   margin: 5px 0;
   width: 100%;
 `
 
-const NameInput = styled.input`
+const PwInput = styled.input`
   width: 80%;
   margin: 5px 0 3px 0;
   padding: 3px;
   border: solid 2px #d2d2d2;
   border-radius: 5px;
+  :focus {
+    border: solid 2px rgb(243, 200, 18);
+    outline: none;
+  }
 `
 
 const CheckBtn = styled.button`
@@ -140,7 +176,7 @@ const CheckBtn = styled.button`
 const CheckText = styled.p`
   height: 20px;
   text-align: left;
-  font-size: 11px;
+  font-size: 10px;
   margin: 0 0 0 26px;
   color: rgb(255, 162, 0);
 `
