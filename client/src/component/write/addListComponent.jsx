@@ -1,18 +1,28 @@
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useRef, useState } from 'react'
 import styled from 'styled-components'
 
-const AddListContent = ({ contents, setContents }) => {
+const AddListContent = ({
+  contents,
+  setContents,
+  contentsRef,
+  setMessageContents,
+}) => {
+  const [contentValue, setContentValue] = useState()
   const addList = () => {
-    setContents([...contents, ' '])
+    setContents([...contents, ''])
   }
   const deletList = () => {
     setContents(contents.slice(0, -1))
   }
 
   const onChangeContent = useCallback((event, idx) => {
-    const newContent = contents
-    newContent[idx] = event
-    setContents(newContent)
+    if (!/[@!#$%^&*()]/g.test(event)) {
+      const newContent = contents.slice()
+      newContent[idx] = event
+      setContents(newContent)
+    } else {
+      setMessageContents('특수문자를 사용하실 수 없습니다.')
+    }
   })
 
   return (
@@ -25,6 +35,8 @@ const AddListContent = ({ contents, setContents }) => {
             onChange={(e) => {
               onChangeContent(e.target.value, idx)
             }}
+            value={content}
+            ref={contentsRef}
           />
         </InlineBox>
       ))}
@@ -42,7 +54,12 @@ const AddListContent = ({ contents, setContents }) => {
 }
 export default AddListContent
 //////
-export const AddListingredients = ({ ingredients, setIngredients }) => {
+export const AddListingredients = ({
+  ingredients,
+  setIngredients,
+  ingredientsRef,
+  setMessageIngredients,
+}) => {
   const addList = () => {
     const newIngredients = [
       ...ingredients,
@@ -54,17 +71,33 @@ export const AddListingredients = ({ ingredients, setIngredients }) => {
     setIngredients(newIngredients)
   }
 
-  const onChangeIngredient = useCallback((value, idx) => {
-    let newIngredients = ingredients
-    newIngredients[idx].ingredient = value
-    setIngredients(newIngredients)
+  const onChangeIngredient = useCallback((obj, value, idx) => {
+    if (!/[@,!.#$%^&*()]/g.test(value)) {
+      let newIngredients = Object.assign(ingredients[idx], {
+        ingredient: value,
+      })
+      let obj = ingredients.slice()
+      obj.splice(idx, 1, newIngredients)
+
+      setIngredients(obj)
+    } else {
+      setMessageIngredients('특수문자[@,!.#$%^&*()]를 사용하실 수 없습니다.')
+    }
   })
 
-  const onChangeAmount = useCallback((value, idx) => {
-    const newIngredients = ingredients.slice()
-    newIngredients[idx]['amount'] = value
-    setIngredients(newIngredients)
-  })
+  const onChangeAmount = (value, idx) => {
+    if (!/[@,!.#$%^&*()]/g.test(value)) {
+      let newIngredients = Object.assign(ingredients[idx], {
+        amount: value,
+      })
+      let obj = ingredients.slice()
+      obj.splice(idx, 1, newIngredients)
+
+      setIngredients(obj)
+    } else {
+      setMessageIngredients('특수문자[@,!.#$%^&*()]를 사용하실 수 없습니다.')
+    }
+  }
 
   const deletList = () => {
     setIngredients(ingredients.slice(0, -1))
@@ -79,8 +112,11 @@ export const AddListingredients = ({ ingredients, setIngredients }) => {
             type="text"
             placeholder="재료"
             onChange={(e) => {
-              onChangeIngredient(e.target.value, idx)
+              console.log(obj.ingredient)
+              onChangeIngredient(obj, e.target.value, idx)
             }}
+            ref={ingredientsRef}
+            value={obj.ingredient}
           />
           <Textarea
             type="text"
@@ -88,6 +124,7 @@ export const AddListingredients = ({ ingredients, setIngredients }) => {
             onChange={(e) => {
               onChangeAmount(e.target.value, idx)
             }}
+            value={obj.amount}
           />
         </InlineBox>
       ))}

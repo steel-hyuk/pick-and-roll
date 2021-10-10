@@ -1,7 +1,7 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useRef } from 'react'
 import styled from 'styled-components'
 
-const DropDownTime = ({ requiredTime, setRequiredTime }) => {
+const DropDownTime = ({ requiredTime, setRequiredTime, requiredTimeRef }) => {
   const onChangeRequiredTime = useCallback((event) => {
     setRequiredTime(event.target.value)
   })
@@ -13,6 +13,7 @@ const DropDownTime = ({ requiredTime, setRequiredTime }) => {
         placeholder="조리시간"
         onChange={(e) => onChangeRequiredTime(e)}
         value={requiredTime}
+        ref={requiredTimeRef}
       />
       <select onChange={(e) => onChangeRequiredTime(e)}>
         <option value="30분">30분</option>
@@ -24,7 +25,7 @@ const DropDownTime = ({ requiredTime, setRequiredTime }) => {
   )
 }
 
-export const DropDownCategory = ({ category, setCategory }) => {
+export const DropDownCategory = ({ category, setCategory, categoryRef }) => {
   const onChangeCategory = useCallback((event) => {
     setCategory(event.target.value)
   }, [])
@@ -36,6 +37,7 @@ export const DropDownCategory = ({ category, setCategory }) => {
         placeholder="카테고리"
         onChange={(e) => onChangeCategory(e)}
         value={category}
+        ref={categoryRef}
       />
       <select onChange={(e) => onChangeCategory(e)}>
         <option value="한식">한식</option>
