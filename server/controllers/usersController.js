@@ -51,7 +51,7 @@ module.exports = {
     })
       .then((user) => {
         if (!user) {
-          return res.send({ message: '사용가능 이메일입니다!' })
+          return res.send({ message: '✔ 사용 가능한 이메일입니다!' })
         }
         res.send({ message: '동일한 이메일이 존재합니다!' })
       })
@@ -66,7 +66,7 @@ module.exports = {
     })
       .then((user) => {
         if (!user) {
-          return res.send({ message: '사용가능 닉네임입니다!' })
+          return res.send({ message: '✔ 사용 가능한 닉네임입니다!' })
         }
         res.send({ message: '동일한 닉네임이 존재합니다!' })
       })
@@ -339,7 +339,7 @@ module.exports = {
     })
       .then(([data, created]) => {
         if (!created) {
-          res.status(409).send({ message: '이미 등록 된 즐겨찾기입니다!' })
+          res.status(409).send({ message: '이미 등록된 즐겨찾기입니다!' })
         }
         res.status(201).send(data)
       })
