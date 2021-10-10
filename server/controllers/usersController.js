@@ -153,8 +153,6 @@ module.exports = {
   },
   update: async (req, res, next) => {
     let userId = res.locals.userId
-    let message = res.locals.message
-    let token = res.locals.isAuth
     //사용자의 가입시 입력한 email은 수정 할 수 없습니다!
     userParams = {
       nickname: req.body.nickname,
@@ -168,8 +166,7 @@ module.exports = {
         let updatedData = await User.findOne({ where: { id: userId } })
         let userData = updatedData.dataValues
         delete userData.password
-        if (message === 'Auth Ok!') res.send({ userData })
-        else res.send({ token, userData })
+        res.send({ userData })
       })
       .catch((err) => {
         console.log('mypage update error!')
@@ -332,7 +329,7 @@ module.exports = {
       })
   },
   addFavorite: (req, res, next) => {
-    let recipeId = req.params.recipesId
+    let recipeId = Number(req.params.recipesId)
     let userId = res.locals.userId
     Favorite.findOrCreate({
       where: {
@@ -352,7 +349,7 @@ module.exports = {
       })
   },
   deleteFavorite: (req, res, next) => {
-    let recipeId = req.params.recipesId
+    let recipeId = Number(req.params.recipesId)
     let userId = res.locals.userId
     Favorite.destroy({
       where: {

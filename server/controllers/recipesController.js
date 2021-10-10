@@ -1,5 +1,12 @@
 const sequelize = require('sequelize')
-const { Recipe, TasteScore, EasyScore, Comment, User } = require('../models')
+const {
+  Recipe,
+  TasteScore,
+  EasyScore,
+  Comment,
+  User,
+  Favorite
+} = require('../models')
 const { isAuthorized } = require('../controllers/token/tokenController')
 const { everyScoreSum, isAuth } = require('../controllers/function/function')
 
@@ -14,7 +21,7 @@ module.exports = {
       "ingredients": "${req.body.ingredients}",
       "content": "${req.body.content}",
       "contentImg": "${req.body.contentImg}",
-      "userId": "${res.locals.id}"        
+      "userId": "${res.locals.userId}"        
   }` //res.locals.id 바꿔줘야함
 
     let postData = JSON.parse(userParams)
@@ -46,11 +53,7 @@ module.exports = {
       .then(async ([data, created]) => {
         if (created) {
           const postId = data.dataValues.id
-          let accessToken = res.locals.isAuthorized
-
-          res.locals.message === 'Auth Ok!'
-            ? res.status(201).send({ id: postId })
-            : res.status(201).send({ accessToken, id: postId })
+          res.status(201).send({ id: postId })
         }
       })
       .catch((err) => {
@@ -65,7 +68,7 @@ module.exports = {
     let pageNum = Number(req.query.offset)
     let offset = 0
     let limit = Number(req.query.limit)
-    let recipeNum = req.query.id
+    let recipeNum = Number(req.query.id)
     if (pageNum > 1) offset = limit * (pageNum - 1)
     let result
 
@@ -75,28 +78,28 @@ module.exports = {
 
       //* 최신순 정렬 *//
       if (division === 'createdAt') {
-          categorySort = await Recipe.findAll(
-            category === 'all'
-              ? {
-                  offset: Number(offset),
-                  limit: Number(limit),
-                  include: [
-                    { model: TasteScore, attributes: ['score'] },
-                    { model: EasyScore, attributes: ['score'] }
-                  ],
-                  order: ['createdAt']
-                }
-              : {
-                  offset: Number(offset),
-                  limit: Number(limit),
-                  include: [
-                    { model: TasteScore, attributes: ['score'] },
-                    { model: EasyScore, attributes: ['score'] }
-                  ],
-                  order: ['createdAt'],
-                  where: { category: category }
-                }
-          )            
+        categorySort = await Recipe.findAll(
+          category === 'all'
+            ? {
+                offset: Number(offset),
+                limit: Number(limit),
+                include: [
+                  { model: TasteScore, attributes: ['score'] },
+                  { model: EasyScore, attributes: ['score'] }
+                ],
+                order: ['createdAt']
+              }
+            : {
+                offset: Number(offset),
+                limit: Number(limit),
+                include: [
+                  { model: TasteScore, attributes: ['score'] },
+                  { model: EasyScore, attributes: ['score'] }
+                ],
+                order: ['createdAt'],
+                where: { category: category }
+              }
+        )
         result = await Promise.all(
           categorySort.map(async (el) => {
             let tasteNum = el.TasteScores.length
@@ -126,9 +129,9 @@ module.exports = {
               updatedAt
             }
           })
-        )       
+        )
       } else if (division === 'taste' || division === 'easy') {
-        //* 맛, 편리성 정렬 *//        
+        //* 맛, 편리성 정렬 *//
         categorySort = await Recipe.findAll(
           category === 'all'
             ? {
@@ -146,7 +149,7 @@ module.exports = {
                 order: ['createdAt'],
                 where: { category: category }
               }
-        )    
+        )
         let avgAdd = await Promise.all(
           categorySort.map(async (el) => {
             let tasteNum = el.TasteScores.length
@@ -182,7 +185,6 @@ module.exports = {
           else if (division === 'easy') return b.easyAvg - a.easyAvg
         })
         let newArr = []
-        console.log(offset, limit)
         for (let n = offset; n < offset + limit; n++) {
           if (sortAvg[n]) newArr.push(sortAvg[n])
         }
@@ -239,8 +241,8 @@ module.exports = {
       }
       result = newArr
     } else if (recipeNum) {
+      isAuth(req, res)
       //* 레시피 게시물을 클릭 후 보여주는 부분 *//
-      isAuth(req, res, next) 
       let recipeData = await Recipe.findOne({
         include: [
           { model: TasteScore, attributes: ['score'] },
@@ -252,13 +254,14 @@ module.exports = {
         ],
         where: { id: recipeNum }
       })
-      console.log(recipeData)
       let tasteNum = recipeData.dataValues.TasteScores.length
-      let tasteAvg = tasteNum === 0
+      let tasteAvg =
+        tasteNum === 0
           ? 0
           : everyScoreSum(recipeData.dataValues.TasteScores) / tasteNum
       let easyNum = recipeData.dataValues.EasyScores.length
-      let easyAvg = easyNum === 0
+      let easyAvg =
+        easyNum === 0
           ? 0
           : everyScoreSum(recipeData.dataValues.EasyScores) / easyNum
       let seperateWords = recipeData.dataValues.content.split('@')
@@ -267,9 +270,10 @@ module.exports = {
       let seperateIngredients2 = seperateIngredients1.map((el) => {
         return el.split(',')
       })
-      let isMyPost = false
+      let isMyRecipe = false
       let isMyFavorite = false
-      //사용자 처리하면 다시 여기도 추가요
+      let isVoteEasy = false
+      let isVoteTaste = false
 
       const {
         id,
@@ -284,6 +288,32 @@ module.exports = {
         Comments
       } = recipeData
 
+      //* 나의 게시물, 즐겨찾기인지 확인 *//
+      let findFavoriteRecipe = await Favorite.findOne({
+        where: {
+          userId: res.locals.userId,
+          recipeId: id
+        }
+      })
+      let findEasyScore = await EasyScore.findOne({
+        where: {
+          userId: res.locals.userId,
+          recipeId: id
+        }
+      })
+      let findTasteScore = await TasteScore.findOne({
+        where: {
+          userId: res.locals.userId,
+          recipeId: id
+        }
+      })
+
+      if (!!findEasyScore) isVoteEasy = true
+      if (!!findTasteScore) isVoteTaste = true
+      if (!!findFavoriteRecipe) isMyFavorite = true
+      if (res.locals.userId === userId) isMyRecipe = true
+
+      //* 댓글정보를 불러와서 입력해주는 곳 *//
       let commentData = await Promise.all(
         Comments.map(async (el) => {
           let value = await User.findOne({
@@ -299,6 +329,10 @@ module.exports = {
       result = {
         id,
         userId,
+        isMyRecipe,
+        isMyFavorite,
+        isVoteTaste,
+        isVoteEasy,
         title,
         introduction,
         category,
@@ -313,6 +347,9 @@ module.exports = {
         ingredients: seperateIngredients2,
         commentData
       }
+      res.locals.message === 'Auth Ok!'
+        ? res.send({ recipeData: result })
+        : res.send({ accessToken: res.locals.isAuth, recipeData: result })
     }
     res.send(result)
   },
