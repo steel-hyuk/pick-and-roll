@@ -1,8 +1,8 @@
 import React, { useState, useRef } from 'react'
-import axios from 'axios'
 import Swal from 'sweetalert2'
 import styled from 'styled-components'
 import { useHistory } from 'react-router'
+import api from '../../api/index'
 
 const ChangePasswordComponent = () => {
   const [password, setPassword] = useState('')
@@ -42,7 +42,7 @@ const ChangePasswordComponent = () => {
 
   // 비밀번호 변경을 위한 함수 
   // (axios) 변경된 비밀번호 업데이트 요청 추가
-  const changePw = () => {
+  const changePw = async () => {
     if (password === '' || !password_Reg.test(password)) {
       _pw.current.focus()
       setMessagePassword('(8~15자) 영문 대소문자/숫자/특수문자 모두 포함해야합니다!')
@@ -52,6 +52,12 @@ const ChangePasswordComponent = () => {
       setMessagePwCheck('비밀번호를 다시 확인해주세요!')
       return
     }
+    await api.post('/users/security', {
+      password
+    }, {
+      'ContentType': 'application/json'
+    })
+
     Swal.fire({
       title: '비밀번호가 변경되었습니다.',
       icon: 'success',

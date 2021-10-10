@@ -1,14 +1,17 @@
-import React, { useState } from 'react'
-import axios from 'axios'
+import React, { useState, useContext } from 'react'
 import styled from 'styled-components'
 import { FaRegTimesCircle } from 'react-icons/fa'
+import api from '../../api/index'
 
 const PasswordModal = ({ pwModal, setPwModal, setPage }) => {
   const [password, setPassword] = useState('')
+  const [checkPwMessage, setCheckPwMessage] = useState('')
 
+  // (axios) 기존비밀번호 확인
   // (axios) 비밀번호 확인 요청
-  const checkPw = () => {
-    console.log(password)
+  const checkPw = async () => {
+        setPwModal(false)
+        setPage('changePassword')
   }
 
   return (
@@ -30,8 +33,6 @@ const PasswordModal = ({ pwModal, setPwModal, setPage }) => {
             <CheckBtn
               onClick={() => {
                 checkPw()
-                setPwModal(false)
-                setPage('changePassword')
               }}
             >
               확인
