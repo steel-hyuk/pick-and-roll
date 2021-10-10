@@ -16,6 +16,7 @@ const LoginModal = ({ openLogin, setOpenLogin }) => {
 
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [messageAuth, setMessageAuth] = useState('')
 
   const kakaoClick = async () => {
     const scope = 'profile_nickname'
@@ -80,6 +81,9 @@ const LoginModal = ({ openLogin, setOpenLogin }) => {
           setUserInfo(user)
           setIsLoggedIn(true)
         })
+        .catch((err) => {
+          setMessageAuth('계정 정보를 확인해주세요!')
+        })
     }
     event.preventDefault()
   }
@@ -116,6 +120,7 @@ const LoginModal = ({ openLogin, setOpenLogin }) => {
                 }}
               />
             </InputC>
+            <CheckText>{messageAuth}</CheckText>
             <LoginBtn onClick={logIn}>Login</LoginBtn>
             <SignUpBtn onClick={() => setOpenLogin(false)}>
               <p>회원가입을 원하시나요?</p>
@@ -274,6 +279,15 @@ const CancelBtn = styled.div`
   :hover {
     color: rgb(237, 199, 32);
   }
+`
+
+const CheckText = styled.div`
+  height: 3px;
+  text-align: left;
+  font-size: 11px;
+  margin-left: 5px;
+  margin-top: 3px;
+  color: rgb(255, 75, 75);
 `
 
 export default LoginModal
