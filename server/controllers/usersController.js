@@ -63,16 +63,17 @@ module.exports = {
   nickCheck: (req, res, next) => {
     User.findOne({
       where: { nickname: req.body.nickname }
-    }).then((user) => {
-      if (!user) {
-        return res.send({ message: '사용가능 닉네임입니다!' })
-      }
-      res.send({ message: '동일한 닉네임이 존재합니다!' })
     })
-    .catch((err) => {
-      console.log('닉네임 유효성 검사 오류')
-      next(err)
-    })
+      .then((user) => {
+        if (!user) {
+          return res.send({ message: '사용가능 닉네임입니다!' })
+        }
+        res.send({ message: '동일한 닉네임이 존재합니다!' })
+      })
+      .catch((err) => {
+        console.log('닉네임 유효성 검사 오류')
+        next(err)
+      })
   },
   signIn: (req, res, next) => {
     const { email, password } = req.body
@@ -197,10 +198,12 @@ module.exports = {
       let changePasswordData = req.body.password
       let userId = res.locals.userId
       delete res.locals.isAuth
-      let userData = await User.findOne({ where: { id: userId }})
+      let userData = await User.findOne({ where: { id: userId } })
       console.log(userData)
-      if(changePasswordData === userData.dataValues.password) {
-        return res.send({ message: '이전 비밀번호와 동일합니다. 다른 비밀번호로 변경해주세요.'})
+      if (changePasswordData === userData.dataValues.password) {
+        return res.send({
+          message: '이전 비밀번호와 동일합니다. 다른 비밀번호로 변경해주세요.'
+        })
       }
       await User.update(
         { password: changePasswordData },
