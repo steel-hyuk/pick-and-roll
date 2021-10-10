@@ -353,5 +353,171 @@ module.exports = {
     }
     res.send(result)
   },
-  update: (req, res, next) => {}
+  update: async (req, res, next) => {
+    let userParams = `{
+      "title": "${req.body.title}",
+      "introduction": "${req.body.introduction}",
+      "category": "${req.body.category}",
+      "requiredTime": "${req.body.requiredTime}",
+      "content": "${req.body.content}",
+      "mainImg": "${req.body.mainImg}",
+      "contentImg": "${req.body.contentImg}",
+      "ingredients": "${req.body.ingredients}"        
+  }`
+    let recipeData = JSON.parse(userParams)
+    let recipeId = req.params.recipesId
+
+    const {
+      title,
+      introduction,
+      category,
+      requiredTime,
+      content,
+      mainImg,
+      contentImg,
+      ingredients
+    } = recipeData
+
+    let updateRecipeData = {
+      title,
+      introduction,
+      mainImg,
+      category,
+      requiredTime,
+      ingredients,
+      content,
+      contentImg
+    }
+    Recipe.update(updateRecipeData, {
+      where: { id: recipeId }
+    })
+      .then(async () => {
+        let updatedData = await Recipe.findOne({ where: { id: recipeId }})
+        let recipeData = updatedData.dataValues
+        res.send(recipeData)
+      })
+      .catch((err) => {
+        console.log('mypage update error!')
+      })
+  },
+  delete: (req, res, next) => {
+    Recipe.destroy({
+      where: { id: req.params.recipesId }
+    })
+      .then(() => {
+        res.send({ message: `레시피 삭제가 완료됐습니다!` })
+      })
+      .catch((err) => {
+        console.log('recipes delete error!')
+        next(err)
+      })
+  },
+  tasteScore: (req, res, next) => {
+    let recipeId = req.params.recipesId
+    let userId = res.locals.userId
+    let score = req.body.score
+
+    TasteScore.findOrCreate({
+      where: {
+        score: score,
+        userId: userId,
+        recipeId: recipeId
+      }
+    })
+      .then(([data, created]) => {
+        if (!created) {
+          res.status(409).send({ message: '맛 평점 중복투표는 불가능합니다!' })
+        }
+        res.send(data.dataValues)
+      })
+      .catch((err) => {
+        console.log('Taste score Add Error!')
+        next(err)
+      })
+  },
+  easyScore: (req, res, next) => {
+    let recipeId = req.params.recipesId
+    let userId = res.locals.userId
+    let score = req.body.score
+
+    EasyScore.findOrCreate({
+      where: {
+        score: score,
+        userId: userId,
+        recipeId: recipeId
+      }
+    })
+      .then(([data, created]) => {
+        if (!created) {
+          res.status(409).send({ message: '편리성 평점 중복투표는 불가능합니다!' })
+        }
+        res.send(data.dataValues)
+      })
+      .catch((err) => {
+        console.log('Easy score Add Error!')
+        next(err)
+      })
+  },
+  commentAdd: (req, res, next) => {
+    let recipeId = req.params.recipesId
+    let userId = res.locals.userId
+    let content = req.body.content
+
+    Comment.findOrCreate({
+      where: {
+        content: content,
+        userId: userId,
+        recipeId: recipeId
+      }
+    })
+      .then(([data, created]) => {
+        if(!created) {
+          res.status(409).send({ message: '댓글 도배는 금지에요!' })
+        }
+        res.status(201).send(data.dataValues)
+      })
+      .catch((err) => {
+        console.log('New comment add Error!')
+        next(err)
+      })
+  },
+  commentEdit: async (req, res, next) => {
+    let commentId = req.params.commentId
+    let content = req.body.content
+    let userId = res.locals.userId
+    let updateComment = {
+      content: content
+    }
+    let findCommentUser = await Comment.findOne({ where: { id: commentId }})
+    let commentUserId = findCommentUser.dataValues.userId
+    if(commentUserId !== userId) {
+      return res.status(403).send({ message: '해당 권한이 없습니다.' })
+    }
+    Comment.update(updateComment, {
+      where: { id: commentId }
+    })
+      .then(async () => {
+        let updateData = await Comment.findOne({ where: { id: commentId }})
+        res.send(updateData.dataValues)
+      })
+      .catch((err) => {
+        console.log('Update comment Error!')
+        next(err)
+      })
+  },
+  commentDelete: async (req, res, next) => {
+    let commentId = req.params.commentId
+    let userId = res.locals.userId
+    let findCommentUser = await Comment.findOne({ where: { id: commentId }})
+    let commentUserId = findCommentUser.dataValues.userId
+    if(commentUserId !== userId) {
+      return res.status(403).send({ message: '해당 권한이 없습니다.' })
+    }
+    Comment.destroy({
+      where: { id: commentId }
+    })
+      .then(() => {
+        res.send({ message: '댓글 삭제가 완료됐습니다!' })
+      })
+  }
 }
