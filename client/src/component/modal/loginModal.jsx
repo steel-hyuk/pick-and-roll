@@ -59,18 +59,27 @@ const LoginModal = ({ openLogin, setOpenLogin }) => {
         confirmButtonText: '확인',
       })
     } else {
-      await api.post('/users/signin', {
-        email, password
-      }, {
-        'Content-Type': 'application/json'
-      })
-      .then((res) => {
-        let { id, email, nickname, description, createdAt } = res.data.userData
-        let user = { id, email, nickname, description, createdAt }
-        console.log('user : ', user)
-        setUserInfo(user)
-        setIsLoggedIn(true)
-      })
+      await api
+        .post(
+          '/users/signin',
+          {
+            email,
+            password,
+          },
+          {
+            'Content-Type': 'application/json',
+          }
+        )
+        .then((res) => {
+          api.defaults.headers.common[
+            'Authorization'
+          ] = `Bearer ${res.data.accessToken}`
+          let { id, email, nickname, description, createdAt } =
+            res.data.userData
+          let user = { id, email, nickname, description, createdAt }
+          setUserInfo(user)
+          setIsLoggedIn(true)
+        })
     }
     event.preventDefault()
   }

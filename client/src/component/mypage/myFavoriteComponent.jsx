@@ -1,7 +1,28 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
+import api from '../../api/index'
 
 const MyFavoriteComponent = () => {
+  const [favoriteInfo, setFavoriteInfo] = useState('')
+
+  const showFavorite = () => {
+    api
+      .get(
+        '/users/favorite',
+        {},
+        {
+          'Content-Type': 'application/json',
+        }
+      )
+      .then((res) => {
+        console.log(res)
+      })
+  }
+
+  useEffect(() => {
+    showFavorite()
+  }, [])
+
   return (
     <Contents>
       <TitleWrap>

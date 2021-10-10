@@ -1,6 +1,6 @@
-import React, {useContext} from 'react'
+import React, { useContext } from 'react'
 import styled from 'styled-components'
-import {UserContext} from '../../context/userContext'
+import { UserContext } from '../../context/userContext'
 
 const ShowInfoComponent = () => {
   const { userInfo, setUserInfo } = useContext(UserContext)
@@ -9,7 +9,7 @@ const ShowInfoComponent = () => {
     <Wrap>
       <NameArea>
         <Name>닉네임</Name>
-        <NameInput>{userInfo.name}</NameInput>
+        <NameInput>{userInfo.nickname}</NameInput>
       </NameArea>
       <IntroArea>
         <Name>자기 소개</Name>
@@ -48,7 +48,7 @@ const Name = styled.h3`
   color: #616161;
 `
 
-const NameInput = styled.input`
+const NameInput = styled.p`
   width: 60%;
   margin: 5px 0 0 0;
   padding: 0;
