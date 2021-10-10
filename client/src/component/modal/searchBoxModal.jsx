@@ -3,11 +3,9 @@ import { useHistory } from 'react-router-dom'
 import styled from 'styled-components'
 import { FaSearch } from 'react-icons/fa'
 import { SearchValueContext } from '../../context/searchValueContext'
-import { AuthContext } from '../../context/authContext'
 
 const SearchBoxModal = ({ showSearchBox, setShowSearchBox }) => {
   const history = useHistory()
-  const { isLoggedIn, setIsLoggedIn } = useContext(AuthContext)
   const { isValue, setIsValue } = useContext(SearchValueContext)
   const [inputValue, setInputValue] = useState('')
 

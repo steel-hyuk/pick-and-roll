@@ -2,7 +2,7 @@ import React from 'react'
 
 import SideMenuComponent from '../component/sideMenuComponent'
 
-const Mypage = (props) => {
+const Mypage = () => {
   return <SideMenuComponent />
 }
 

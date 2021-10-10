@@ -1,13 +1,16 @@
 import React, { useState, useContext } from 'react'
-import axios from 'axios'
 import styled from 'styled-components'
 import { useHistory } from 'react-router'
 import { FaRegTimesCircle } from 'react-icons/fa'
 import Swal from 'sweetalert2'
-import { AuthContext } from '../../context/authContext'
 
-const LoginModal = ({ handleLogin, openLogin, setOpenLogin }) => {
+import api from '../../api'
+import { AuthContext } from '../../context/authContext'
+import { UserContext } from '../../context/userContext'
+
+const LoginModal = ({ openLogin, setOpenLogin }) => {
   const { isLoggedIn, setIsLoggedIn } = useContext(AuthContext)
+  const { userInfo, setUserInfo } = useContext(UserContext)
 
   const history = useHistory()
 
@@ -29,8 +32,8 @@ const LoginModal = ({ handleLogin, openLogin, setOpenLogin }) => {
             const { email, profile } = kakao_account
             console.log(email)
             console.log(profile.nickname)
-            axios
-              .get('https://localhost:4000/users/kakao', {
+            api
+              .get('/users/kakao', {
                 email,
                 name: profile.nickname,
               })
@@ -47,7 +50,6 @@ const LoginModal = ({ handleLogin, openLogin, setOpenLogin }) => {
     })
   }
 
-  // (axios) 로그인 요청
   const logIn = async (event) => {
     if (email === '' || password === '') {
       Swal.fire({
@@ -57,9 +59,20 @@ const LoginModal = ({ handleLogin, openLogin, setOpenLogin }) => {
         confirmButtonText: '확인',
       })
     } else {
-      setIsLoggedIn(!isLoggedIn)
-      event.preventDefault()
+      await api.post('/users/signin', {
+        email, password
+      }, {
+        'Content-Type': 'application/json'
+      })
+      .then((res) => {
+        let { id, email, nickname, description, createdAt } = res.data.userData
+        let user = { id, email, nickname, description, createdAt }
+        console.log('user : ', user)
+        setUserInfo(user)
+        setIsLoggedIn(true)
+      })
     }
+    event.preventDefault()
   }
 
   return openLogin ? (
