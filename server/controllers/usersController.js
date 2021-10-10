@@ -153,9 +153,9 @@ module.exports = {
       let findData = await User.findOne({ where: { id: userId } })
       let userData = findData.dataValues
 
-      if (Number(userData.password) !== req.body.password) {
+      if (userData.password !== req.body.password) {
         res.status(404).send({ message: false })
-      } else if (Number(userData.password) === req.body.password) {
+      } else if (userData.password === req.body.password) {
         res.send({ message: true })
       }
     } catch (err) {
@@ -171,7 +171,7 @@ module.exports = {
         { password: req.body.password },
         { where: { id: userId } }
       )
-      res.send({ message: true })
+      res.send({ message: '변경이 완료되었습니다' })
     } catch (err) {
       console.log('비밀번호 변경 오류')
       next(err)
