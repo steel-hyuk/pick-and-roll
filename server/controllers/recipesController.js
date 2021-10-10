@@ -1,7 +1,7 @@
 const sequelize = require('sequelize')
 const { Recipe, TasteScore, EasyScore, Comment, User } = require('../models')
 const { isAuthorized } = require('../controllers/token/tokenController')
-const { everyScoreSum } = require('../controllers/function/function')
+const { everyScoreSum, isAuth } = require('../controllers/function/function')
 
 module.exports = {
   write: async (req, res, next) => {
@@ -75,28 +75,28 @@ module.exports = {
 
       //* 최신순 정렬 *//
       if (division === 'createdAt') {
-        categorySort = await Recipe.findAll(
-          category === 'all'
-            ? {
-                offset: Number(offset),
-                limit: Number(limit),
-                include: [
-                  { model: TasteScore, attributes: ['score'] },
-                  { model: EasyScore, attributes: ['score'] }
-                ],
-                order: ['createdAt']
-              }
-            : {
-                offset: Number(offset),
-                limit: Number(limit),
-                include: [
-                  { model: TasteScore, attributes: ['score'] },
-                  { model: EasyScore, attributes: ['score'] }
-                ],
-                order: ['createdAt'],
-                where: { category: category }
-              }
-        )
+          categorySort = await Recipe.findAll(
+            category === 'all'
+              ? {
+                  offset: Number(offset),
+                  limit: Number(limit),
+                  include: [
+                    { model: TasteScore, attributes: ['score'] },
+                    { model: EasyScore, attributes: ['score'] }
+                  ],
+                  order: ['createdAt']
+                }
+              : {
+                  offset: Number(offset),
+                  limit: Number(limit),
+                  include: [
+                    { model: TasteScore, attributes: ['score'] },
+                    { model: EasyScore, attributes: ['score'] }
+                  ],
+                  order: ['createdAt'],
+                  where: { category: category }
+                }
+          )            
         result = await Promise.all(
           categorySort.map(async (el) => {
             let tasteNum = el.TasteScores.length
@@ -126,9 +126,9 @@ module.exports = {
               updatedAt
             }
           })
-        )
+        )       
       } else if (division === 'taste' || division === 'easy') {
-        //* 맛, 편리성 정렬 *//
+        //* 맛, 편리성 정렬 *//        
         categorySort = await Recipe.findAll(
           category === 'all'
             ? {
@@ -146,7 +146,7 @@ module.exports = {
                 order: ['createdAt'],
                 where: { category: category }
               }
-        )
+        )    
         let avgAdd = await Promise.all(
           categorySort.map(async (el) => {
             let tasteNum = el.TasteScores.length
@@ -203,7 +203,6 @@ module.exports = {
           }
         }
       })
-
       let addAvg = await Promise.all(
         searchData.map(async (el) => {
           let tasteNum = el.TasteScores.length
@@ -234,13 +233,14 @@ module.exports = {
           }
         })
       )
-
       let newArr = []
       for (let n = offset; n < offset + limit; n++) {
         if (addAvg[n]) newArr.push(addAvg[n])
       }
       result = newArr
-    } else if (recipeNum) { 
+    } else if (recipeNum) {
+      //* 레시피 게시물을 클릭 후 보여주는 부분 *//
+      isAuth(req, res, next) 
       let recipeData = await Recipe.findOne({
         include: [
           { model: TasteScore, attributes: ['score'] },
@@ -254,13 +254,11 @@ module.exports = {
       })
       console.log(recipeData)
       let tasteNum = recipeData.dataValues.TasteScores.length
-      let tasteAvg =
-        tasteNum === 0
+      let tasteAvg = tasteNum === 0
           ? 0
           : everyScoreSum(recipeData.dataValues.TasteScores) / tasteNum
       let easyNum = recipeData.dataValues.EasyScores.length
-      let easyAvg =
-        easyNum === 0
+      let easyAvg = easyNum === 0
           ? 0
           : everyScoreSum(recipeData.dataValues.EasyScores) / easyNum
       let seperateWords = recipeData.dataValues.content.split('@')
