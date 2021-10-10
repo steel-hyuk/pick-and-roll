@@ -17,7 +17,7 @@ const MyInfoComponent = () => {
   const changeInfo = () => setPage('showInfo')
   const changeEdit = () => setPage('EditInfo')
 
-  //axios get 요청으로 토큰, 데이터 업데이트
+  //(axios) get 요청으로 토큰, 데이터 업데이트
   const updateUser = async () => {
     await api
       .get(
