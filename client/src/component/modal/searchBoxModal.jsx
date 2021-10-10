@@ -1,6 +1,7 @@
 import React, { useContext, useState } from 'react'
 import { useHistory } from 'react-router-dom'
 import styled from 'styled-components'
+import { FaSearch } from 'react-icons/fa'
 import { SearchValueContext } from '../../context/searchValueContext'
 import { AuthContext } from '../../context/authContext'
 
@@ -35,9 +36,9 @@ const SearchBoxModal = ({ showSearchBox, setShowSearchBox }) => {
         ></div>
         <div className={showSearchBox ? 'opened' : 'modal'} aria-hidden="true">
           <div className="modal-dialog">
-            <button onClick={() => setShowSearchBox(false)} aria-hidden="true">
+            <Button onClick={() => setShowSearchBox(false)} aria-hidden="true">
               &times;
-            </button>
+            </Button>
             <div className="modal-body">
               <input
                 type="text"
@@ -47,6 +48,11 @@ const SearchBoxModal = ({ showSearchBox, setShowSearchBox }) => {
                 value={inputValue}
                 onChange={(e) => setInputValue(e.target.value)}
                 onKeyPress={(e) => SearchRedirect(e)}
+              />
+              <FaSearch
+                className="icon"
+                type="submit"
+                onClick={SearchRedirect}
               />
             </div>
           </div>
@@ -58,7 +64,7 @@ const SearchBoxModal = ({ showSearchBox, setShowSearchBox }) => {
 
 const Wrapper = styled.div`
   .Background {
-    background: rgba(210, 224, 8, 0.356);
+    background: #606060;
     position: fixed;
     width: 100%;
     height: 100vh;
@@ -84,7 +90,7 @@ const Wrapper = styled.div`
     -webkit-transform: translate(0, 0);
     -ms-transform: translate(0, 0);
     transform: translate(0, 0);
-    top: 20%;
+    top: 40%;
   }
   .modal-dialog {
     background: #fefefe;
@@ -120,5 +126,23 @@ const Wrapper = styled.div`
     border-right: 0px;
     border-top: 0px;
   }
+  .icon {
+    margin-top: 3px;
+    width: 24px;
+    height: 24px;
+  }
+  .icon:hover {
+    color: #888;
+    width: 30px;
+    height: 30px;
+    transition: transform 0.3s ease-out;
+  }
 `
+
+const Button = styled.button`
+  position: absolute;
+  top: 5%;
+  left: 93%;
+`
+
 export default SearchBoxModal

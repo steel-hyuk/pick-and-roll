@@ -1,5 +1,11 @@
 import React from 'react'
 import styled from 'styled-components'
+import {
+  FaFacebookSquare,
+  FaPinterestSquare,
+  FaGithub,
+  FaTwitter,
+} from 'react-icons/fa'
 
 const FooterComponent = () => {
   return (
@@ -26,16 +32,24 @@ const FooterComponent = () => {
         <p className="text">Copyright @2021 | Designed by 경기남부연합</p>
         <ul className="social">
           <li>
-            <a href="#"></a>
+            <a href="#">
+              <FaFacebookSquare />
+            </a>
           </li>
           <li>
-            <a href="#"></a>
+            <a href="#">
+              <FaPinterestSquare />
+            </a>
           </li>
           <li>
-            <a href="#"></a>
+            <a href="#">
+              <FaGithub />
+            </a>
           </li>
           <li>
-            <a href="#"></a>
+            <a href="#">
+              <FaTwitter />
+            </a>
           </li>
         </ul>
       </footer>
@@ -46,7 +60,7 @@ const FooterComponent = () => {
 const Main = styled.div`
   position: relative;
   display: flex;
-  min-height: 70vh;
+  min-height: 20vh;
   flex-direction: column;
   .void {
     flex: 1;
