@@ -1,23 +1,27 @@
 import React, { useContext, useState } from 'react'
 import styled from 'styled-components'
-import axios from 'axios'
 import { NavLink as NavLinkLogo } from 'react-router-dom'
 import { NavLink as NavLinkElement } from 'react-router-dom'
-import { AuthContext } from '../context/authContext'
-import { UserContext } from '../context/userContext'
+
 import LoginModal from './modal/loginModal'
 import SearchBoxModal from './modal/searchBoxModal'
+import api from '../api'
+import { AuthContext } from '../context/authContext'
+import { UserContext } from '../context/userContext'
 
-const NavbarComponent = ({ handleLogin, handleLogout }) => {
+const NavbarComponent = ({ handleLogin }) => {
   const { isLoggedIn, setIsLoggedIn } = useContext(AuthContext)
   const { userInfo, setUserInfo } = useContext(UserContext)
   const [openLogin, setOpenLogin] = useState(false)
   const [showSearchBox, setShowSearchBox] = useState(false)
 
-  // (axios) 로그아웃 요청
-  // const logout = () => {
-  //   handleLogout()
-  // }
+  const logout = async () => {
+    await api.post('/users/logout').then((res) => {
+      setIsLoggedIn(false)
+      setUserInfo({})
+      setOpenLogin(false)
+    })
+  }
 
   return (
     <Nav>
@@ -27,7 +31,6 @@ const NavbarComponent = ({ handleLogin, handleLogout }) => {
             Pick & Roll
           </Logo>
           <MenuLinks>
-            <TestBtn onClick={() => setIsLoggedIn(!isLoggedIn)}>test</TestBtn>
             <NavElement to="/Recipe">레시피</NavElement>
             <ChangeClick onClick={() => setShowSearchBox(true)}>
               검색
@@ -52,7 +55,6 @@ const NavbarComponent = ({ handleLogin, handleLogout }) => {
         <AfterLoginView>
           <Logo to="/">Pick & Roll</Logo>
           <MenuLinks>
-            <TestBtn onClick={() => setIsLoggedIn(!isLoggedIn)}>test</TestBtn>
             <NavElement to="/recipe">레시피</NavElement>
             <ChangeClick onClick={() => setShowSearchBox(true)}>
               검색
@@ -63,9 +65,9 @@ const NavbarComponent = ({ handleLogin, handleLogout }) => {
             />
             <NavElement to="/write">새 글 작성</NavElement>
             <NavElement to={`/mypage/${userInfo.email}`}>
-              {userInfo.name}님
+              {userInfo.nickname}님
             </NavElement>
-            <NavElement to="/">로그아웃</NavElement>
+            <NavElement to="/" onClick={logout}>로그아웃</NavElement>
           </MenuLinks>
         </AfterLoginView>
       )}
