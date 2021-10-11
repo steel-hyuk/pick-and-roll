@@ -36,7 +36,7 @@ const Dropdown = ({ selected, setSelected }) => {
 
 const Container = styled.div`
   z-index: 50;
-  margin-top: 6px;
+  margin-top: 7px;
   margin-right: 100px;
 `
 
@@ -53,7 +53,7 @@ const DropdownBtn = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  show {
+  .show {
     border-radius: 10%;
   }
 `
@@ -66,7 +66,7 @@ const Contents = styled.div`
   box-shadow: 3px 3px 10px 1px rgba(0, 0, 0, 0.06);
   border-radius: 0 0 10% 10%;
   font-weight: 500;
-  color: #333;
+  color: #4f4e4e;
   width: 80%;
   animation: box 0.3s ease-in;
   animation-fill-mode: forwards;

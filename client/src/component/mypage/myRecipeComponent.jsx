@@ -5,8 +5,8 @@ import api from '../../api/index'
 const MyRecipeComponent = () => {
   const [myRecipe, setMyRecipe] = useState('')
 
-  const showMyRecipe = () => {
-    api
+  const showMyRecipe = async () => {
+    await api
       .get(
         '/users/myrecipe',
         {},

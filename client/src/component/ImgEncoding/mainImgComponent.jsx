@@ -60,13 +60,12 @@ const MainImgsComponent = ({ mainImg, setMainImg, mainImgRef }) => {
 }
 
 const Wrapper = styled.div`
-  margin-left: 25%;
+  width: 100%;
 `
 
 const ImgInput = styled.div`
   position: relative;
-  width: 400px;
-  height: 200px;
+  height: 400px;
   border: 2px dashed rgb(243, 200, 18);
   border-radius: 20px;
   display: flex;

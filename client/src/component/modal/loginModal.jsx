@@ -93,6 +93,9 @@ const LoginModal = ({ openLogin, setOpenLogin }) => {
       <Left onClick={() => setOpenLogin(false)}></Left>
       <Form>
         <LoginWrapper>
+          <CancelIcon onClick={() => setOpenLogin(false)}>
+            <FaRegTimesCircle />
+          </CancelIcon>
           <Login>Login</Login>
           <LoginC>
             <InputC>
@@ -134,9 +137,6 @@ const LoginModal = ({ openLogin, setOpenLogin }) => {
               </div>
             </SignUpBtn>
             <SocialLoginBtn onClick={kakaoClick}>kakao</SocialLoginBtn>
-            <CancelBtn onClick={() => setOpenLogin(false)}>
-              <FaRegTimesCircle />
-            </CancelBtn>
           </LoginC>
         </LoginWrapper>
       </Form>
@@ -154,6 +154,15 @@ const Modal = styled.div`
   left: 0;
   background: rgba(72, 72, 66, 0.5);
   display: flex;
+  animation: back 0.5s ease-in;
+  @keyframes back {
+    from {
+      opacity: 0%;
+    }
+    to {
+      opacity: 80%;
+    }
+  }
 `
 
 const Left = styled.div`
@@ -165,16 +174,16 @@ const Right = styled.div`
 `
 
 const Form = styled.div`
-  width: auto;
-  padding-top: 200px;
-  margin-bottom: 180px;
+  width: 30%;
+  justify-content: center;
+  align-items: center;
   display: flex;
   flex-direction: column;
 `
 
 const LoginWrapper = styled.div`
+  position: relative;
   width: 450px;
-  height: 500px;
   background: white;
   border-radius: 30px;
   box-shadow: 3px 3px 10px 6px rgba(0, 0, 0, 0.06);
@@ -182,7 +191,6 @@ const LoginWrapper = styled.div`
 
 const LoginC = styled.div`
   width: 400px;
-  height: 450px;
   display: flex;
   flex-direction: column;
   margin: auto;
@@ -222,14 +230,13 @@ const Input = styled.input`
 `
 
 const LoginBtn = styled.div`
-  width: 250px;
+  width: 67%;
   text-align: center;
-  padding: 15px 0px;
+  padding: 10px;
   background-color: #d2d2d2;
-  margin-top: 30px;
-  width: 265px;
-  height: 15px;
+  margin: 15px auto;
   border-radius: 15px;
+  box-sizing: border-box;
   color: white;
   :hover {
     font-weight: bold;
@@ -238,14 +245,13 @@ const LoginBtn = styled.div`
 `
 
 const SocialLoginBtn = styled.div`
-  width: 250px;
+  width: 67%;
   text-align: center;
-  padding: 15px 0px;
+  padding: 10px;
   background-color: #17a717;
-  margin-top: 30px;
-  width: 265px;
-  height: 15px;
+  margin: 15px auto;
   border-radius: 15px;
+  box-sizing: border-box;
   color: white;
   :hover {
     font-weight: bold;
@@ -261,23 +267,18 @@ const SignUpBtn = styled.div`
   font-size: 13px;
   .makeaccount {
     margin: 0 10px;
-    font-size: 15px;
+    padding: 0 10px;
+    font-size: 17px;
+    font-weight: bold;
     line-height: 2;
     text-align: left;
     color: rgb(237, 199, 32);
     cursor: pointer;
     :hover {
-      font-weight: bold;
+      background-color: rgb(237, 199, 32);
+      color: white;
+      border-radius: 10px;
     }
-  }
-`
-
-const CancelBtn = styled.div`
-  margin-top: 25px;
-  color: #b8b8b8;
-  font-size: 20px;
-  :hover {
-    color: rgb(237, 199, 32);
   }
 `
 
@@ -288,6 +289,17 @@ const CheckText = styled.div`
   margin-left: 5px;
   margin-top: 3px;
   color: rgb(255, 75, 75);
+`
+
+const CancelIcon = styled.div`
+  position: absolute;
+  top: 15px;
+  right: 20px;
+  font-size: 20px;
+  color: #a4a4a4;
+  :hover {
+    color: rgb(237, 199, 32);
+  }
 `
 
 export default LoginModal

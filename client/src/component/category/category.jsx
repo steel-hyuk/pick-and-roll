@@ -4,6 +4,7 @@ import Dropdown from './dropdown'
 
 const Category = ({ selected, setSelected, setSelectCateogry }) => {
   return (
+    <>
     <Wrap>
       <Dropdown selected={selected} setSelected={setSelected} />
       <ListWrap>
@@ -14,13 +15,16 @@ const Category = ({ selected, setSelected, setSelectCateogry }) => {
         <List onClick={() => {setSelectCateogry('etc')}}>etc</List>
       </ListWrap>
     </Wrap>
+  </>
   )
 }
 
 const Wrap = styled.div`
   width: 100%;
-  height: 50px;
+  height: 60px;
+  margin-top : 70px;
   display: flex;
+  position : fixed;
   justify-content: center;
   border-bottom: solid 1px rgb(243, 200, 18);
 `
@@ -34,9 +38,13 @@ const List = styled.li`
   margin-right: 15px;
   display: flex;
   align-items: center;
+  color : #7d7d7d;
   border-bottom: 10px;
+  box-sizing : border-box;
   :hover {
-    border-bottom: solid 6px rgb(243, 200, 18);
+    border-bottom: solid 3px rgb(243, 200, 18);
+    font-weight:bold;
+    cursor: pointer;
   }
 `
 

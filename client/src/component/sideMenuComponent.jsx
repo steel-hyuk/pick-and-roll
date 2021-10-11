@@ -51,6 +51,7 @@ const Wrap = styled.div`
   position: relative;
   height: 700px;
   display: flex;
+  top : 70px;
   justify-content: flex-end;
   @media (max-width: 1200px) {
     flex-direction: column;
@@ -89,7 +90,7 @@ const Menu = styled.div`
   background-color: #f3c811;
   color: white;
   @media (max-width: 1200px) {
-    position: static;
+    position: fixed;
     display: flex;
     height: 50px;
     width: 100%;
@@ -102,6 +103,7 @@ const ContentWapper = styled.div`
   width: calc(100% - 273px);
   @media (max-width: 1200px) {
     width: 100%;
+    margin-top : 75px;
   }
 `
 

@@ -2,18 +2,20 @@ import React, { useContext, useState } from 'react'
 import styled from 'styled-components'
 import { NavLink as NavLinkLogo } from 'react-router-dom'
 import { NavLink as NavLinkElement } from 'react-router-dom'
-
+import { FaAlignJustify } from 'react-icons/fa'
 import LoginModal from './modal/loginModal'
 import SearchBoxModal from './modal/searchBoxModal'
 import api from '../api'
 import { AuthContext } from '../context/authContext'
 import { UserContext } from '../context/userContext'
+import MenuModal from './modal/menuModal'
 
 const NavbarComponent = ({ handleLogin }) => {
   const { isLoggedIn, setIsLoggedIn } = useContext(AuthContext)
   const { userInfo, setUserInfo } = useContext(UserContext)
   const [openLogin, setOpenLogin] = useState(false)
   const [showSearchBox, setShowSearchBox] = useState(false)
+  const [openMenu, setOpenMenu] = useState(false)
 
   const logout = async () => {
     await api.post('/users/logout').then((res) => {
@@ -21,6 +23,10 @@ const NavbarComponent = ({ handleLogin }) => {
       setUserInfo({})
       setOpenLogin(false)
     })
+  }
+
+  const changeMenu = () => {
+    setOpenMenu(!openMenu)
   }
 
   return (
@@ -50,6 +56,16 @@ const NavbarComponent = ({ handleLogin }) => {
               />
             ) : null}
           </MenuLinks>
+          <MenuIcon onClick={changeMenu}>
+            <FaAlignJustify />
+          </MenuIcon>
+          {openMenu ? (
+            <MenuModal
+              isLoggedIn={isLoggedIn}
+              openMenu={openMenu}
+              changeMenu={changeMenu}
+            />
+          ) : null}
         </BeforeLoginView>
       ) : (
         <AfterLoginView>
@@ -69,6 +85,16 @@ const NavbarComponent = ({ handleLogin }) => {
             </NavElement>
             <NavElement to="/" onClick={logout}>로그아웃</NavElement>
           </MenuLinks>
+          <MenuIcon onClick={changeMenu}>
+            <FaAlignJustify />
+          </MenuIcon>
+          {openMenu ? (
+            <MenuModal
+              isLoggedIn={isLoggedIn}
+              openMenu={openMenu}
+              changeMenu={changeMenu}
+            />
+          ) : null}
         </AfterLoginView>
       )}
     </Nav>
@@ -79,6 +105,11 @@ const Nav = styled.nav`
   background-color: white;
   margin: 0px;
   box-shadow: 0px 1px 10px 1px rgb(243, 200, 18);
+  position : fixed;
+  top : 0;
+  left: 0;
+  width: 100%;
+  z-index: 9999;
 `
 
 const MenuLinks = styled.div`
@@ -94,7 +125,7 @@ const BeforeLoginView = styled.div`
   align-items: center;
   height: 70px;
   @media (max-width: 750px) {
-    height: 43px;
+    height: 70px;
   }
 `
 
@@ -104,7 +135,7 @@ const AfterLoginView = styled.div`
   align-items: center;
   height: 70px;
   @media (max-width: 750px) {
-    height: 43px;
+    height: 70px;
   }
 `
 
@@ -152,6 +183,17 @@ const NavElement = styled(NavLinkElement)`
     color: white;
     border-radius: 10%;
     font-weight: bold;
+  }
+`
+
+const MenuIcon = styled.div`
+  display: none;
+  height: 25px;
+  margin-right: 8px;
+  @media (max-width: 750px) {
+    display: inline-block;
+    color: rgb(243, 200, 18);
+    font-size: 25px;
   }
 `
 

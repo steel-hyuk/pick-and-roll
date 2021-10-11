@@ -36,6 +36,7 @@ const Wrap = styled.div`
   margin: 0 auto;
   display: flex;
   flex-direction: column;
+  justify-content: center;
 `
 
 const NameArea = styled.div`
@@ -50,7 +51,7 @@ const Name = styled.h3`
 
 const NameInput = styled.p`
   width: 60%;
-  margin: 5px 0 0 0;
+  margin: 5px auto 0 auto;
   padding: 0;
   border: solid 2px #d2d2d2;
   border-radius: 5px;
