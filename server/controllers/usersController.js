@@ -15,12 +15,17 @@ const {
 const { everyScoreSum } = require('../controllers/function/function')
 
 module.exports = {
-  signUp: (req, res, next) => {
+  signUp: async (req, res, next) => {
     const { email, nickname, password, description } = req.body
     if (!email || !nickname || !password || !description) {
       res
         .status(422)
         .send({ message: '회원가입에 필요한 정보를 모두 입력하세요!' })
+    }    
+    let checkEmail = await User.findOne({ where: { email }})
+    let checkNick = await User.findOne({ where: { nickname }})
+    if(checkEmail.dataValues || checkNick.dataValues) {
+      return res.status(409).send('이미 동일한 데이터가 있습니다. 회원가입을 허락할 수 없습니다.')
     }
     User.findOrCreate({
       where: {
@@ -61,10 +66,12 @@ module.exports = {
       })
   },
   nickCheck: (req, res, next) => {
+    console.log(req.body.nickname)
     User.findOne({
       where: { nickname: req.body.nickname }
     })
       .then((user) => {
+        console.log(user)
         if (!user) {
           return res.send({ message: '✔ 사용 가능한 닉네임입니다!' })
         }
