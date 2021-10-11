@@ -1,21 +1,39 @@
-import React, { useState } from 'react'
+import React, { useState, useRef } from 'react'
 import styled from 'styled-components'
+import axios from 'axios'
 import { BsUpload } from 'react-icons/bs'
 import { RiDeleteBinFill } from 'react-icons/ri'
 
-const ContentImgsComponent = ({ contentImgs, setContentImgs }) => {
+const ContentImgsComponent = ({
+  contentImgs,
+  setContentImgs,
+  contentImgsRef,
+}) => {
   const [imgUrl, setImgUrl] = useState([])
+  const [imgName, setImgName] = useState([])
 
   const onImgDrop = async (e) => {
     const newFile = e.target.files[0]
     if (newFile) {
+      const form = new FormData()
+      form.append('file', newFile)
+      form.append('upload_preset', process.env.REACT_APP_UPLOAD_PRESET_MAIN)
+
       const reader = new FileReader()
       reader.readAsDataURL(newFile)
       reader.onloadend = () => {
         setImgUrl([...imgUrl, reader.result])
       }
-      const updatedList = [...contentImgs, newFile]
+      let url
+      await axios
+        .post(process.env.REACT_APP_CLOUDINARY_URL, form)
+        .then((res) => {
+          url = res.data.url
+        })
+
+      const updatedList = [...contentImgs, url]
       setContentImgs(updatedList)
+      setImgName([...imgName, newFile.name])
     }
   }
 
@@ -26,7 +44,10 @@ const ContentImgsComponent = ({ contentImgs, setContentImgs }) => {
     const updatedUrl = [...imgUrl]
     updatedUrl.splice(index, 1)
     setImgUrl(updatedUrl)
-    console.log(img)
+
+    const updatedName = [...imgName]
+    updatedName.splice(index, 1)
+    setImgName(updatedName)
   }
 
   return (
@@ -42,6 +63,7 @@ const ContentImgsComponent = ({ contentImgs, setContentImgs }) => {
           value=""
           encType="multipart/form-data"
           onChange={onImgDrop}
+          ref={contentImgsRef}
         />
       </ImgInput>
       {contentImgs.length > 0 ? (
@@ -49,10 +71,8 @@ const ContentImgsComponent = ({ contentImgs, setContentImgs }) => {
           <p className="title">선택파일 목록</p>
           {contentImgs.map((item, index) => (
             <LoadedList key={index}>
-              <div className="info">
-                <img src={imgUrl[index]} alt="" />
-                <p>{item.name}</p>
-              </div>
+              <img src={imgUrl[index]} alt="" />
+              <p>{imgName[index]}</p>
               <span className="delete" onClick={() => imgRemove(item, index)}>
                 <RiDeleteBinFill className="icon" />
               </span>
@@ -109,22 +129,22 @@ const ImgInput = styled.div`
 `
 
 const LoadedList = styled.div`
-  position: relative;
   display: flex;
   margin-bottom: 10px;
   background-color: #857d7d2f;
   padding: 15px;
   border-radius: 20px;
-  .info {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
+  width: 400px;
+  height: 6pc;
+  img {
+    width: 100px;
+    height: 100px;
   }
-  .img {
-    width: 30px;
-    height: 15px;
-    max-width: 20%;
-    max-height: 10%;
+  p {
+    font-size: 15px;
+    position: relative;
+    margin-left: 30px;
+    margin-top: 50px;
   }
   .delete {
     background-color: rgb(110, 174, 233);
@@ -134,9 +154,8 @@ const LoadedList = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
-    position: absolute;
-    right: 10px;
-    margin-top: 7px;
+    margin-top: -7px;
+    margin-left: 5px;
   }
   .delete:hover {
     background-color: rgba(202, 35, 35, 0.685);
