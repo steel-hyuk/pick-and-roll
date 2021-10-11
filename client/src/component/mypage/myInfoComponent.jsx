@@ -38,7 +38,7 @@ const MyInfoComponent = () => {
         setUserInfo(user)
       })
   }
-
+  
   useEffect(() => {
     updateUser()
   }, [])

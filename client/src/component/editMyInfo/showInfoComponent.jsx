@@ -4,7 +4,6 @@ import { UserContext } from '../../context/userContext'
 
 const ShowInfoComponent = () => {
   const { userInfo, setUserInfo } = useContext(UserContext)
-
   return (
     <Wrap>
       <NameArea>
