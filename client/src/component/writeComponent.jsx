@@ -104,21 +104,14 @@ const WriteComponent = (props) => {
     )
     let finalIngredients = ingred.join('@')
 
-    let finalMainImg
-    await axios
-      .post(process.env.REACT_APP_CLOUDINARY_URL, mainImg)
-      .then((res) => {
-        finalMainImg = res.data.url
-      })
-
     console.log({
-      userId: userInfo.email,
+      userId: userInfo.userId,
       title: title,
       introduction: introduction,
       category: category,
       requiredTime: requiredTime,
       content: content,
-      mainImg: finalMainImg,
+      mainImg: mainImg,
       contentImgs: contentImgs,
       ingredients: finalIngredients,
     })
@@ -126,13 +119,13 @@ const WriteComponent = (props) => {
     await axios.post(
       '/recipes',
       {
-        userId: userInfo.email,
+        userId: userInfo.userId,
         title: title,
         introduction: introduction,
         category: category,
         requiredTime: requiredTime,
         content: content,
-        mainImg: finalMainImg,
+        mainImg: mainImg,
         contentImgs: contentImgs,
         ingredients: finalIngredients,
       },
@@ -160,9 +153,10 @@ const WriteComponent = (props) => {
         <Form>
           <FormGroup>
             <Labal>
-            제목<span className="require">*</span>
+              제목<span className="require">*</span>
             </Labal>
-            <Input className="title"
+            <Input
+              className="title"
               type="text"
               placeholder="제목을 입력해주세요"
               onChange={(e) => onChangeTitle(e)}
@@ -172,7 +166,7 @@ const WriteComponent = (props) => {
           </FormGroup>
           <FormGroup>
             <Labal>
-            요리소개<span className="require">*</span>
+              요리소개<span className="require">*</span>
             </Labal>
             <Textarea
               type="text"
@@ -184,7 +178,7 @@ const WriteComponent = (props) => {
           </FormGroup>
           <FormGroup>
             <Labal>
-            메인 사진<span className="require">*</span>
+              메인 사진<span className="require">*</span>
             </Labal>
             <MainImgComponent
               className="imgBox"
@@ -195,32 +189,32 @@ const WriteComponent = (props) => {
             <CheckText>{messageMainImg}</CheckText>
           </FormGroup>
           <BoxWrap>
-          <BoxGroup>
-            <Labal>
-            레시피 카테고리 <span className="require">*</span>
-            </Labal>
-            <DropDownCategory
-              category={category}
-              setCategory={setCategory}
-              categoryRef={categoryRef}
-            />
-            <CheckText>{messageCategory}</CheckText>
-          </BoxGroup>
-          <BoxGroup>
-            <Labal>
-            조리시간<span className="require">*</span> 
-            </Labal>
-            <DropDownTime
-              requiredTime={requiredTime}
-              setRequiredTime={setRequiredTime}
-              requiredTimeRef={requiredTimeRef}
-            />
-            <CheckText>{messageRequiredTime}</CheckText>
-          </BoxGroup>
+            <BoxGroup>
+              <Labal>
+                레시피 카테고리 <span className="require">*</span>
+              </Labal>
+              <DropDownCategory
+                category={category}
+                setCategory={setCategory}
+                categoryRef={categoryRef}
+              />
+              <CheckText>{messageCategory}</CheckText>
+            </BoxGroup>
+            <BoxGroup>
+              <Labal>
+                조리시간<span className="require">*</span>
+              </Labal>
+              <DropDownTime
+                requiredTime={requiredTime}
+                setRequiredTime={setRequiredTime}
+                requiredTimeRef={requiredTimeRef}
+              />
+              <CheckText>{messageRequiredTime}</CheckText>
+            </BoxGroup>
           </BoxWrap>
           <FormGroup>
             <Labal>
-            요리 재료<span className="require">*</span>
+              요리 재료<span className="require">*</span>
             </Labal>
             <AddListingredients
               ingredients={ingredients}
@@ -232,7 +226,7 @@ const WriteComponent = (props) => {
           </FormGroup>
           <FormGroup>
             <Labal>
-            요리 방법<span className="require">*</span> 
+              요리 방법<span className="require">*</span>
             </Labal>
             <AddListContent
               contents={contents}
@@ -244,7 +238,7 @@ const WriteComponent = (props) => {
           </FormGroup>
           <FormGroup>
             <Labal>
-            요리 사진<span className="require">*</span> 
+              요리 사진<span className="require">*</span>
             </Labal>
             <ContentImgComponent
               contentImgs={contentImgs}
@@ -267,7 +261,7 @@ const Wrapper = styled.div`
   height: 100%;
   display: flex;
   flex-direction: column;
-  margin-top : 70px;
+  margin-top: 70px;
   align-items: center;
 `
 
@@ -305,14 +299,12 @@ const Form = styled.div`
 const FormGroup = styled.div`
   display: block;
   text-align: center;
-  margin-bottom : 50px;
-  
+  margin-bottom: 50px;
 `
 const BoxGroup = styled.div`
   display: block;
   text-align: center;
-  width : 45%;
-  
+  width: 45%;
 `
 
 const CheckText = styled.div`
@@ -326,21 +318,21 @@ const CheckText = styled.div`
 
 const Labal = styled.div`
   margin-bottom: 3px;
-  font-size : 25px;
+  font-size: 25px;
   .require {
     color: rgb(255, 162, 0);
     line-height: 2;
   }
   :nth-child(6) {
-    margin-left : 1000px;
+    margin-left: 1000px;
   }
 `
 const BoxWrap = styled.div`
-  width : 100%;
-  display : flex;
+  width: 100%;
+  display: flex;
   justify-content: center;
   justify-content: space-around;
-  margin-bottom : 70px;
+  margin-bottom: 70px;
 `
 const Input = styled.input`
   width: 100%;
@@ -348,7 +340,7 @@ const Input = styled.input`
   align-items: center;
   padding: 15px;
   border-radius: 8px;
-  box-sizing : border-box;
+  box-sizing: border-box;
   border: solid 2px #d2d2d2;
   :focus {
     border: solid 2px rgb(243, 200, 18);
@@ -361,12 +353,12 @@ const Input = styled.input`
     color: #b5b5b5;
   }
   .title {
-    font-size : 30px;
+    font-size: 30px;
   }
 `
 
 const SignupBtn = styled.button`
-  width : 100%;
+  width: 100%;
   text-align: center;
   align-items: center;
   padding: 0px 0px;
@@ -385,7 +377,7 @@ const Textarea = styled.textarea`
   align-items: center;
   padding: 5px 10px 10px 10px;
   border-radius: 8px;
-  box-sizing : border-box;
+  box-sizing: border-box;
   border: solid 2px #d2d2d2;
   resize: none;
   :focus {

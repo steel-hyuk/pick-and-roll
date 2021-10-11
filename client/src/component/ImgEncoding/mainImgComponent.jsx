@@ -1,7 +1,10 @@
 import React, { useState, useRef } from 'react'
 import styled from 'styled-components'
+import { v4 as uuid4 } from 'uuid'
 import { BsUpload } from 'react-icons/bs'
 import { RiDeleteBinFill } from 'react-icons/ri'
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage'
+import { storageService, storageRef } from './firebase'
 
 const MainImgsComponent = ({ mainImg, setMainImg, mainImgRef }) => {
   const [previewUrl, setPreviewUrl] = useState('')
@@ -10,19 +13,28 @@ const MainImgsComponent = ({ mainImg, setMainImg, mainImgRef }) => {
   const onImgDrop = async (e) => {
     const newFile = e.target.files[0]
     if (newFile) {
-      const form = new FormData()
-      form.append('file', newFile)
-      form.append('upload_preset', process.env.REACT_APP_UPLOAD_PRESET_MAIN)
-      setMainImg(form)
       setImgName(newFile.name)
       const reader = new FileReader()
       reader.readAsDataURL(newFile)
       reader.onloadend = () => {
         setPreviewUrl(reader.result)
       }
+      let url
+      let id = uuid4()
+      const imgRef = ref(storageService, `main/${id}`)
+      await uploadBytes(imgRef, newFile)
+      await getDownloadURL(imgRef).then((res) => {
+        url=res
+      })
+      setMainImg(url)
     }
   }
-
+  // let finalMainImg
+  // await axios
+  //   .post(process.env.REACT_APP_CLOUDINARY_URL, mainImg)
+  //   .then((res) => {
+  //     finalMainImg = res.data.url
+  //   })
   const imgRemove = (img) => {
     setMainImg('')
     setImgName('')
