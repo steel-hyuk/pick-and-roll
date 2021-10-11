@@ -1,8 +1,11 @@
 import React, { useState, useRef } from 'react'
 import styled from 'styled-components'
 import axios from 'axios'
+import { v4 as uuid4 } from 'uuid'
 import { BsUpload } from 'react-icons/bs'
 import { RiDeleteBinFill } from 'react-icons/ri'
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage'
+import { storageService, storageRef } from './firebase'
 
 const ContentImgsComponent = ({
   contentImgs,
@@ -15,21 +18,22 @@ const ContentImgsComponent = ({
   const onImgDrop = async (e) => {
     const newFile = e.target.files[0]
     if (newFile) {
-      const form = new FormData()
-      form.append('file', newFile)
-      form.append('upload_preset', process.env.REACT_APP_UPLOAD_PRESET_MAIN)
-
       const reader = new FileReader()
       reader.readAsDataURL(newFile)
       reader.onloadend = () => {
         setImgUrl([...imgUrl, reader.result])
       }
+
+      let id = uuid4()
+      const imgRef = ref(storageService, `contentMain/${id}`)
+      const reference = await uploadBytes(imgRef, newFile).then(
+        (snapshot) => {}
+      )
       let url
-      await axios
-        .post(process.env.REACT_APP_CLOUDINARY_URL, form)
-        .then((res) => {
-          url = res.data.url
-        })
+      const getUrl = await getDownloadURL(imgRef).then((res) => {
+        url = res
+      })
+      console.log(url)
 
       const updatedList = [...contentImgs, url]
       setContentImgs(updatedList)
@@ -85,7 +89,7 @@ const ContentImgsComponent = ({
 }
 
 const Wrapper = styled.div`
-width : 100%;
+  width: 100%;
 `
 
 const ImgInput = styled.div`
