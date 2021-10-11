@@ -326,7 +326,7 @@ module.exports = {
         })
       )
 
-      result = {
+      resultData = {
         id,
         userId,
         isMyRecipe,
@@ -348,8 +348,8 @@ module.exports = {
         commentData
       }
       res.locals.message === 'Auth Ok!'
-        ? res.send({ recipeData: result })
-        : res.send({ accessToken: res.locals.isAuth, recipeData: result })
+        ? res.send({ recipeData: resultData })
+        : res.send({ accessToken: res.locals.isAuth, recipeData: resultData })
     }
     res.send(result)
   },
