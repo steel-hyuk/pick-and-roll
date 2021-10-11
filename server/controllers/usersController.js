@@ -23,7 +23,7 @@ module.exports = {
         .send({ message: '회원가입에 필요한 정보를 모두 입력하세요!' })
     }    
     let checkEmail = await User.findOne({ where: { email }})
-    let checkNick = await User.findOne({ where: { nicname }})
+    let checkNick = await User.findOne({ where: { nickname }})
     if(checkEmail.dataValues || checkNick.dataValues) {
       return res.status(409).send('이미 동일한 데이터가 있습니다. 회원가입을 허락할 수 없습니다.')
     }
