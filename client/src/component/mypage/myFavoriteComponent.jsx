@@ -5,8 +5,8 @@ import api from '../../api/index'
 const MyFavoriteComponent = () => {
   const [favoriteInfo, setFavoriteInfo] = useState('')
 
-  const showFavorite = () => {
-    api
+  const showFavorite = async () => {
+    await api
       .get(
         '/users/favorite',
         {},

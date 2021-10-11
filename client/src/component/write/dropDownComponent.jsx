@@ -53,23 +53,19 @@ export const DropDownCategory = ({ category, setCategory, categoryRef }) => {
 const Wrapper = styled.div`
   display: grid;
   grid-template-columns: 3fr 1fr;
-  width: 150px;
   height: 30px;
   border-radius: 8px;
   border: solid 2px #d2d2d2;
   resize: none;
-  margin-left: 25%;
   input {
     height: 80%;
     width: 100%;
-    margin-left: 7px;
     margin-top: 3px;
     outline: none;
     text-align: center;
     border: 0mm #f7f4f41c;
   }
   select {
-    margin-left: 15px;
     border: 0mm #f7f4f41c;
     width: 50%;
     height: 100%;

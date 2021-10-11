@@ -40,15 +40,14 @@ const AddListContent = ({
           />
         </InlineBox>
       ))}
-      <button className="button" onClick={addList}>
-        +<br />
-        항목추가
-      </button>
-      <button className="button" onClick={deletList}>
-        <span>-</span>
-        <br />
-        항목제거
-      </button>
+      <ClickWrap>
+      <ClickBtn className="button" onClick={addList}>
+        항목 추가
+      </ClickBtn>
+      <ClickBtn className="button" onClick={deletList}>
+        항목 제거
+      </ClickBtn>
+      </ClickWrap>
     </Wrapper>
   )
 }
@@ -128,15 +127,14 @@ export const AddListingredients = ({
           />
         </InlineBox>
       ))}
-      <button className="button" onClick={addList}>
-        +<br />
-        항목추가
-      </button>
-      <button className="button" onClick={deletList}>
-        <span>-</span>
-        <br />
-        항목제거
-      </button>
+      <ClickWrap>
+      <ClickBtn className="button" onClick={addList}>
+        항목 추가
+      </ClickBtn>
+      <ClickBtn className="button" onClick={deletList}>
+        항목 제거
+      </ClickBtn>
+      </ClickWrap>
     </Wrapper>
   )
 }
@@ -144,23 +142,15 @@ export const AddListingredients = ({
 const Wrapper = styled.div`
   width: 100%;
   height: 100%;
-  margin-left: 25%;
-  margin-bottom: 30%;
-  .button {
-    background-color: #b7bbbe;
-    color: black;
-    margin-right: 20px;
-    transition: all 0.6s linear;
     span {
       font-size: 23px;
     }
-  }
 `
 
 const InlineBox = styled.div`
   display: flex;
   justify-items: flex-start;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
   .number {
     font-size: 20px;
     margin-right: 10px;
@@ -168,11 +158,13 @@ const InlineBox = styled.div`
 `
 
 const Textarea = styled.textarea`
-  width: 400px;
-  height: 120px;
+  width: 100%;
+  height: 60px;
   align-items: center;
   padding: 5px 10px 10px 10px;
   border-radius: 8px;
+  margin-right : 5px;
+  box-sizing : border-box;
   border: solid 2px #d2d2d2;
   resize: none;
   :focus {
@@ -180,9 +172,34 @@ const Textarea = styled.textarea`
     outline: none;
   }
   ::placeholder {
-    font-size: 20px;
+    font-size: 18px;
     text-align: left;
     line-height: 1.5;
     color: #b5b5b5;
   }
+`
+const ClickWrap = styled.div`
+display : flex;
+justify-content: center;
+`
+
+const ClickBtn = styled.button`
+    height : 35px;
+    width : 25%;
+    background-color: #a5a5a5;
+    border: none;
+    border-radius : 10px;
+    color: #ffffff;
+    font-size : 16px;
+    font-weight : bold;
+    transition: all 0.3s linear;
+    :hover {
+      background-color:#e89a13;
+    }
+    :nth-child(1) {
+      margin-left: 20px;
+    }
+    :nth-child(2) {
+      margin-left: 5px;
+    }
 `

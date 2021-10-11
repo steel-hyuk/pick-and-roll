@@ -30,8 +30,10 @@ const SignupComponent = () => {
   const _des = useRef()
 
   // 이메일, 비밀번호, 닉네임 형식을 체크하는 정규 표현식
-  const email_Reg = /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i
-  const password_Reg = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&])[A-Za-z\d$@$!%*?&]{8,15}/
+  const email_Reg =
+    /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i
+  const password_Reg =
+    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&])[A-Za-z\d$@$!%*?&]{8,15}/
   const nickname_Reg = /^([a-zA-Z0-9ㄱ-ㅎ|ㅏ-ㅣ|가-힣]).{1,10}$/
 
   // (axios) 이미 등록된 이메일인지 체크
@@ -40,15 +42,18 @@ const SignupComponent = () => {
       setMessageEmail('이메일 형식에 맞게 작성해 주시기 바랍니다!')
       return
     } else {
-      await api.post('/users/signup/mail-check', { email })
-      .then((res) => setMessageEmail(res.data.message))
+      await api
+        .post('/users/signup/mail-check', { email })
+        .then((res) => setMessageEmail(res.data.message))
     }
   }
 
   // 비밀번호 체크
   const checkPassWord = () => {
     if (!password_Reg.test(password)) {
-      setMessagePassword('(8~15자) 영문 대소문자/숫자/특수문자 모두 포함해야합니다!')
+      setMessagePassword(
+        '(8~15자) 영문 대소문자/숫자/특수문자 모두 포함해야합니다!'
+      )
       return
     }
     setMessagePassword('✔ 사용 가능한 비밀번호입니다!')
@@ -69,11 +74,14 @@ const SignupComponent = () => {
   // (axios) 이미 등록된 닉네임인지 체크
   const checkNickname = async () => {
     if (!nickname_Reg.test(nickname)) {
-      setMessageNickname('닉네임은 한글, 영문, 숫자만 가능하며 2-10자리까지 가능합니다!')
+      setMessageNickname(
+        '닉네임은 한글, 영문, 숫자만 가능하며 2-10자리까지 가능합니다!'
+      )
       return
     } else {
-      await api.post('/users/signup/nick-check', { nickname })
-      .then((res) => setMessageNickname(res.data.message))
+      await api
+        .post('/users/signup/nick-check', { nickname })
+        .then((res) => setMessageNickname(res.data.message))
     }
   }
 
@@ -85,7 +93,9 @@ const SignupComponent = () => {
       return
     } else if (password === '' || !password_Reg.test(password)) {
       _pw.current.focus()
-      setMessagePassword('(8~15자) 영문 대소문자/숫자/특수문자 모두 포함해야합니다!')
+      setMessagePassword(
+        '(8~15자) 영문 대소문자/숫자/특수문자 모두 포함해야합니다!'
+      )
       return
     } else if (pwCheck === '') {
       _pwChk.current.focus()
@@ -102,11 +112,18 @@ const SignupComponent = () => {
     }
     event.preventDefault()
 
-    await api.post('/users/signup', {
-      email, password, nickname, description
-    }, {
-      'ContentType': 'application/json'
-    })
+    await api.post(
+      '/users/signup',
+      {
+        email,
+        password,
+        nickname,
+        description,
+      },
+      {
+        ContentType: 'application/json',
+      }
+    )
 
     Swal.fire({
       title: '회원가입이 완료되었습니다.',
@@ -116,7 +133,7 @@ const SignupComponent = () => {
     })
     history.push('/')
   }
-  
+
   return (
     <Wrapper>
       <TitleArea>
@@ -223,6 +240,8 @@ const Wrapper = styled.div`
   margin-bottom: 50px;
   align-items: center;
   text-align: center;
+  position: relative;
+  top: 70px;
 `
 
 const TitleArea = styled.div`
@@ -309,6 +328,7 @@ const Textarea = styled.textarea`
   border-radius: 8px;
   border: solid 2px #d2d2d2;
   resize: none;
+  margin-bottom: -5px;
   :focus {
     border: solid 2px rgb(243, 200, 18);
     outline: none;
@@ -326,6 +346,7 @@ const SignupBtn = styled.button`
   text-align: center;
   align-items: center;
   padding: 0px 0px;
+  margin-top: 15px;
   background-color: rgb(243, 200, 18);
   height: 50px;
   border: 1px solid transparent;

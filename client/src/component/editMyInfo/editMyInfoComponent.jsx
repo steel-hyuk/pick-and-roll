@@ -2,6 +2,7 @@ import React, { useState, useContext, useRef } from 'react'
 import styled from 'styled-components'
 import Swal from 'sweetalert2'
 import api from '../../api/index'
+import { useHistory } from 'react-router'
 import { UserContext } from '../../context/userContext'
 
 const EditMyInfoComponent = () => {
@@ -17,10 +18,12 @@ const EditMyInfoComponent = () => {
   const { userInfo, setUserInfo } = useContext(UserContext)
   const { email, createdAt } = userInfo
 
+  const history = useHistory()
+
   // 닉네임 형식을 체크하는 정규 표현식
   const nickname_Reg = /^([a-zA-Z0-9ㄱ-ㅎ|ㅏ-ㅣ|가-힣]).{1,10}$/
 
-  const checkNickname = () => {
+  const checkNickname = async () => {
     if (!nickname_Reg.test(changeNickname) || changeNickname === '') {
       Swal.fire({
         title: '닉네임을 다시 정해주세요',
@@ -33,15 +36,13 @@ const EditMyInfoComponent = () => {
       })
       return
     }
-    api
+    await api
       .post('users/signup/nick-check', {
         nickname: changeNickname,
       })
       .then((res) => {
-        console.log(changeNickname)
-        console.log(res.data.message)
+        setMessageNickname(res.data.message)
         if (res.data.message === '동일한 닉네임이 존재합니다!') {
-          console.log(res)
           Swal.fire({
             title: '중복된 닉네임입니다.',
             icon: 'warning',
@@ -50,20 +51,21 @@ const EditMyInfoComponent = () => {
             confirmButtonText: '확인',
             confirmButtonColor: '#e8b229',
           })
+          setChangeNickname('')
           return
         }
       })
-    Swal.fire({
-      title: '사용할 수 있는 닉네임입니다.',
-      icon: 'success',
-      showCancelButton: false,
-      focusConfirm: false,
-      confirmButtonText: '확인',
-      confirmButtonColor: '#e8b229',
-    })
   }
 
-  const editDone = () => {
+const DesCheck = () => {
+  if (changeDescription === '') {
+    _des.current.focus()
+    setMessageDescription('자기소개를 입력해주세요!')
+    return
+  }
+}
+
+  const editDone = async () => {
     if (changeNickname === '' || !nickname_Reg.test(changeNickname)) {
       _nick.current.focus()
       setMessageNickname(
@@ -76,27 +78,32 @@ const EditMyInfoComponent = () => {
       setMessageDescription('자기소개를 입력해주세요!')
       return
     }
-    api.patch('/users', {
-      nickname : changeNickname,
-      description : changeDescription
-    }).then(res => {
-      let { id, email, nickname, description, createdAt } = res.data.userData
-      setUserInfo({
-        id,
-        email,
-        nickname : changeNickname,
-        description : changeDescription,
-        createdAt
+    await api
+      .patch('/users', {
+        nickname: changeNickname,
+        description: changeDescription,
       })
-    })
-    Swal.fire({
-      title: '정보가 수정되었습니다.',
-      icon: 'success',
-      showCancelButton: false,
-      focusConfirm: false,
-      confirmButtonText: '확인',
-      confirmButtonColor: '#e8b229',
-    })
+      .then((res) => {
+        let { id, email, createdAt } = res.data.userData
+        setUserInfo({
+          id,
+          email,
+          nickname: changeNickname,
+          description: changeDescription,
+          createdAt,
+        })
+        if (res.data.userData) {
+          Swal.fire({
+            title: '정보가 수정되었습니다.',
+            icon: 'success',
+            showCancelButton: false,
+            focusConfirm: false,
+            confirmButtonText: '확인',
+            confirmButtonColor: '#e8b229',
+          })
+          history.push(`/info`)
+        }
+      })
   }
 
   return (
@@ -109,8 +116,9 @@ const EditMyInfoComponent = () => {
           }}
           placeholder="닉네임을 입력해주세요."
           ref={_nick}
+          onBlur={checkNickname}
         />
-        <CheckBtn onClick={checkNickname}>확인</CheckBtn>
+        <CheckText>{messageNickname}</CheckText>
       </NameArea>
       <IntroArea>
         <Name>자기 소개</Name>
@@ -120,7 +128,9 @@ const EditMyInfoComponent = () => {
           }}
           placeholder="자기소개를 입력해주세요."
           ref={_des}
+          onBlur={DesCheck}
         />
+        <CheckText>{messageDescription}</CheckText>
       </IntroArea>
       <BottomArea>
         <DateArea>
@@ -148,6 +158,7 @@ const Wrap = styled.div`
 
 const NameArea = styled.div`
   text-align: center;
+  padding-top: 10px;
 `
 
 const Name = styled.h3`
@@ -158,7 +169,7 @@ const Name = styled.h3`
 
 const NameInput = styled.input`
   width: 60%;
-  margin: 5px 0 0 0;
+  margin: 5px auto 0 auto;
   padding: 3px;
   font-size: 11px;
   border: solid 2px #d2d2d2;
@@ -193,13 +204,22 @@ const Textarea = styled.textarea`
   resize: none;
   width: 95%;
   height: 130px;
-  padding: 0 0 5px 0;
+  padding: 10px;
   border: solid 2px #d2d2d2;
   border-radius: 5px;
+  box-sizing: border-box;
   :focus {
     border: 2px solid rgb(243, 200, 18);
     outline: none;
   }
+`
+const CheckText = styled.div`
+  height: 3px;
+  text-align: center;
+  font-size: 11px;
+  margin-left: 5px;
+  margin-top: 3px;
+  color: rgb(255, 162, 0);
 `
 
 const DateArea = styled.div`

@@ -160,9 +160,9 @@ const WriteComponent = (props) => {
         <Form>
           <FormGroup>
             <Labal>
-              <span className="require">1.</span> &nbsp; 제목
+            제목<span className="require">*</span>
             </Labal>
-            <Input
+            <Input className="title"
               type="text"
               placeholder="제목을 입력해주세요"
               onChange={(e) => onChangeTitle(e)}
@@ -172,7 +172,7 @@ const WriteComponent = (props) => {
           </FormGroup>
           <FormGroup>
             <Labal>
-              <span className="require">2.</span>&nbsp; 요리소개
+            요리소개<span className="require">*</span>
             </Labal>
             <Textarea
               type="text"
@@ -184,7 +184,7 @@ const WriteComponent = (props) => {
           </FormGroup>
           <FormGroup>
             <Labal>
-              <span className="require">3.</span>&nbsp; 메인 사진
+            메인 사진<span className="require">*</span>
             </Labal>
             <MainImgComponent
               className="imgBox"
@@ -194,9 +194,10 @@ const WriteComponent = (props) => {
             />
             <CheckText>{messageMainImg}</CheckText>
           </FormGroup>
-          <FormGroup>
+          <BoxWrap>
+          <BoxGroup>
             <Labal>
-              <span className="require">4.</span>&nbsp; 레시피 카테고리
+            레시피 카테고리 <span className="require">*</span>
             </Labal>
             <DropDownCategory
               category={category}
@@ -204,10 +205,10 @@ const WriteComponent = (props) => {
               categoryRef={categoryRef}
             />
             <CheckText>{messageCategory}</CheckText>
-          </FormGroup>
-          <FormGroup>
+          </BoxGroup>
+          <BoxGroup>
             <Labal>
-              <span className="require">5.</span>&nbsp; 조리시간
+            조리시간<span className="require">*</span> 
             </Labal>
             <DropDownTime
               requiredTime={requiredTime}
@@ -215,10 +216,11 @@ const WriteComponent = (props) => {
               requiredTimeRef={requiredTimeRef}
             />
             <CheckText>{messageRequiredTime}</CheckText>
-          </FormGroup>
+          </BoxGroup>
+          </BoxWrap>
           <FormGroup>
             <Labal>
-              <span className="require">6.</span>&nbsp; 요리 재료
+            요리 재료<span className="require">*</span>
             </Labal>
             <AddListingredients
               ingredients={ingredients}
@@ -230,7 +232,7 @@ const WriteComponent = (props) => {
           </FormGroup>
           <FormGroup>
             <Labal>
-              <span className="require">7.</span>&nbsp; 요리 방법
+            요리 방법<span className="require">*</span> 
             </Labal>
             <AddListContent
               contents={contents}
@@ -242,7 +244,7 @@ const WriteComponent = (props) => {
           </FormGroup>
           <FormGroup>
             <Labal>
-              <span className="require">8.</span>&nbsp; 요리 사진
+            요리 사진<span className="require">*</span> 
             </Labal>
             <ContentImgComponent
               contentImgs={contentImgs}
@@ -265,6 +267,8 @@ const Wrapper = styled.div`
   height: 100%;
   display: flex;
   flex-direction: column;
+  margin-top : 70px;
+  align-items: center;
 `
 
 const TitleArea = styled.div`
@@ -291,48 +295,61 @@ const MainText = styled.div`
 `
 
 const Form = styled.div`
-  width: 100%;
+  width: 40%;
   height: 100%;
   display: flex;
   flex-direction: column;
-  margin-left: -6%;
   padding: 25px 0px;
 `
 
 const FormGroup = styled.div`
   display: block;
-  margin-left: 13%;
   text-align: center;
+  margin-bottom : 50px;
+  
+`
+const BoxGroup = styled.div`
+  display: block;
+  text-align: center;
+  width : 45%;
+  
 `
 
 const CheckText = styled.div`
   height: 3px;
-  text-align: left;
-  font-size: 11px;
+  text-align: center;
+  font-size: 20px;
   margin-left: 5px;
   margin-top: 3px;
   color: rgb(255, 162, 0);
 `
 
 const Labal = styled.div`
-  text-align: left;
-  margin-left: 4px;
   margin-bottom: 3px;
+  font-size : 25px;
   .require {
     color: rgb(255, 162, 0);
-    margin-left: 4px;
     line-height: 2;
   }
+  :nth-child(6) {
+    margin-left : 1000px;
+  }
 `
-
+const BoxWrap = styled.div`
+  width : 100%;
+  display : flex;
+  justify-content: center;
+  justify-content: space-around;
+  margin-bottom : 70px;
+`
 const Input = styled.input`
-  width: 300px;
-  height: 15px;
+  width: 100%;
+  height: 60px;
   align-items: center;
-  padding: 15px 50px 10px 10px;
+  padding: 15px;
   border-radius: 8px;
+  box-sizing : border-box;
   border: solid 2px #d2d2d2;
-
   :focus {
     border: solid 2px rgb(243, 200, 18);
     outline: none;
@@ -343,27 +360,32 @@ const Input = styled.input`
     line-height: 1.5;
     color: #b5b5b5;
   }
+  .title {
+    font-size : 30px;
+  }
 `
 
 const SignupBtn = styled.button`
-  width: 300px;
+  width : 100%;
   text-align: center;
   align-items: center;
   padding: 0px 0px;
   background-color: rgb(243, 200, 18);
-  height: 50px;
+  height: 70px;
   border: 1px solid transparent;
   border-radius: 13px;
   color: white;
-  font-size: 17px;
+  font-size: 25px;
+  font-weight: bold;
 `
 
 const Textarea = styled.textarea`
-  width: 400px;
-  height: 120px;
+  width: 100%;
+  height: 150px;
   align-items: center;
   padding: 5px 10px 10px 10px;
   border-radius: 8px;
+  box-sizing : border-box;
   border: solid 2px #d2d2d2;
   resize: none;
   :focus {

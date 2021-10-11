@@ -28,10 +28,11 @@ const MyInfoComponent = () => {
         }
       )
       .then((res) => {
-        console.log(res.data)
-        api.defaults.headers.common[
-          'Authorization'
-        ] = `Bearer ${res.data.accessToken}`
+        if (res.data.accessToken) {
+          api.defaults.headers.common[
+            'Authorization'
+          ] = `Bearer ${res.data.accessToken}`
+        }
         let { id, email, nickname, description, createdAt } = res.data.userData
         let user = { id, email, nickname, description, createdAt }
         setUserInfo(user)
@@ -118,6 +119,7 @@ const Info = styled.div`
   display: flex;
   box-shadow: 0px 1px 10px 1px rgb(201, 201, 201);
   @media (max-width: 1200px) {
+    position: relative;
     width: 90%;
     height: 500px;
     padding: 0;
@@ -133,9 +135,9 @@ const BtnWrap = styled.div`
   margin-left: 445px;
   @media (max-width: 1200px) {
     padding: 2px 10px 0 0;
-    width: 40%;
+    top: 20px;
+    right: 1px;
     height: 80px;
-    margin-left: 230px;
   }
 `
 
@@ -167,7 +169,7 @@ const ReviseBtn = styled.div`
 const ReviseText = styled.div`
   font-size: 11px;
   margin-right: 10px;
-  margin-top: 5px;
+  margin-top: 1px;
   display: none;
   color: rgb(243, 200, 18);
 `
