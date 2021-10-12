@@ -4,23 +4,23 @@ import InfiniteScroll from 'react-infinite-scroll-component'
 import { SearchValueContext } from '../context/searchValueContext'
 import ImageComponent from './imageComponent'
 import LoadingComponent from './loadingComponent'
+import api from '../api'
 
 const SearchComponent = () => {
   const { isValue, setIsValue } = useContext(SearchValueContext)
-  const [datas, setDatas] = useState([])
-  // { // 객체나 배열로 들어가야 할 것 같다.
-  //   id: '',
-  //   url: '',
-  //  ...
-  // }
-  const [offset, setOffset] = useState(1)
+  const [infos, setInfos] = useState([])
 
+  const [offset, setOffset] = useState(1)
   const fetchImages = async () => {
-    // await axios.get(`/recipes?searchName=${isValue}&offset=${offset}&limit=10`)
-    // .then(res=>{
-    //   setDatas([...setDatas, res.data])
-    //   setOffset(offset+1)
-    // })
+    await api
+      .get(`/recipes?searchName=${isValue}&offset=${offset}&limit=10`, {
+        headers: { 'Content-Type': 'application/json' },
+        withCredentials: true,
+      })
+      .then((res) => {
+        setInfos([...infos, ...res.data])
+        setOffset(offset + 1)
+      })
   }
 
   useEffect(() => {
@@ -31,24 +31,20 @@ const SearchComponent = () => {
     <>
       <Header>
         <h3>
-          {isValue} &nbsp;&nbsp;검색 결과 &nbsp;&nbsp;&nbsp; {datas.length} 개
+          {isValue} &nbsp;&nbsp;검색 결과 &nbsp;&nbsp;&nbsp; {infos.length} 개
         </h3>
       </Header>
       <Wrapper>
         <InfiniteScroll
-          dataLength={datas.length}
-          next="fetchImages" //{} 로 들어가야함
-          hasMore={datas.length >= 10}
+          dataLength={infos.length}
+          next={fetchImages}
+          hasMore={infos.length >= 10}
           loader={<LoadingComponent />}
         >
           <WrapperImage>
-            {datas.map((image) => (
-              <div
-                className="img-wrapper"
-                key={image.id}
-                onClick={() => console.log(333)}
-              >
-                <ImageComponent datas={datas} />
+            {infos.map((image) => (
+              <div className="img-wrapper" key={image.id}>
+                <ImageComponent info={image} />
               </div>
             ))}
           </WrapperImage>
@@ -59,6 +55,7 @@ const SearchComponent = () => {
 }
 
 const Header = styled.div`
+  margin-top: 70px;
   display: flex;
   justify-content: center;
 `
