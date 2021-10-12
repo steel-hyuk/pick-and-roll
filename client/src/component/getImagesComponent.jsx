@@ -26,7 +26,7 @@ function GetImagesComponent({ isValue, selectCategory }) {
         setOffset(offset + 1)
       })
     const imgUrls = infos.map((el) => el.mainImg)
-    setImages(...images, ...imgUrls)
+    setImages([...images, ...imgUrls])
     console.log(imgUrls)
   }
 

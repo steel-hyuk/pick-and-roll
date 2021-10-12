@@ -24,6 +24,7 @@ const MyInfoComponent = () => {
         '/users',
         {},
         {
+          withCredentials: true,
           'Content-Type': 'application/json',
         }
       )
@@ -35,6 +36,7 @@ const MyInfoComponent = () => {
         }
         let { id, email, nickname, description, createdAt } = res.data.userData
         createdAt = createdAt.substring(0,10)
+
         let user = { id, email, nickname, description, createdAt }
         setUserInfo(user)
       })

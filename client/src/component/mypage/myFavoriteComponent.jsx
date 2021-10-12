@@ -11,6 +11,7 @@ const MyFavoriteComponent = () => {
         '/users/favorite',
         {},
         {
+          withCredentials: true,
           'Content-Type': 'application/json',
         }
       )

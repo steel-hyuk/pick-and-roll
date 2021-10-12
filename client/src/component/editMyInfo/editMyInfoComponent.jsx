@@ -39,6 +39,8 @@ const EditMyInfoComponent = () => {
     await api
       .post('users/signup/nick-check', {
         nickname: changeNickname,
+      },{
+        withCredentials: true
       })
       .then((res) => {
         setMessageNickname(res.data.message)
@@ -82,6 +84,8 @@ const DesCheck = () => {
       .patch('/users', {
         nickname: changeNickname,
         description: changeDescription,
+      }, {
+        withCredentials: true
       })
       .then((res) => {
         let { id, email, createdAt } = res.data.userData
