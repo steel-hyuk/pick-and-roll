@@ -6,6 +6,22 @@ const {
 const { User } = require('../../models')
 
 module.exports = {
+  generateRandomPassword: () => {
+    const chars =  "0123456789ABCDEFGHIJKLMNOPQRSTUVWXTZabcdefghiklmnopqrstuvwxyz!@#$%^&*"
+    const stringLength = 8
+
+    let randomString = ''
+    for(let n=0; n < stringLength; n++) {
+      let randomNum = Math.floor(Math.random() * chars.length)
+      randomString += chars.substring(randomNum, randomNum + 1)
+    }
+    return randomString
+  },
+  everyScoreSum: (arr) => {
+    let sum = 0
+    arr.map((el) => (sum += el.dataValues.score))
+    return sum
+  },
   everyScoreSum: (arr) => {
     let sum = 0
     arr.map((el) => (sum += el.dataValues.score))
@@ -44,7 +60,7 @@ module.exports = {
         .catch((err) => {
           console.log(`New Access Token Error: ${err.message}`)
         })
-    }
+    } else {
     const { email } = accessTokenData
     User.findOne({
       where: { email }
@@ -59,5 +75,6 @@ module.exports = {
     .catch((err) => {
       console.log(`Access Token Error: ${err.message}`)
     })
+   }
   }
 }
