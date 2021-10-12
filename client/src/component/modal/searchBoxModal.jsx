@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react'
 import { useHistory } from 'react-router-dom'
 import styled from 'styled-components'
-import { FaSearch } from 'react-icons/fa'
+import { FaSearch, FaRegTimesCircle } from 'react-icons/fa'
 import { SearchValueContext } from '../../context/searchValueContext'
 
 const SearchBoxModal = ({ showSearchBox, setShowSearchBox }) => {
@@ -35,7 +35,7 @@ const SearchBoxModal = ({ showSearchBox, setShowSearchBox }) => {
         <div className={showSearchBox ? 'opened' : 'modal'} aria-hidden="true">
           <div className="modal-dialog">
             <Button onClick={() => setShowSearchBox(false)} aria-hidden="true">
-              &times;
+              <FaRegTimesCircle />
             </Button>
             <div className="modal-body">
               <input
@@ -68,6 +68,7 @@ const Wrapper = styled.div`
     height: 100vh;
     top: 0;
     left: 0;
+    opacity : 50%;
     z-index: 10000000;
   }
   .modal:before {
@@ -94,13 +95,15 @@ const Wrapper = styled.div`
     background: #fefefe;
     border: #333333 solid 0px;
     border-radius: 5px;
-    margin-left: -200px;
+    margin-left: -250px;
     text-align: center;
     position: fixed;
     left: 50%;
     top: -100%;
     z-index: 1100000000;
-    width: 360px;
+    width: 500px;
+    height : 70px;
+    box-sizing : border-box;
     box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
     -webkit-transform: translate(0, -500%);
     -ms-transform: translate(0, -500%);
@@ -112,35 +115,46 @@ const Wrapper = styled.div`
   }
   .modal-body {
     padding: 20px;
+    position: relative;
   }
   .modal-body input {
-    width: 200px;
+    width: 300px;
     padding: 8px;
     color: #888;
     outline: 0;
+    background-color : #e1e1e1;
     font-size: 14px;
     font-weight: bold;
     border: none;
     border-right: 0px;
     border-top: 0px;
+    border-radius : 30px;
   }
   .icon {
-    margin-top: 3px;
-    width: 24px;
-    height: 24px;
+    width: 15px;
+    height: 15px;
+    position: absolute;
+    right : 100px;
+    color : #888;
+    top : 29px;
   }
   .icon:hover {
     color: #888;
-    width: 30px;
-    height: 30px;
+    width: 20px;
+    height: 20px;
     transition: transform 0.3s ease-out;
   }
 `
 
 const Button = styled.button`
   position: absolute;
-  top: 5%;
-  left: 93%;
+  top: 5px;
+  right :1px;
+  border :none;
+  z-index : 100000;
+  opacity : 0.5;
+  background-color : white;
+  color : #999;
 `
 
 export default SearchBoxModal

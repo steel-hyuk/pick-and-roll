@@ -4,19 +4,35 @@ import InfiniteScroll from 'react-infinite-scroll-component'
 
 import ImageComponent from './imageComponent'
 import LoadingComponent from './loadingComponent'
+import axios from 'axios'
 
 function GetImagesComponent({ isValue, selectCategory }) {
   const [images, setImages] = useState([])
   const [offset, setOffset] = useState(1) // 데이터를 받으면 then에서 offset +1
 
-  const fetchImages = async () => {
-    // await axios.get(`/recipes?searchName=${isValue}&offset=${offset}&limit=10`)
-    // .then(res=>{
-    //   setImages([...images, res.data.url])
-    //   setOffset(offset+1)
-    // })
+  // const fetchImages = async () => {
+  //   await axios.get(`/recipes?searchName=${isValue}&offset=${offset}&limit=10`)
+  //   .then(res=>{
+  //     setImages([...images, res.data.url])
+  //     setOffset(offset+1)
+  //   })
+
+  // }
+
+  const fetchImages = () => {
+    axios
+      .get(
+        `https://api.unsplash.com/photos/random?client_id=dllapZyq7HTMkM11dE1uhoBRzwWNupievUHo1BM2Nq8&count=10`
+      )
+      .then((res) => {
+        setImages((photo) => [...photo, ...res.data])
+        setOffset(offset + 1)
+      })
   }
 
+  useEffect(() => {
+    fetchImages()
+  }, [])
   useEffect(() => {
     //fetchImages()
   }, [])

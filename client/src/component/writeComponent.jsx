@@ -124,7 +124,7 @@ const WriteComponent = (props) => {
         <Form>
           <FormGroup>
             <Labal>
-              제목<span className="require">*</span>
+              제목 <span className="require">*</span>
             </Labal>
             <Input
               className="title"
@@ -137,7 +137,7 @@ const WriteComponent = (props) => {
           </FormGroup>
           <FormGroup>
             <Labal>
-              요리소개<span className="require">*</span>
+              요리소개 <span className="require">*</span>
             </Labal>
             <Textarea
               type="text"
@@ -162,7 +162,7 @@ const WriteComponent = (props) => {
           <BoxWrap>
             <BoxGroup>
               <Labal>
-                레시피 카테고리 <span className="require">*</span>
+                카테고리 <span className="require">*</span>
               </Labal>
               <DropDownCategory
                 category={category}
@@ -173,7 +173,7 @@ const WriteComponent = (props) => {
             </BoxGroup>
             <BoxGroup>
               <Labal>
-                조리시간<span className="require">*</span>
+                조리시간 <span className="require">*</span>
               </Labal>
               <DropDownTime
                 requiredTime={requiredTime}
@@ -185,7 +185,7 @@ const WriteComponent = (props) => {
           </BoxWrap>
           <FormGroup>
             <Labal>
-              요리 재료<span className="require">*</span>
+            <div className='center'>요리 재료 <span className="require">*</span></div>
             </Labal>
             <AddListingredients
               ingredients={ingredients}
@@ -197,7 +197,7 @@ const WriteComponent = (props) => {
           </FormGroup>
           <FormGroup>
             <Labal>
-              요리 방법<span className="require">*</span>
+            <div className='center'>요리 방법 <span className="require">*</span></div>
             </Labal>
             <AddListContent
               contents={contents}
@@ -209,7 +209,7 @@ const WriteComponent = (props) => {
           </FormGroup>
           <FormGroup>
             <Labal>
-              요리 사진<span className="require">*</span>
+              요리 사진 <span className="require">*</span>
             </Labal>
             <ContentImgComponent
               contentImgs={contentImgs}
@@ -219,7 +219,7 @@ const WriteComponent = (props) => {
             <CheckText>{messageContentImgs}</CheckText>
           </FormGroup>
           <FormGroup>
-            <SignupBtn onClick={(e) => postInfoSubmit(e)}>등록하기</SignupBtn>
+            <Enroll onClick={(e) => postInfoSubmit(e)}>등록하기</Enroll>
           </FormGroup>
         </Form>
       </Wrapper>
@@ -265,6 +265,9 @@ const Form = styled.div`
   display: flex;
   flex-direction: column;
   padding: 25px 0px;
+  @media (max-width: 750px) {
+    width: 90%;
+  }
 `
 
 const FormGroup = styled.div`
@@ -285,11 +288,20 @@ const CheckText = styled.div`
   margin-left: 5px;
   margin-top: 3px;
   color: rgb(255, 162, 0);
+  @media (max-width: 750px) {
+    font-size: 13px;
+  }
 `
 
 const Labal = styled.div`
   margin-bottom: 3px;
   font-size: 25px;
+  .center {
+    margin-left : 25px;
+    @media (max-width: 750px) {
+      margin-left : 15px;
+  }
+  }
   .require {
     color: rgb(255, 162, 0);
     line-height: 2;
@@ -297,7 +309,11 @@ const Labal = styled.div`
   :nth-child(6) {
     margin-left: 1000px;
   }
+  @media (max-width: 750px) {
+    font-size: 14px;
+  }
 `
+
 const BoxWrap = styled.div`
   width: 100%;
   display: flex;
@@ -322,13 +338,16 @@ const Input = styled.input`
     text-align: left;
     line-height: 1.5;
     color: #b5b5b5;
+    @media (max-width: 750px) {
+    font-size: 11px;
+  }
   }
   .title {
     font-size: 30px;
   }
 `
 
-const SignupBtn = styled.button`
+const Enroll = styled.button`
   width: 100%;
   text-align: center;
   align-items: center;
@@ -340,13 +359,17 @@ const SignupBtn = styled.button`
   color: white;
   font-size: 25px;
   font-weight: bold;
+  @media (max-width: 750px) {
+    height : 40px;
+    font-size: 15px;
+  }
 `
 
 const Textarea = styled.textarea`
   width: 100%;
   height: 150px;
   align-items: center;
-  padding: 5px 10px 10px 10px;
+  padding: 15px;
   border-radius: 8px;
   box-sizing: border-box;
   border: solid 2px #d2d2d2;
@@ -360,6 +383,9 @@ const Textarea = styled.textarea`
     text-align: left;
     line-height: 1.5;
     color: #b5b5b5;
+    @media (max-width: 750px) {
+    font-size: 11px;
+    }
   }
 `
 

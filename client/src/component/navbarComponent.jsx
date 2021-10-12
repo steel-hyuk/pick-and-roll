@@ -41,13 +41,17 @@ const NavbarComponent = ({ handleLogin }) => {
             <ChangeClick onClick={() => setShowSearchBox(true)}>
               검색
             </ChangeClick>
+            <ChangeClick to="/" onClick={() => setOpenLogin(true)}>
+              로그인
+            </ChangeClick>
+          </MenuLinks>
+          <Modal>
             <SearchBoxModal
               showSearchBox={showSearchBox}
               setShowSearchBox={setShowSearchBox}
             />
-            <ChangeClick to="/" onClick={() => setOpenLogin(true)}>
-              로그인
-            </ChangeClick>
+          </Modal>
+          <Modal>
             {openLogin ? (
               <LoginModal
                 handleLogin={handleLogin}
@@ -55,15 +59,18 @@ const NavbarComponent = ({ handleLogin }) => {
                 setOpenLogin={setOpenLogin}
               />
             ) : null}
-          </MenuLinks>
+          </Modal>
           <MenuIcon onClick={changeMenu}>
             <FaAlignJustify />
           </MenuIcon>
           {openMenu ? (
             <MenuModal
               isLoggedIn={isLoggedIn}
-              openMenu={openMenu}
               changeMenu={changeMenu}
+              openLogin={openLogin}
+              setOpenLogin={setOpenLogin}
+              setShowSearchBox={setShowSearchBox}
+              logout={logout}
             />
           ) : null}
         </BeforeLoginView>
@@ -75,24 +82,31 @@ const NavbarComponent = ({ handleLogin }) => {
             <ChangeClick onClick={() => setShowSearchBox(true)}>
               검색
             </ChangeClick>
-            <SearchBoxModal
-              showSearchBox={showSearchBox}
-              setShowSearchBox={setShowSearchBox}
-            />
             <NavElement to="/write">새 글 작성</NavElement>
             <NavElement to={`/mypage/${userInfo.email}`}>
               {userInfo.nickname}님
             </NavElement>
-            <NavElement to="/" onClick={logout}>로그아웃</NavElement>
+            <NavElement to="/" onClick={logout}>
+              로그아웃
+            </NavElement>
           </MenuLinks>
           <MenuIcon onClick={changeMenu}>
             <FaAlignJustify />
           </MenuIcon>
+          <Modal>
+            <SearchBoxModal
+              showSearchBox={showSearchBox}
+              setShowSearchBox={setShowSearchBox}
+            />
+          </Modal>
           {openMenu ? (
             <MenuModal
               isLoggedIn={isLoggedIn}
-              openMenu={openMenu}
               changeMenu={changeMenu}
+              openLogin={openLogin}
+              setOpenLogin={setOpenLogin}
+              setShowSearchBox={setShowSearchBox}
+              logout={logout}
             />
           ) : null}
         </AfterLoginView>
@@ -105,8 +119,8 @@ const Nav = styled.nav`
   background-color: white;
   margin: 0px;
   box-shadow: 0px 1px 10px 1px rgb(243, 200, 18);
-  position : fixed;
-  top : 0;
+  position: fixed;
+  top: 0;
   left: 0;
   width: 100%;
   z-index: 9999;
@@ -114,9 +128,14 @@ const Nav = styled.nav`
 
 const MenuLinks = styled.div`
   display: flex;
+  position: relative;
   @media (max-width: 750px) {
     display: none;
   }
+`
+
+const Modal = styled.div`
+  position: absolute;
 `
 
 const BeforeLoginView = styled.div`

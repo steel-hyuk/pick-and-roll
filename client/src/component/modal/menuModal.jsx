@@ -1,10 +1,22 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import styled from 'styled-components'
 import { NavLink } from 'react-router-dom'
+import LoginModal from './loginModal'
+import SearchBoxModal from './searchBoxModal'
+import { UserContext } from '../../context/userContext'
+import { AuthContext } from '../../context/authContext'
 
-const MenuModal = ({ isLoggedIn, openMenu, changeMenu }) => {
+const MenuModal = ({
+  changeMenu,
+  openLogin,
+  setOpenLogin,
+  setShowSearchBox,
+  logout
+}) => {
+  const { userInfo } = useContext(UserContext)
+  const { isLoggedIn } = useContext(AuthContext)
   return (
-    <Modal openMenu={openMenu} onClick={changeMenu}>
+    <Modal onClick={changeMenu}>
       {!isLoggedIn ? (
         <Form>
           <Container>
@@ -12,8 +24,12 @@ const MenuModal = ({ isLoggedIn, openMenu, changeMenu }) => {
               <Title>Menu</Title>
             </TitleWrap>
             <List to="/recipe">레시피</List>
-            <List to="/postWrite">검색</List>
-            <List to="/Login">로그인</List>
+            <Search onClick={() => setShowSearchBox(true)}>검색</Search>
+            <SearchBoxModal />
+            <List to="/Login" onClick={() => setOpenLogin(true)}>
+              로그인
+            </List>
+            {openLogin ? <LoginModal /> : null}
           </Container>
         </Form>
       ) : (
@@ -23,10 +39,11 @@ const MenuModal = ({ isLoggedIn, openMenu, changeMenu }) => {
               <Title>Menu</Title>
             </TitleWrap>
             <List to="/recipe">레시피</List>
-            <List to="/postWrite">검색</List>
-            <List to="/postWrite">새 글 작성</List>
-            <List to="/users">사용자 이름</List>
-            <List to="/Login">로그아웃</List>
+            <Search onClick={() => setShowSearchBox(true)}>검색</Search>
+            <SearchBoxModal />
+            <List to="/write">새 글 작성</List>
+            <List to={`/mypage/${userInfo.email}`}>{userInfo.nickname}님</List>
+            <List to="/" onClick={logout}>로그아웃</List>
           </Container>
         </Form>
       )}
@@ -94,6 +111,14 @@ const Title = styled.div`
 `
 const List = styled(NavLink)`
   text-decoration: none;
+  color: white;
+  font-size: 25px;
+  margin-bottom: 20px;
+  :hover {
+    color: rgb(255, 183, 0);
+  }
+`
+const Search = styled.div`
   color: white;
   font-size: 25px;
   margin-bottom: 20px;
