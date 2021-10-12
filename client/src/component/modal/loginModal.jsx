@@ -106,9 +106,9 @@ const LoginModal = ({ openLogin, setOpenLogin }) => {
               </div>
             </SignUpBtn>
             <SocialLoginBtn onClick={handleKakao}>kakao</SocialLoginBtn>
-            <CancelBtn onClick={() => setOpenLogin(false)}>
+            <CancelIcon onClick={() => setOpenLogin(false)}>
               <FaRegTimesCircle />
-            </CancelBtn>
+            </CancelIcon>
           </LoginC>
         </LoginWrapper>
       </Form>
