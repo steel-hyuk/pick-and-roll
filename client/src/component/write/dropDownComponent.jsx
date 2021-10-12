@@ -1,7 +1,7 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useRef } from 'react'
 import styled from 'styled-components'
 
-const DropDownTime = ({ requiredTime, setRequiredTime }) => {
+const DropDownTime = ({ requiredTime, setRequiredTime, requiredTimeRef }) => {
   const onChangeRequiredTime = useCallback((event) => {
     setRequiredTime(event.target.value)
   })
@@ -13,6 +13,7 @@ const DropDownTime = ({ requiredTime, setRequiredTime }) => {
         placeholder="조리시간"
         onChange={(e) => onChangeRequiredTime(e)}
         value={requiredTime}
+        ref={requiredTimeRef}
       />
       <select onChange={(e) => onChangeRequiredTime(e)}>
         <option value="30분">30분</option>
@@ -24,7 +25,7 @@ const DropDownTime = ({ requiredTime, setRequiredTime }) => {
   )
 }
 
-export const DropDownCategory = ({ category, setCategory }) => {
+export const DropDownCategory = ({ category, setCategory, categoryRef }) => {
   const onChangeCategory = useCallback((event) => {
     setCategory(event.target.value)
   }, [])
@@ -36,6 +37,7 @@ export const DropDownCategory = ({ category, setCategory }) => {
         placeholder="카테고리"
         onChange={(e) => onChangeCategory(e)}
         value={category}
+        ref={categoryRef}
       />
       <select onChange={(e) => onChangeCategory(e)}>
         <option value="한식">한식</option>
@@ -51,23 +53,19 @@ export const DropDownCategory = ({ category, setCategory }) => {
 const Wrapper = styled.div`
   display: grid;
   grid-template-columns: 3fr 1fr;
-  width: 150px;
   height: 30px;
   border-radius: 8px;
   border: solid 2px #d2d2d2;
   resize: none;
-  margin-left: 25%;
   input {
     height: 80%;
     width: 100%;
-    margin-left: 7px;
     margin-top: 3px;
     outline: none;
     text-align: center;
     border: 0mm #f7f4f41c;
   }
   select {
-    margin-left: 15px;
     border: 0mm #f7f4f41c;
     width: 50%;
     height: 100%;

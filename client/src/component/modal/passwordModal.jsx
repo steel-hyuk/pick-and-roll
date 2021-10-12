@@ -154,6 +154,9 @@ const CheckIcon = styled.div`
   margin-left: 410px;
   margin-top: 15px;
   color: #6f6f6f;
+  :hover {
+    cursor: pointer;
+  }
 `
 
 export default PasswordModal

@@ -67,7 +67,6 @@ const ChangePasswordComponent = () => {
         }
       )
       .then((res) => {
-        console.log(res.data.message)
         if (res.data.message !== '비밀번호 변경이 완료됐습니다') {
           setMessagePassword('이전 비밀번호 입니다.')
           setMessagePwCheck('비밀번호를 다시 확인해주세요!')
