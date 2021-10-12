@@ -10,7 +10,11 @@ const PasswordModal = ({ pwModal, setPwModal, setPage }) => {
 
   const checkPw = async () => {
     await api
-      .post('/users/security', { password }, { withCredentials: true })
+      .post('/users/security', { password }, { 
+        headers : { 
+          'Content-Type': 'application/json' 
+        }, 
+        withCredentials: true })
       .then((res) => {
         Swal.fire({
           title: '비밀번호가 확인되었습니다.',

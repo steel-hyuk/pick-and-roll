@@ -115,9 +115,11 @@ const DesCheck = () => {
       <NameArea>
         <Name>새로운 닉네임</Name>
         <NameInput
+          type="text"
           onChange={(e) => {
             setChangeNickname(e.target.value)
           }}
+          value={userInfo.nickname}
           placeholder="닉네임을 입력해주세요."
           ref={_nick}
           onBlur={checkNickname}
@@ -130,7 +132,7 @@ const DesCheck = () => {
           onChange={(e) => {
             setChangeDescription(e.target.value)
           }}
-          placeholder="자기소개를 입력해주세요."
+          placeholder={userInfo.description}
           ref={_des}
           onBlur={DesCheck}
         />

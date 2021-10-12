@@ -20,13 +20,11 @@ const MyInfoComponent = () => {
   //(axios) get 요청으로 토큰, 데이터 업데이트
   const updateUser = async () => {
     await api
-      .get(
-        '/users',
-        {},
-        {
-          withCredentials: true,
-          'Content-Type': 'application/json',
-        }
+      .get('/users', { 
+          headers : { 
+            'Content-Type': 'application/json' 
+          }, 
+          withCredentials: true }
       )
       .then((res) => {
         if (res.data.accessToken) {

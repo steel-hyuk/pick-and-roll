@@ -7,13 +7,11 @@ const MyRecipeComponent = () => {
 
   const showMyRecipe = async () => {
     await api
-      .get(
-        '/users/myrecipe',
-        {},
-        {
-          withCredentials: true,
-          'Content-Type': 'application/json',
-        }
+      .get('/users/myrecipe', { 
+          headers : { 
+            'Content-Type': 'application/json' 
+          }, 
+          withCredentials: true }
       )
       .then((res) => {
         console.log(res.data)

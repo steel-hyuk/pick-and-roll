@@ -45,7 +45,7 @@ const MainImgsComponent = ({ mainImg, setMainImg, mainImgRef }) => {
       <ImgInput>
         <div className="label">
           <BsUpload />
-          <p>Drag & Drop</p>
+          <p>이 곳을 클릭하거나 사진을 가져오세요</p>
         </div>
         <input
           type="file"
@@ -77,7 +77,7 @@ const Wrapper = styled.div`
 
 const ImgInput = styled.div`
   position: relative;
-  height: 400px;
+  height: 150px;
   border: 2px dashed rgb(243, 200, 18);
   border-radius: 20px;
   display: flex;
