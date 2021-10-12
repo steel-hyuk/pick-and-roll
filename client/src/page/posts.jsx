@@ -1,70 +1,202 @@
-import React from 'react'
+import React, { useState, useEffect, useContext } from 'react'
+import { useHistory } from 'react-router-dom'
 import styled from 'styled-components'
-import DropdownStar from '../component/posts/dropdownPosts'
 import { FaRegBookmark, FaCog, FaRegTrashAlt } from 'react-icons/fa'
+
+import api from '../api'
+import { UserContext } from '../context/userContext'
+import DropdownStar from '../component/posts/dropdownPosts'
 import CommentComponent from '../component/comment/commentComponent'
+
 const Posts = () => {
+  const history = useHistory()
+  const recipeId = history.location.pathname.split('=')[1]
+
+  const { userInfo, setUserInfo } = useContext(UserContext)
+  const [recipeInfo, setRecipeInfo] = useState({})
+  const [date, setDate] = useState('')
+
+  const getRecipeInfo = async () => {
+    await api.get(`/recipes?id=${recipeId}`, {
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      withCredentials: true
+    })
+    .then((res) => {
+      console.log(res.data.recipeData)
+      setRecipeInfo(res.data.recipeData)
+      const yymmdd = res.data.recipeData.createdAt.split('-')
+      const dd = yymmdd[2].split('T')[0]
+      setDate(`${yymmdd[0]}.${yymmdd[1]}.${dd}`)
+    })
+  }
+  
+  useEffect(() => {
+    getRecipeInfo()
+  }, [])
+
+  const addFavorite = async () => {
+    await api.post(`/users/favorite/${recipeId}`, {}, {
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      withCredentials: true
+    })
+    .then((res) => {
+      window.location.reload()
+    })
+  }
+
+  const deleteFavorite = async () => {
+    await api.delete(`/users/favorite/${recipeId}`, {
+      withCredentials:true
+    })
+    .then((res) => window.location.reload())
+  }
+
+  const updateRecipe = async () => {
+
+  }
+
+  const deleteRecipe = async () => {
+    await api.delete(`/recipes/${recipeId}`, {
+      withCredentials: true
+    })
+    .then((res) =>{
+      history.push('/recipe')
+    })
+  }
+
+  const giveTasteScore = async () => {
+    await api.post(`/recipes/${recipeId}/taste-score`, {
+      score: 5
+    }, {
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      withCredentials: true
+    })
+    .then((res) => window.location.reload())
+  }
+
+  const giveEasyScore = async () => {
+    await api.post(`/recipes/${recipeId}/easy-score`, {
+      score: 5
+    }, {
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      withCredentials: true
+    })
+    .then((res) => window.location.reload())
+  }
+
   return (
     <Wrapper>
       <Form>
-        <TitleArea>
+        <TitleArea> 
           <Favorite>
-            <FaRegBookmark />
+            { recipeInfo.isMyFavorite ? (
+              <button onClick={deleteFavorite}>해제</button>
+            ) : (
+              <FaRegBookmark onClick={addFavorite}/>
+            )}
           </Favorite>
-          <Title>제목입니다</Title>
+          <Title>{recipeInfo.title}</Title>
           <TextWrap>
-            <Category>총 소요 시간 : 3시간</Category>
+            <Category>{`총 소요 시간 : ${recipeInfo.requiredTime}`}</Category>
             <Editor>작성자</Editor>
           </TextWrap>
           <TextWrap>
-            <Category>카테고리 : 한식</Category>
-            <Editor className="date">2021-10-13</Editor>
+            <Category>{`카테고리 : ${recipeInfo.category}`}</Category>
+            <Editor className="date">{recipeInfo.createdAt && date}</Editor>
           </TextWrap>
-          <TitleIcon1>
-            <FaCog />
-          </TitleIcon1>
-          <TitleIcon2>
-            <FaRegTrashAlt />
-          </TitleIcon2>
+          { recipeInfo.userId === userInfo.id ? (
+            <>
+              <TitleIcon1>
+                <FaCog onClick={updateRecipe} />
+              </TitleIcon1>
+              <TitleIcon2>
+                <FaRegTrashAlt onClick={deleteRecipe} />
+              </TitleIcon2>
+            </>
+          ) : null }
         </TitleArea>
         <ScoreWrap>
-          <ScoreContent>맛 4.5</ScoreContent>
-          <ScoreContent>간편성 4.2</ScoreContent>
+          <ScoreContent>{`맛 ${recipeInfo.tasteAvg}`}</ScoreContent>
+          <ScoreContent>{`간편성 ${recipeInfo.easyAvg}`}</ScoreContent>
         </ScoreWrap>
-        <MainImage>메인 사진</MainImage>
+        <MainImage style={{backgroundImage: `url('${recipeInfo.mainImg}')`}}/>
         <BoxWrap>
           <BoxGroup>
-            <StarBtn>맛 별점주기</StarBtn>
-            <DropdownStar className="taste" color="blue" />
+            {
+              recipeInfo.isVoteTaste ? (
+                <div>이미 투표</div>
+              ) : (
+                <>
+                  <StarBtn onClick={giveTasteScore}>맛 별점주기</StarBtn>
+                  <DropdownStar className="taste" color="blue" />
+                </>
+              )
+            }
           </BoxGroup>
           <BoxGroup>
-            <StarBtn>간편성 별점주기</StarBtn>
-            <DropdownStar className="simple" color="red" />
+            {
+              recipeInfo.isVoteEasy ? (
+                <div>이미 투표</div>
+              ) : (
+                <>
+                  <StarBtn onClick={giveEasyScore}>간편성 별점주기</StarBtn>
+                  <DropdownStar className="simple" color="red" />
+                </>
+              )
+            }
           </BoxGroup>
         </BoxWrap>
-        <div>
-          <div>총 소요시간</div>
-          <div>몇 분</div>
-        </div>
-        <div>카테고리</div>
-        <div>한식</div>
         <Labal>요리소개</Labal>
-        <Textarea />
+        <Textarea value={recipeInfo.introduction} />
 
         <ContentWrap>
           <Labal>재료</Labal>
-          <Contents />
+          <Contents>
+            <ul>
+              {
+                recipeInfo.ingredients && recipeInfo.ingredients.map((el) => {
+                  return (
+                    <li>{`${el[0]} : ${el[1]}`}</li>
+                  )
+                })
+              }
+            </ul>
+          </Contents>
         </ContentWrap>
 
         <ContentWrap>
           <Labal>요리 방법</Labal>
-          <Contents />
+          <Contents>
+            <ol>
+              {
+                recipeInfo.content && recipeInfo.content.map((el) => {
+                  return (
+                    <li>{el}</li>
+                  )
+                })
+              }
+            </ol>
+          </Contents>
         </ContentWrap>
         <Labal>요리 사진</Labal>
         <SubWrap>
-          <SubImage></SubImage>
+          {
+            recipeInfo.contentImg && recipeInfo.contentImg.map((el) => {
+              return (
+                <SubImage style={{backgroundImage: `url('${el}')`}}/>
+              )
+            })
+          }
         </SubWrap>
-        {/* <CommentComponent /> */}
+        <CommentComponent recipesId={recipeId} comments={recipeInfo.commentData}/>
       </Form>
     </Wrapper>
   )
@@ -221,7 +353,6 @@ const Textarea = styled.textarea`
 
 const Contents = styled.div`
   width: 90%;
-  height: 30px;
   margin: 0 auto;
   margin-bottom: 10px;
   align-items: center;
