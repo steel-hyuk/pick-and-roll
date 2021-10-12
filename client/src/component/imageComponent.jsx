@@ -3,7 +3,7 @@ import { useHistory } from 'react-router-dom'
 import styled from 'styled-components'
 import { ImStarFull } from 'react-icons/im'
 
-const ImageComponent = ({ url, infos }) => {
+const ImageComponent = ({ url, info }) => {
   const history = useHistory()
   const {
     id,
@@ -15,7 +15,7 @@ const ImageComponent = ({ url, infos }) => {
     tasteAvg,
     easyAvg,
     createdAt,
-  } = infos
+  } = info
   const totalScore = (tasteAvg + easyAvg) / 2
   const toPost = () => {
     history.push(`/recipes?id=${userId}`)
