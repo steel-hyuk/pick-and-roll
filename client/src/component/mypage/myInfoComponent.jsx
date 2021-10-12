@@ -34,11 +34,12 @@ const MyInfoComponent = () => {
           ] = `Bearer ${res.data.accessToken}`
         }
         let { id, email, nickname, description, createdAt } = res.data.userData
+        createdAt = createdAt.substring(0,10)
         let user = { id, email, nickname, description, createdAt }
         setUserInfo(user)
       })
   }
-
+  
   useEffect(() => {
     updateUser()
   }, [])

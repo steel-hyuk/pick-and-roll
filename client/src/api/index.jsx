@@ -6,6 +6,6 @@ const url = process.env.REACT_APP_API_URL || 'http://localhost:80'
 const instance = axios.create({
   baseURL: url,
 })
-instance.defaults.headers.common["Authorizaion"] = ''
+instance.defaults.headers.common['Authorizaion'] = ''
 
 export default instance
