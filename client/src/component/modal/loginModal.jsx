@@ -9,7 +9,9 @@ import { UserContext } from '../../context/userContext'
 import { KAKAO_AUTH_URL } from '../kakao/OAuth'
 
 const LoginModal = ({ openLogin, setOpenLogin }) => {
-  function handleKakao(e) { window.location.href = KAKAO_AUTH_URL }
+  function handleKakao(e) {
+    window.location.href = KAKAO_AUTH_URL
+  }
   const { isLoggedIn, setIsLoggedIn } = useContext(AuthContext)
   const { userInfo, setUserInfo } = useContext(UserContext)
 

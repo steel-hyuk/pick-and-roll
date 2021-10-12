@@ -37,7 +37,7 @@ const NavbarComponent = ({ handleLogin }) => {
             Pick & Roll
           </Logo>
           <MenuLinks>
-            <NavElement to="/Recipe">레시피</NavElement>
+            <NavElement to="/recipe">레시피</NavElement>
             <ChangeClick onClick={() => setShowSearchBox(true)}>
               검색
             </ChangeClick>
