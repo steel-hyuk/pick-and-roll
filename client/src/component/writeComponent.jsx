@@ -1,10 +1,9 @@
 import React, { useRef, useState, useCallback, useContext } from 'react'
 import { useHistory } from 'react-router'
-import axios from 'axios'
 import styled from 'styled-components'
 import Swal from 'sweetalert2'
 
-import { UserContext } from '../context/userContext'
+import api from '../api'
 import AddListContent, { AddListingredients } from './write/addListComponent'
 import DropDownTime, { DropDownCategory } from './write/dropDownComponent'
 import ContentImgComponent from './ImgEncoding/contentImgsComponent'
@@ -13,17 +12,13 @@ import MainImgComponent from './ImgEncoding/mainImgComponent'
 const WriteComponent = (props) => {
   const history = useHistory()
 
-  const { userInfo, setUserInfo } = useContext(UserContext)
-
-  const [userId, setUserId] = useState(0)
   const [title, setTitle] = useState('')
   const [introduction, setIntroduction] = useState('')
   const [category, setCategory] = useState('')
   const [requiredTime, setRequiredTime] = useState('')
-  const [contents, setContents] = useState([''])
+  const [contents, setContents] = useState([])
   const [mainImg, setMainImg] = useState('')
   const [contentImgs, setContentImgs] = useState([])
-  const [url, setUrl] = useState([])
   const [ingredients, setIngredients] = useState([
     {
       ingredient: '',
@@ -37,60 +32,49 @@ const WriteComponent = (props) => {
   const [messageContents, setMessageContents] = useState('')
   const [messageMainImg, setMessageMainImg] = useState('')
   const [messageContentImgs, setMessageContentImgs] = useState('')
-  const [messageUrl, setMessageUrl] = useState('')
   const [messageIngredients, setMessageIngredients] = useState('')
 
   // focus 이벤트를 주기 위한 Ref
-  const titleRef = useRef()
-  const introductionRef = useRef()
-  const categoryRef = useRef()
-  const requiredTimeRef = useRef()
-  const contentsRef = useRef()
-  const mainImgRef = useRef()
-  const contentImgsRef = useRef()
-  const ingredientsRef = useRef()
+  const _title = useRef()
+  const _introduction = useRef()
+  const _category = useRef()
+  const _requiredTime = useRef()
+  const _contents = useRef()
+  const _mainImg = useRef()
+  const _contentImgs = useRef()
+  const _ingredients = useRef()
 
-  const onChangeUserId = useCallback((event) => {
-    setUserId(event.target.value)
-  })
-  const onChangeTitle = useCallback((event) => {
-    setTitle(event.target.value)
-  })
-  const onChangeIntroduction = useCallback((event) => {
-    setIntroduction(event.target.value)
-  }, [])
-
-  const postInfoSubmit = useCallback(async (event) => {
+  const postInfoSubmit = async (event) => {
     if (title === '') {
-      titleRef.current.focus()
+      _title.current.focus()
       setMessageTitle('title을 입력해주세요')
       return
     } else if (category === '') {
-      categoryRef.current.focus()
+      _category.current.focus()
       setMessageCategory('카테고리를 입력해주세요!')
       return
     } else if (introduction === '') {
-      introductionRef.current.focus()
+      _introduction.current.focus()
       setMessageIntroduction('음식 소개를 입력해주세요!')
       return
     } else if (requiredTime === '') {
-      requiredTimeRef.current.focus()
+      _requiredTime.current.focus()
       setMessageRequiredTime('소요시간을 입력해주세요!')
       return
     } else if (contents[0] === '') {
-      contentsRef.current.focus()
+      _contents.current.focus()
       setMessageContents('요리 방법을 입력해주세요!')
       return
     } else if (mainImg.length <= 0) {
-      mainImgRef.current.focus()
+      _mainImg.current.focus()
       setMessageMainImg('메인 이미지를 등록해주세요!')
       return
     } else if (contentImgs.length <= 0) {
-      contentImgsRef.current.focus()
+      _contentImgs.current.focus()
       setMessageContentImgs('요리 방법에 대한 사진을 등록해주세요!')
       return
     } else if (ingredients[0].ingredient === '') {
-      ingredientsRef.current.focus()
+      _ingredients.current.focus()
       setMessageIngredients('재료를 입력해주세요!')
       return
     }
@@ -100,34 +84,21 @@ const WriteComponent = (props) => {
     let content = contents.join('@')
     // regex
     let ingred = ingredients.map(
-      (el) => `${el.ingredient}` + ',' + `${el.amount}`
+      (el) => `${el.ingredient},${el.amount}`
     )
     let finalIngredients = ingred.join('@')
 
-    console.log({
-      userId: userInfo.userId,
-      title: title,
-      introduction: introduction,
-      category: category,
-      requiredTime: requiredTime,
-      content: content,
-      mainImg: mainImg,
-      contentImgs: contentImgs,
-      ingredients: finalIngredients,
-    })
-
-    await axios.post(
+    await api.post(
       '/recipes',
       {
-        userId: userInfo.userId,
         title: title,
         introduction: introduction,
+        mainImg: mainImg,
         category: category,
         requiredTime: requiredTime,
-        content: content,
-        mainImg: mainImg,
-        contentImgs: contentImgs,
         ingredients: finalIngredients,
+        content: content,
+        contentImg: contentImgs.join(',')
       },
       {
         'Content-Type': 'application/json',
@@ -141,7 +112,7 @@ const WriteComponent = (props) => {
       confirmButtonText: '확인',
     })
     history.push('/')
-  })
+  }
 
   return (
     <>
@@ -159,8 +130,8 @@ const WriteComponent = (props) => {
               className="title"
               type="text"
               placeholder="제목을 입력해주세요"
-              onChange={(e) => onChangeTitle(e)}
-              ref={titleRef}
+              onChange={(e) => setTitle(e.target.value)}
+              ref={_title}
             />
             <CheckText>{messageTitle}</CheckText>
           </FormGroup>
@@ -171,8 +142,8 @@ const WriteComponent = (props) => {
             <Textarea
               type="text"
               placeholder="요리에 대한 설명을 해주세요!"
-              onChange={(e) => onChangeIntroduction(e)}
-              ref={introductionRef}
+              onChange={(e) => setIntroduction(e.target.value)}
+              ref={_introduction}
             />
             <CheckText>{messageIntroduction}</CheckText>
           </FormGroup>
@@ -184,7 +155,7 @@ const WriteComponent = (props) => {
               className="imgBox"
               mainImg={mainImg}
               setMainImg={setMainImg}
-              mainImgRef={mainImgRef}
+              mainImgRef={_mainImg}
             />
             <CheckText>{messageMainImg}</CheckText>
           </FormGroup>
@@ -196,7 +167,7 @@ const WriteComponent = (props) => {
               <DropDownCategory
                 category={category}
                 setCategory={setCategory}
-                categoryRef={categoryRef}
+                categoryRef={_category}
               />
               <CheckText>{messageCategory}</CheckText>
             </BoxGroup>
@@ -207,7 +178,7 @@ const WriteComponent = (props) => {
               <DropDownTime
                 requiredTime={requiredTime}
                 setRequiredTime={setRequiredTime}
-                requiredTimeRef={requiredTimeRef}
+                requiredTimeRef={_requiredTime}
               />
               <CheckText>{messageRequiredTime}</CheckText>
             </BoxGroup>
@@ -219,7 +190,7 @@ const WriteComponent = (props) => {
             <AddListingredients
               ingredients={ingredients}
               setIngredients={setIngredients}
-              ingredientsRef={ingredientsRef}
+              ingredientsRef={_ingredients}
               setMessageIngredients={setMessageIngredients}
             />
             <CheckText>{messageIngredients}</CheckText>
@@ -231,7 +202,7 @@ const WriteComponent = (props) => {
             <AddListContent
               contents={contents}
               setContents={setContents}
-              contentsRef={contentsRef}
+              contentsRef={_contents}
               setMessageContents={setMessageContents}
             ></AddListContent>
             <CheckText>{messageContents}</CheckText>
@@ -243,7 +214,7 @@ const WriteComponent = (props) => {
             <ContentImgComponent
               contentImgs={contentImgs}
               setContentImgs={setContentImgs}
-              contentImgsRef={contentImgsRef}
+              contentImgsRef={_contentImgs}
             ></ContentImgComponent>
             <CheckText>{messageContentImgs}</CheckText>
           </FormGroup>
