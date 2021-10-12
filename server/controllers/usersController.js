@@ -13,6 +13,9 @@ const {
   checkRefeshToken
 } = require('../controllers/token/tokenController')
 const { everyScoreSum } = require('../controllers/function/function')
+const axios = require('axios')
+const dotenv = require('dotenv')
+dotenv.config()
 
 module.exports = {
   signUp: async (req, res, next) => {
@@ -21,12 +24,16 @@ module.exports = {
       res
         .status(422)
         .send({ message: '회원가입에 필요한 정보를 모두 입력하세요!' })
-    }    
+    }
+    try{    
     let checkEmail = await User.findOne({ where: { email }})
     let checkNick = await User.findOne({ where: { nickname }})
     if(checkEmail.dataValues || checkNick.dataValues) {
       return res.status(409).send('이미 동일한 데이터가 있습니다. 회원가입을 허락할 수 없습니다.')
     }
+  } catch (err) {
+    console.log('회원가입 유효성 체크 오류')
+  }
     User.findOrCreate({
       where: {
         email: email,
@@ -116,6 +123,7 @@ module.exports = {
     }
   },
   isAuth: async (req, res, next) => {
+    try{
     const accessTokenData = isAuthorized(req)
     const refreshToken = req.cookies.jwt
     if (!accessTokenData) {
@@ -157,6 +165,9 @@ module.exports = {
         console.log('isAuth error!')
         next(err)
       })
+    } catch (err) {
+      console.log(`${err.message}`)
+    }
   },
   update: async (req, res, next) => {
     let userId = res.locals.userId
@@ -371,5 +382,51 @@ module.exports = {
         console.log('Favorite Delete Error!')
         next(err)
       })
+  },
+  kakao: async (req, res, next) => {
+    const code = req.query.code
+    if(code !== undefined) {
+      requestToken(code)
+        .then( async ({data}) => {
+          console.log('requestToken!!:', data)
+          let kakaoUserData = await axios({
+            method:'get',
+            url:'https://kapi.kakao.com/v2/user/me',
+            headers: { Authorization: `Bearer ${data.access_token}`,
+            "Content-Type": "application/x-www-form-urlencoded;charset=utf-8"},
+            withCredentials: true
+          })
+          console.log(kakaoUserData.data)
+        })
+        .catch((err) => {
+          console.log(err.message)
+        })
+    }
+
+    function requestToken(code) {
+      const JS_APP_KEY = process.env.KAKAO_CLIENT_ID
+      const REDIRECT_URI = "http://localhost:3000/oauth/kakao"
+      const makeFormData = params => {
+        const searchParams = new URLSearchParams()
+        Object.keys(params).forEach(key => {
+          searchParams.append(key, params[key])
+        })
+        return searchParams
+      }
+      return axios({
+        method: 'POST',
+        url: 'https://kauth.kakao.com/oauth/token',
+        headers: {
+          'content-type': 'application/x-www-form-urlencoded;charset=utf-8'
+        }, 
+        withCredentials: true,
+        data: makeFormData({
+          code,
+          grant_type: 'authorization_code',
+          client_id: JS_APP_KEY,
+          redirect_uri: REDIRECT_URI
+        })
+      })
+    }
   }
 }

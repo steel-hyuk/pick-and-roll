@@ -7,8 +7,10 @@ import Swal from 'sweetalert2'
 import api from '../../api'
 import { AuthContext } from '../../context/authContext'
 import { UserContext } from '../../context/userContext'
+import { KAKAO_AUTH_URL } from '../kakao/OAuth'
 
 const LoginModal = ({ openLogin, setOpenLogin }) => {
+  function handleKakao(e) { window.location.href = KAKAO_AUTH_URL }
   const { isLoggedIn, setIsLoggedIn } = useContext(AuthContext)
   const { userInfo, setUserInfo } = useContext(UserContext)
 
@@ -17,39 +19,6 @@ const LoginModal = ({ openLogin, setOpenLogin }) => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [messageAuth, setMessageAuth] = useState('')
-
-  const kakaoClick = async () => {
-    const scope = 'profile_nickname'
-    window.Kakao.Auth.login({
-      success: function (response) {
-        window.Kakao.Auth.setAccessToken(response.access_token)
-        console.log(`is set?: ${window.Kakao.Auth.getAccessToken()}`)
-        const ACCESS_TOKEN = window.Kakao.Auth.getAccessToken()
-        window.Kakao.API.request({
-          url: '/v2/user/me',
-          success: function ({ kakao_account }) {
-            console.log(ACCESS_TOKEN)
-            console.log(kakao_account)
-            const { email, profile } = kakao_account
-            console.log(email)
-            console.log(profile.nickname)
-            api
-              .get('/users/kakao', {
-                email,
-                name: profile.nickname,
-              })
-              .then((res) => {
-                console.log(res)
-              })
-              .catch((error) => {
-                console.error(error)
-                alert('카카오 로그인 에러?')
-              })
-          },
-        })
-      },
-    })
-  }
 
   const logIn = async (event) => {
     if (email === '' || password === '') {
@@ -136,7 +105,10 @@ const LoginModal = ({ openLogin, setOpenLogin }) => {
                 Sign Up
               </div>
             </SignUpBtn>
-            <SocialLoginBtn onClick={kakaoClick}>kakao</SocialLoginBtn>
+            <SocialLoginBtn onClick={handleKakao}>kakao</SocialLoginBtn>
+            <CancelBtn onClick={() => setOpenLogin(false)}>
+              <FaRegTimesCircle />
+            </CancelBtn>
           </LoginC>
         </LoginWrapper>
       </Form>
