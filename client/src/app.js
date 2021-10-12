@@ -8,6 +8,7 @@ import Recipe from './page/recipe'
 import Search from './page/search'
 import Signup from './page/signup'
 import Write from './page/write'
+import Redirect from './component/kakao/redirect'
 import NavbarComponent from './component/navbarComponent'
 import FooterComponent from './component/footerComponent';
 
@@ -16,8 +17,9 @@ function App() {
     <div>
       <GlogbalStyle />
       <Router>
-        <NavbarComponent />
+        <NavbarComponent />    
         <Switch>
+         <Route exact path="/oauth/kakao" component={Redirect}/>
           <Route exact path="/" component={Info} />
           <Route exact path="/signup" component={Signup} />
           <Route exact path="/mypage/:id" component={Mypage} />
