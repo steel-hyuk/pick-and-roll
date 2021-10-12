@@ -64,6 +64,9 @@ const Wrapper = styled.div`
     outline: none;
     text-align: center;
     border: 0mm #f7f4f41c;
+    @media (max-width: 750px) {
+      font-size: 10px;
+    }
   }
   select {
     border: 0mm #f7f4f41c;

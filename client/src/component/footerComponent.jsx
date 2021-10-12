@@ -10,7 +10,6 @@ import {
 const FooterComponent = () => {
   return (
     <Main>
-      <div className="void"></div>
       <footer className="container">
         <ul className="foote_bottom">
           <li>
@@ -62,10 +61,13 @@ const Main = styled.div`
   display: flex;
   min-height: 20vh;
   flex-direction: column;
-  .void {
-    flex: 1;
-  }
+
   .container {
+    position : absolute;
+    width : 100%;
+    top : 150px;
+    z-index: 999;
+    background-color : white;
     border-top: solid 0.7mm #e7e9eb;
   }
   p {
@@ -75,7 +77,6 @@ const Main = styled.div`
   }
   .foote_bottom {
     list-style-type: none;
-    padding: 0px;
     display: table;
     margin-top: 5px;
     margin-right: auto;
@@ -86,8 +87,9 @@ const Main = styled.div`
     display: inline;
   }
   .foote_bottom li a {
-    color: #4b3add;
+    color: #0a0a0a;
     margin: 0 7px;
+    text-decoration:none
   }
   .social {
     display: table;
@@ -103,8 +105,7 @@ const Main = styled.div`
   .social li a {
     color: #1f1818;
     border: 1px solid #ccc;
-    padding: 8px;
-    border-radius: 50%;
+    padding: 3px;
   }
 `
 

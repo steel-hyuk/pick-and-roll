@@ -41,12 +41,12 @@ const AddListContent = ({
         </InlineBox>
       ))}
       <ClickWrap>
-      <ClickBtn className="button" onClick={addList}>
-        항목 추가
-      </ClickBtn>
-      <ClickBtn className="button" onClick={deletList}>
-        항목 제거
-      </ClickBtn>
+        <ClickBtn className="button" onClick={addList}>
+          항목 추가
+        </ClickBtn>
+        <ClickBtn className="button" onClick={deletList}>
+          항목 제거
+        </ClickBtn>
       </ClickWrap>
     </Wrapper>
   )
@@ -128,12 +128,12 @@ export const AddListingredients = ({
         </InlineBox>
       ))}
       <ClickWrap>
-      <ClickBtn className="button" onClick={addList}>
-        항목 추가
-      </ClickBtn>
-      <ClickBtn className="button" onClick={deletList}>
-        항목 제거
-      </ClickBtn>
+        <ClickBtn className="button" onClick={addList}>
+          항목 추가
+        </ClickBtn>
+        <ClickBtn className="button" onClick={deletList}>
+          항목 제거
+        </ClickBtn>
       </ClickWrap>
     </Wrapper>
   )
@@ -142,9 +142,9 @@ export const AddListingredients = ({
 const Wrapper = styled.div`
   width: 100%;
   height: 100%;
-    span {
-      font-size: 23px;
-    }
+  span {
+    font-size: 23px;
+  }
 `
 
 const InlineBox = styled.div`
@@ -152,8 +152,14 @@ const InlineBox = styled.div`
   justify-items: flex-start;
   margin-bottom: 10px;
   .number {
-    font-size: 20px;
-    margin-right: 10px;
+    font-size: 15px;
+    margin-top: 16px;
+    margin-right: 3px;
+    color: #c4c4c4;
+    @media (max-width: 750px) {
+      font-size: 10px;
+      margin-top: 20px;
+  }
   }
 `
 
@@ -163,8 +169,8 @@ const Textarea = styled.textarea`
   align-items: center;
   padding: 5px 10px 10px 10px;
   border-radius: 8px;
-  margin-right : 5px;
-  box-sizing : border-box;
+  margin-right: 5px;
+  box-sizing: border-box;
   border: solid 2px #d2d2d2;
   resize: none;
   :focus {
@@ -172,34 +178,44 @@ const Textarea = styled.textarea`
     outline: none;
   }
   ::placeholder {
-    font-size: 18px;
+    font-size: 15px;
     text-align: left;
     line-height: 1.5;
     color: #b5b5b5;
+    @media (max-width: 750px) {
+      font-size: 13px;
+    }
   }
 `
 const ClickWrap = styled.div`
-display : flex;
-justify-content: center;
+  display: flex;
+  justify-content: center;
 `
 
 const ClickBtn = styled.button`
-    height : 35px;
-    width : 25%;
-    background-color: #a5a5a5;
-    border: none;
-    border-radius : 10px;
-    color: #ffffff;
-    font-size : 16px;
-    font-weight : bold;
-    transition: all 0.3s linear;
-    :hover {
-      background-color:#e89a13;
+  height: 35px;
+  width: 25%;
+  background-color: #a5a5a5;
+  border: none;
+  border-radius: 10px;
+  color: #ffffff;
+  font-size: 16px;
+  font-weight: bold;
+  transition: all 0.3s linear;
+  :hover {
+    background-color: #e89a13;
+  }
+  :nth-child(1) {
+    margin-left: 9px;
+    @media (max-width: 750px) {
+      margin-left: 5.5px;
     }
-    :nth-child(1) {
-      margin-left: 20px;
-    }
-    :nth-child(2) {
-      margin-left: 5px;
-    }
+  }
+  :nth-child(2) {
+    margin-left: 5px;
+  }
+  @media (max-width: 750px) {
+    font-size: 11px;
+    height: 25px;
+  }
 `
