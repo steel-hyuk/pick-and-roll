@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
 import InfiniteScroll from 'react-infinite-scroll-component'
-import axios from 'axios'
-
+import api from '../api'
 import ImageComponent from './imageComponent'
 import LoadingComponent from './loadingComponent'
 import Posts from '../page/posts'
@@ -10,14 +9,25 @@ import Posts from '../page/posts'
 function GetImagesComponent({ isValue, selectCategory }) {
   const [images, setImages] = useState([])
   const [offset, setOffset] = useState(1) // 데이터를 받으면 then에서 offset +1
-  const [info, setInfo] = useState([])
+  const [infos, setInfos] = useState([])
+  const [division, setDivision] = useState('createdAt')
 
   const fetchImages = async () => {
-    await axios.get(`/recipes?offset=${offset}&limit=10`).then((res) => {
-      setInfo([...info, ...res.body])
-      setImages([...images, ...res.body.mainImage])
-      setOffset(offset + 1)
-    })
+    await api
+      .get(
+        `/recipes?category=${selectCategory}&division=${division}&offset=${offset}&limit=10`,
+        {
+          headers: { 'Content-Type': 'application/json' },
+          withCredentials: true,
+        }
+      )
+      .then((res) => {
+        setInfos([...infos, ...res.data])
+        setOffset(offset + 1)
+      })
+    const imgUrls = infos.map((el) => el.mainImg)
+    setImages(...images, ...imgUrls)
+    console.log(imgUrls)
   }
 
   useEffect(() => {
@@ -35,8 +45,8 @@ function GetImagesComponent({ isValue, selectCategory }) {
         >
           <WrapperImage>
             {images.map((image, idx) => (
-              <div className="img-wrapper" key={image.id} onClick={() => {}}>
-                <ImageComponent url={image.urls.thumb} />
+              <div className="img-wrapper" key={idx}>
+                <ImageComponent url={image} info={infos[idx]} />
               </div>
             ))}
           </WrapperImage>

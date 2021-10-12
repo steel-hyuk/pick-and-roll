@@ -37,7 +37,7 @@ const NavbarComponent = ({ handleLogin }) => {
             Pick & Roll
           </Logo>
           <MenuLinks>
-            <NavElement to="/Recipe">레시피</NavElement>
+            <NavElement to="/recipe">레시피</NavElement>
             <ChangeClick onClick={() => setShowSearchBox(true)}>
               검색
             </ChangeClick>
@@ -83,7 +83,9 @@ const NavbarComponent = ({ handleLogin }) => {
             <NavElement to={`/mypage/${userInfo.email}`}>
               {userInfo.nickname}님
             </NavElement>
-            <NavElement to="/" onClick={logout}>로그아웃</NavElement>
+            <NavElement to="/" onClick={logout}>
+              로그아웃
+            </NavElement>
           </MenuLinks>
           <MenuIcon onClick={changeMenu}>
             <FaAlignJustify />
@@ -105,8 +107,8 @@ const Nav = styled.nav`
   background-color: white;
   margin: 0px;
   box-shadow: 0px 1px 10px 1px rgb(243, 200, 18);
-  position : fixed;
-  top : 0;
+  position: fixed;
+  top: 0;
   left: 0;
   width: 100%;
   z-index: 9999;

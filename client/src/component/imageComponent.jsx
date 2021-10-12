@@ -1,41 +1,46 @@
 import React from 'react'
+import { useHistory } from 'react-router-dom'
 import styled from 'styled-components'
 import { ImStarFull } from 'react-icons/im'
 
-const ImageComponent = ({ url, datas }) => {
-  // const { //
-  //   id,
-  //   UserId,
-  //   title,
-  //   introduction,
-  //   category,
-  //   requiredTime,
-  //   mainImg
-  // } = datas
+const ImageComponent = ({ url, infos }) => {
+  const history = useHistory()
+  const {
+    id,
+    userId,
+    title,
+    introduction,
+    category,
+    mainImg,
+    tasteAvg,
+    easyAvg,
+    createdAt,
+  } = infos
+  const totalScore = (tasteAvg + easyAvg) / 2
+  const toPost = () => {
+    history.push(`/recipes?id=${userId}`)
+  }
 
   return (
     <>
-      <Background className="back">
+      <Background className="back" onClick={toPost}>
         <span className="score">
           {' '}
-          &nbsp;'점수'&nbsp; &nbsp;
+          &nbsp;{totalScore}&nbsp; &nbsp;
           <ImStarFull className="icon" />
           &nbsp;
         </span>
         <br />
-        <span className="title">Title</span>
+        <span className="title">{title}</span>
         <br />
         <br />
         <br />
-        <div className="email">
-          email@naver.com
+        <div className="id">
+          {userId}
           <br />
-          <span>2021. 04. 06</span>
+          <span>{createdAt}</span>
         </div>
-        <div className="instruction">
-          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Obcaecati
-          sint veritati...
-        </div>
+        <div className="introduction">{introduction}</div>
       </Background>
       <BackImg style={{ backgroundImage: `url(${url})` }}></BackImg>
     </>
@@ -79,15 +84,15 @@ const Background = styled.div`
   .icon {
     color: rgb(231, 235, 13);
   }
-  .email {
+  .id {
     padding-bottom: 26px;
     color: white;
     border-bottom: solid 0.3mm black;
   }
-  .email span {
+  .id span {
     font-size: 12px;
   }
-  .instruction {
+  .introduction {
     margin-top: 20px;
   }
   :hover {
