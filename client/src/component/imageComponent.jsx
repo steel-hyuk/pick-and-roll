@@ -31,7 +31,7 @@ const ImageComponent = ({ url, info }) => {
         </ScoreWrap>
         <p className="title">{title}</p>
         <div className="editor">작성자 : {userId}</div>
-        <p className="date">게시일 : {createdAt.substring(0,10)}</p>
+        <p className="date">게시일 : {createdAt.substring(0, 10)}</p>
         <div className="instruction">{introduction}</div>
       </Background>
       <BackImg style={{ backgroundImage: `url(${url})` }}></BackImg>
@@ -68,9 +68,9 @@ const Background = styled.div`
   overflow-y: hidden;
   padding: 0 20px;
   .score {
-  position: absolute;
-  bottom : 1.5px;
-  right: 23px;
+    position: absolute;
+    bottom: 1.5px;
+    right: 23px;
     color: white;
   }
   .title {

@@ -13,9 +13,10 @@ function GetImagesComponent({ isValue, selectCategory }) {
   const fetchImages = async () => {
     await api
       .get(
-        `/recipes?category=${selectCategory}&division=${division}&offset=${offset}&limit=10`, {
-          headers: { 
-            'Content-Type': 'application/json' 
+        `/recipes?category=${selectCategory}&division=${division}&offset=${offset}&limit=10`,
+        {
+          headers: {
+            'Content-Type': 'application/json',
           },
           withCredentials: true,
         }
@@ -53,9 +54,9 @@ function GetImagesComponent({ isValue, selectCategory }) {
 }
 
 const Wrapper = styled.div`
-    margin: 0;
-    padding: 0;
-    margin-top : 130px;
+  margin: 0;
+  padding: 0;
+  margin-top: 130px;
 `
 
 const WrapperImage = styled.section`

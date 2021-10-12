@@ -8,32 +8,28 @@ const Posts = () => {
     <Wrapper>
       <Form>
         <TitleArea>
-        <Favorite>
+          <Favorite>
             <FaRegBookmark />
-        </Favorite>
+          </Favorite>
           <Title>제목입니다</Title>
           <TextWrap>
-          <Category>총 소요 시간 : 3시간</Category>
-          <Editor>작성자</Editor>
+            <Category>총 소요 시간 : 3시간</Category>
+            <Editor>작성자</Editor>
           </TextWrap>
           <TextWrap>
-          <Category>카테고리 : 한식</Category>
-          <Editor className="date">2021-10-13</Editor>
+            <Category>카테고리 : 한식</Category>
+            <Editor className="date">2021-10-13</Editor>
           </TextWrap>
-            <TitleIcon1>
+          <TitleIcon1>
             <FaCog />
-            </TitleIcon1>
-            <TitleIcon2 >
-            <FaRegTrashAlt/>
-            </TitleIcon2>
+          </TitleIcon1>
+          <TitleIcon2>
+            <FaRegTrashAlt />
+          </TitleIcon2>
         </TitleArea>
         <ScoreWrap>
-          <ScoreContent>
-            맛 4.5
-          </ScoreContent>
-          <ScoreContent>
-            간편성 4.2
-          </ScoreContent>
+          <ScoreContent>맛 4.5</ScoreContent>
+          <ScoreContent>간편성 4.2</ScoreContent>
         </ScoreWrap>
         <MainImage>메인 사진</MainImage>
         <BoxWrap>
@@ -52,28 +48,23 @@ const Posts = () => {
         </div>
         <div>카테고리</div>
         <div>한식</div>
-        <Labal>
-          요리소개
-        </Labal>
-            <Textarea />
-        
+        <Labal>요리소개</Labal>
+        <Textarea />
+
         <ContentWrap>
-        <Labal>재료</Labal>
-        <Contents />
-      </ContentWrap>
-        
-      <ContentWrap>
-      <Labal>요리 방법</Labal>
-        <Contents />
-      </ContentWrap>
-        <Labal>
-          요리 사진
-        </Labal>
-      <SubWrap>
-        <SubImage>
-        </SubImage>
-      </SubWrap>
-      {/* <CommentComponent /> */}
+          <Labal>재료</Labal>
+          <Contents />
+        </ContentWrap>
+
+        <ContentWrap>
+          <Labal>요리 방법</Labal>
+          <Contents />
+        </ContentWrap>
+        <Labal>요리 사진</Labal>
+        <SubWrap>
+          <SubImage></SubImage>
+        </SubWrap>
+        {/* <CommentComponent /> */}
       </Form>
     </Wrapper>
   )
@@ -87,6 +78,7 @@ const Wrapper = styled.div`
   margin-top: 150px;
   align-items: center;
 `
+
 const Form = styled.div`
   width: 60%;
   height: 100%;
@@ -98,40 +90,43 @@ const Form = styled.div`
     width: 90%;
   }
 `
+
 const Title = styled.h3`
-  margin-top : 0;
-  margin-bottom : 3px;
+  margin-top: 0;
+  margin-bottom: 3px;
   text-align: center;
   color: rgb(77, 77, 77);
-  padding-bottom : 10px;
-  border-bottom : solid 1px #d4d4d4;
+  padding-bottom: 10px;
+  border-bottom: solid 1px #d4d4d4;
 `
+
 const TitleIcon1 = styled.div`
-position : absolute;
-top : 10px;
-right : 5px;
-font-size: 15px;
-color : #7b7b7b;
-:hover {
-  color :#f3c811;
-  font-size: 18px;
-}
+  position: absolute;
+  top: 10px;
+  right: 5px;
+  font-size: 15px;
+  color: #7b7b7b;
+  :hover {
+    color: #f3c811;
+    font-size: 18px;
+  }
 `
+
 const TitleIcon2 = styled.div`
-position : absolute;
-top : 35px;
-right : 5px;
-font-size: 15px;
-color : #7b7b7b;
-:hover {
-  color :#f3c811;
-  font-size: 18px;
-}
+  position: absolute;
+  top: 35px;
+  right: 5px;
+  font-size: 15px;
+  color: #7b7b7b;
+  :hover {
+    color: #f3c811;
+    font-size: 18px;
+  }
 `
 
 const TextWrap = styled.div`
-display: flex;
-justify-content: space-between;
+  display: flex;
+  justify-content: space-between;
 `
 
 const Editor = styled.p`
@@ -140,8 +135,8 @@ const Editor = styled.p`
 `
 
 const Category = styled.p`
-font-size: 15px;
-margin: 5px 0;
+  font-size: 15px;
+  margin: 5px 0;
 `
 
 const TitleArea = styled.div`
@@ -149,7 +144,7 @@ const TitleArea = styled.div`
   width: 100%;
   margin: 0 auto;
   font-size: 30px;
-  margin-bottom : 60px;
+  margin-bottom: 60px;
 `
 
 const MainImage = styled.div`
@@ -161,6 +156,7 @@ const ScoreWrap = styled.div`
   display: flex;
   text-align: center;
 `
+
 const ScoreContent = styled.div`
   display: flex;
   height: 30px;
@@ -175,19 +171,11 @@ const ScoreContent = styled.div`
 
 const Favorite = styled.div`
   position: absolute;
-  left : 10px;
+  left: 10px;
   color: #e9b83a;
   font-size: 25px;
   top: 1px;
   opacity: 0.7;
-`
-
-const Score = styled.p`
-  margin-right: 5px;
-`
-
-const Text = styled.p`
-  margin-right: 5px;
 `
 
 const BoxWrap = styled.div`
@@ -206,12 +194,12 @@ const BoxGroup = styled.div`
 `
 
 const StarBtn = styled.button`
-border : none;
-border-radius : 6px;
+  border: none;
+  border-radius: 6px;
 `
 
 const Labal = styled.h3`
-margin-bottom : 5px;
+  margin-bottom: 5px;
 `
 
 const Textarea = styled.textarea`
@@ -220,8 +208,8 @@ const Textarea = styled.textarea`
   align-items: center;
   padding: 15px;
   border-radius: 8px;
-  margin : 0 auto;
-  margin-bottom : 30px;
+  margin: 0 auto;
+  margin-bottom: 30px;
   box-sizing: border-box;
   border: solid 2px #d2d2d2;
   resize: none;
@@ -232,10 +220,10 @@ const Textarea = styled.textarea`
 `
 
 const Contents = styled.div`
-  width : 90%;
+  width: 90%;
   height: 30px;
-  margin : 0 auto;
-  margin-bottom : 10px;
+  margin: 0 auto;
+  margin-bottom: 10px;
   align-items: center;
   border-radius: 8px;
   border: solid 2px #d2d2d2;
@@ -250,21 +238,23 @@ const Contents = styled.div`
     color: #b5b5b5;
   }
 `
+
 const ContentWrap = styled.div`
-  align-items : center;
-  text-align:center;
-  margin : 20px;
+  align-items: center;
+  text-align: center;
+  margin: 20px;
 `
 
 const SubWrap = styled.div`
-display: flex;
-width : 100%;
+  display: flex;
+  width: 100%;
 `
+
 const SubImage = styled.div`
-  width :100%;
+  width: 100%;
   height: 400px;
   background-color: black;
-/* width : 50%;
+  /* width : 50%;
 background-color : black;
 height : 300px;
 margin : 3px; */
