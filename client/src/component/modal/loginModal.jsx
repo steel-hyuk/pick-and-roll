@@ -1,9 +1,8 @@
-import React, { useState, useContext } from 'react'
+import React, { useState, useContext, useEffect } from 'react'
 import styled from 'styled-components'
 import { useHistory } from 'react-router'
 import { FaRegTimesCircle } from 'react-icons/fa'
 import Swal from 'sweetalert2'
-
 import api from '../../api'
 import { AuthContext } from '../../context/authContext'
 import { UserContext } from '../../context/userContext'
@@ -46,8 +45,8 @@ const LoginModal = ({ openLogin, setOpenLogin }) => {
           api.defaults.headers.common[
             'Authorization'
           ] = `Bearer ${res.data.accessToken}`
-          let { id, email, nickname, description, createdAt } =
-            res.data.userData
+          let { id, email, nickname, description, createdAt } = res.data.userData
+          createdAt = createdAt.substring(0, 10)
           let user = { id, email, nickname, description, createdAt }
           setUserInfo(user)
           setIsLoggedIn(true)
@@ -58,6 +57,11 @@ const LoginModal = ({ openLogin, setOpenLogin }) => {
     }
     event.preventDefault()
   }
+
+  useEffect(() => {
+    if (userInfo) {
+    }
+  })
 
   return openLogin ? (
     <Modal>
@@ -243,15 +247,12 @@ const SignUpBtn = styled.div`
     margin: 0 10px;
     padding: 0 10px;
     font-size: 17px;
-    font-weight: bold;
     line-height: 2;
     text-align: left;
     color: rgb(237, 199, 32);
     cursor: pointer;
     :hover {
-      background-color: rgb(237, 199, 32);
-      color: white;
-      border-radius: 10px;
+      font-weight: bold;
     }
   }
 `

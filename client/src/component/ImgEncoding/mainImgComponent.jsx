@@ -112,6 +112,9 @@ const ImgInput = styled.div`
   .title {
     margin-bottom: 20px;
   }
+  @media (max-width: 750px) {
+    height : 200px;
+  }
 `
 
 const LoadedList = styled.div`
