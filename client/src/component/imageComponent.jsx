@@ -16,14 +16,15 @@ const ImageComponent = ({ url, info }) => {
     easyAvg,
     createdAt,
   } = info
-  const totalScore = (Number(tasteAvg) + Number(easyAvg)) / 2
+  const totalScore = (tasteAvg + easyAvg) / 2
+
   const toPost = () => {
-    history.push(`/recipes?id=${userId}`)
+    history.push(`/recipe/id=${id}`)
   }
 
   return (
     <>
-      <Background className="back">
+      <Background className="back" onClick={toPost}>
         <ScoreWrap>
           <span className="score">{totalScore}</span>
           <ImStarFull className="icon" />
