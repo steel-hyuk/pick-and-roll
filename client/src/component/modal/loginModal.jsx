@@ -31,15 +31,12 @@ const LoginModal = ({ openLogin, setOpenLogin }) => {
       })
     } else {
       await api
-        .post(
-          '/users/signin',
-          {
-            email,
-            password,
-          },
-          {
-            'Content-Type': 'application/json',
-          }
+        .post('/users/signin', { email, password }, { 
+            headers: {
+              'Content-Type': 'application/json' 
+            }, 
+            withCredentials: true }
+    
         )
         .then((res) => {
           api.defaults.headers.common[

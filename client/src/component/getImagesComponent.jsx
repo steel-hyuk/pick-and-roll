@@ -15,13 +15,15 @@ function GetImagesComponent({ isValue, selectCategory }) {
   const fetchImages = async () => {
     await api
       .get(
-        `/recipes?category=${selectCategory}&division=${division}&offset=${offset}&limit=10`,
-        {
-          headers: { 'Content-Type': 'application/json' },
+        `/recipes?category=${selectCategory}&division=${division}&offset=${offset}&limit=10`, {
+          headers: { 
+            'Content-Type': 'application/json' 
+          },
           withCredentials: true,
         }
       )
       .then((res) => {
+        console.log(res)
         setInfos([...infos, ...res.data])
         console.log(...res.data)
         setOffset(offset + 1)

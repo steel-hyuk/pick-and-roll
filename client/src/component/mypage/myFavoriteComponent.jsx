@@ -7,12 +7,11 @@ const MyFavoriteComponent = () => {
 
   const showFavorite = async () => {
     await api
-      .get(
-        '/users/favorite',
-        {},
-        {
-          'Content-Type': 'application/json',
-        }
+      .get('/users/favorite', { 
+          headers : { 
+            'Content-Type': 'application/json' 
+          },
+           withCredentials: true }        
       )
       .then((res) => {
         console.log(res)
