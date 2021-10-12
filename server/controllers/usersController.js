@@ -425,7 +425,7 @@ module.exports = {
               })
                 .then(async (user) => {
                   let userData = user.dataValues
-
+                  const CLIENTDOMAIN = process.env.CLIENT_DOMAIN || 'http://localhost:3000'
                   const emailOptions = {
                     from: process.env.GMAIL_ID,
                     to: userData.email,
@@ -434,7 +434,7 @@ module.exports = {
                     \n임시 비밀번호를 다음과 같이 발급해드렸습니다.
                     \n임시비밀번호: ${userData.password}
                     \n\n${userData.nickname}님만의 레시피를 공유해주세요!!
-                    \n${process.env.RINK_DOMAIN} :^)`
+                    \n${CLIENTDOMAIN} :^)`
                   }
                   await smtpTransport.sendMail(emailOptions, (err, res) => {
                     if (err) {
@@ -470,8 +470,9 @@ module.exports = {
     }
 
     function requestToken(code) {
+      const CLIENTDOMAIN = process.env.CLIENT_DOMAIN || 'http://localhost:3000'
       const JS_APP_KEY = process.env.KAKAO_CLIENT_ID
-      const REDIRECT_URI = 'http://localhost:3000/oauth/kakao'
+      const REDIRECT_URI = `${CLIENTDOMAIN}/oauth/kakao`
       const makeFormData = (params) => {
         const searchParams = new URLSearchParams()
         Object.keys(params).forEach((key) => {
