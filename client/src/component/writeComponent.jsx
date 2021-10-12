@@ -16,7 +16,7 @@ const WriteComponent = (props) => {
   const [introduction, setIntroduction] = useState('')
   const [category, setCategory] = useState('')
   const [requiredTime, setRequiredTime] = useState('')
-  const [contents, setContents] = useState([])
+  const [contents, setContents] = useState([''])
   const [mainImg, setMainImg] = useState('')
   const [contentImgs, setContentImgs] = useState([])
   const [ingredients, setIngredients] = useState([

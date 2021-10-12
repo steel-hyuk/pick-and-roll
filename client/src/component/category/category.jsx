@@ -22,7 +22,7 @@ const Category = ({ selected, setSelected, setSelectCateogry }) => {
 const Wrap = styled.div`
   width: 100%;
   height: 60px;
-  margin-top : 70px;
+  top : 70px;
   display: flex;
   position : fixed;
   justify-content: center;

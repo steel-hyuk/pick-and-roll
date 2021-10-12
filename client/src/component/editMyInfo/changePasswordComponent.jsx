@@ -63,6 +63,7 @@ const ChangePasswordComponent = () => {
           password,
         },
         {
+          withCredentials: true,
           ContentType: 'application/json',
         }
       )
