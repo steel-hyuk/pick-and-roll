@@ -19,7 +19,6 @@ function App() {
       <Router>
         <NavbarComponent />    
         <Switch>
-         <Route exact path="/oauth/kakao" component={Redirect}/>
           <Route exact path="/" component={Info} />
           <Route exact path="/signup" component={Signup} />
           <Route exact path="/mypage/:id" component={Mypage} />
@@ -27,6 +26,7 @@ function App() {
           <Route exact path="/recipe" component={Recipe} />
           <Route exact path="/search/:id" component={Search} />
           <Route exact path="/posts" component={Posts} />
+          <Route exact path="/oauth/kakao" component={Redirect}/>
         </Switch>
       </Router>
       <FooterComponent />
