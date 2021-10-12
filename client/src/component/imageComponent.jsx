@@ -16,7 +16,7 @@ const ImageComponent = ({ url, info }) => {
     easyAvg,
     createdAt,
   } = info
-  const totalScore = (tasteAvg + easyAvg) / 2
+  const totalScore = (Number(tasteAvg) + Number(easyAvg)) / 2
   const toPost = () => {
     history.push(`/recipes?id=${userId}`)
   }
@@ -29,8 +29,8 @@ const ImageComponent = ({ url, info }) => {
           <ImStarFull className="icon" />
         </ScoreWrap>
         <p className="title">{title}</p>
-        <div className="editor">{userId}</div>
-        <p className="date">{createdAt}</p>
+        <div className="editor">작성자 : {userId}</div>
+        <p className="date">게시일 : {createdAt.substring(0,10)}</p>
         <div className="instruction">{introduction}</div>
       </Background>
       <BackImg style={{ backgroundImage: `url(${url})` }}></BackImg>
@@ -59,11 +59,17 @@ const Background = styled.div`
   height: 301px;
   background: #2e2e2e92;
   border-radius: 15%;
+  padding: 20px;
+  box-sizing: border-box;
   text-align: left;
   opacity: 0;
   transition: all 0.3s linear;
+  overflow-y: hidden;
+  padding: 0 20px;
   .score {
-    padding-bottom: 5px;
+  position: absolute;
+  bottom : 1.5px;
+  right: 23px;
     color: white;
   }
   .title {
@@ -71,19 +77,14 @@ const Background = styled.div`
     font-size: 24px;
     font-weight: bold;
     padding-bottom: 15px;
-    margin-left: 15px;
   }
   .icon {
     color: rgb(247, 215, 36);
-    margin-top: 3.7px;
-    margin-left: 5px;
   }
   .editor {
-    margin-left: 15px;
     color: white;
   }
   .date {
-    margin-left: 15px;
     width: 100%;
     font-size: 12px;
     color: white;
@@ -91,7 +92,6 @@ const Background = styled.div`
     border-bottom: solid 0.3mm white;
   }
   .instruction {
-    margin-left: 15px;
     margin-top: 20px;
     color: white;
   }
@@ -102,9 +102,8 @@ const Background = styled.div`
 `
 
 const ScoreWrap = styled.div`
-  display: flex;
-  justify-content: flex-end;
-  margin-right: 15px;
-  margin-top: 20px;
+  position: absolute;
+  top: 20px;
+  right: 16px;
 `
 export default ImageComponent

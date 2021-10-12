@@ -134,12 +134,13 @@ const DropdownStar = ({ color }) => {
 }
 
 const Container = styled.div`
+  position : relative;
   z-index: 50;
 `
 
 const DropdownBox = styled.div`
-  width: 100px;
-  margin-left: 200px;
+  width: 50px;
+  margin-left : 10px;
   .show_red,
   .red {
     background-color: #eee9e8f8;
@@ -151,8 +152,9 @@ const DropdownBox = styled.div`
 `
 
 const DropdownBtn = styled.div`
+  height : 15px;
   padding: 10px;
-  width: 150px;
+  width: 140px;
   //margin-left: 200px;
   //background: #fff;
   box-shadow: 3px 3px 10px 6px rgba(0, 0, 0, 0.06);
@@ -164,6 +166,7 @@ const DropdownBtn = styled.div`
 `
 
 const Contents = styled.div`
+  position : absolute;
   margin-top: -1px;
   left: 0;
   padding: 10px;
@@ -172,7 +175,7 @@ const Contents = styled.div`
   border-radius: 0 0 10% 10%;
   font-weight: 500;
   color: #333;
-  width: 150px;
+  width: 140px;
   animation: box 0.3s ease-in;
   animation-fill-mode: forwards;
   @keyframes box {

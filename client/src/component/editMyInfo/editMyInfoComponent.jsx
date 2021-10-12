@@ -6,8 +6,11 @@ import { useHistory } from 'react-router'
 import { UserContext } from '../../context/userContext'
 
 const EditMyInfoComponent = () => {
+  const { userInfo, setUserInfo } = useContext(UserContext)
+  const { email, nickname, description, createdAt } = userInfo
+
   const [changeNickname, setChangeNickname] = useState('')
-  const [changeDescription, setChangeDescription] = useState('자기소개 입니다.')
+  const [changeDescription, setChangeDescription] = useState('')
 
   const [messageNickname, setMessageNickname] = useState('')
   const [messageDescription, setMessageDescription] = useState('')
@@ -15,8 +18,6 @@ const EditMyInfoComponent = () => {
   const _nick = useRef()
   const _des = useRef()
 
-  const { userInfo, setUserInfo } = useContext(UserContext)
-  const { email, createdAt } = userInfo
 
   const history = useHistory()
 
@@ -115,12 +116,10 @@ const DesCheck = () => {
       <NameArea>
         <Name>새로운 닉네임</Name>
         <NameInput
-          type="text"
           onChange={(e) => {
             setChangeNickname(e.target.value)
           }}
-          value={userInfo.nickname}
-          placeholder="닉네임을 입력해주세요."
+          placeholder={nickname}
           ref={_nick}
           onBlur={checkNickname}
         />
@@ -132,7 +131,7 @@ const DesCheck = () => {
           onChange={(e) => {
             setChangeDescription(e.target.value)
           }}
-          placeholder={userInfo.description}
+          placeholder={description}
           ref={_des}
           onBlur={DesCheck}
         />

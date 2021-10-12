@@ -59,7 +59,7 @@ function GetImagesComponent({ isValue, selectCategory }) {
 const Wrapper = styled.div`
     margin: 0;
     padding: 0;
-
+    margin-top : 130px;
 `
 
 const WrapperImage = styled.section`
