@@ -404,7 +404,7 @@ module.exports = {
     }
 
     function requestToken(code) {
-      const JS_APP_KEY = '03598b5ba2cf770c49a43324f9cc8367'
+      const JS_APP_KEY = process.env.KAKAO_CLIENT_ID
       const REDIRECT_URI = "http://localhost:3000/oauth/kakao"
       const makeFormData = params => {
         const searchParams = new URLSearchParams()
