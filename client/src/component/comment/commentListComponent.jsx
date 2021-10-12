@@ -14,16 +14,25 @@ const CommentListComponent = ({ recipesId, comment }) => {
     setPage('edit')
   }
   const updateComment = async () => {
-    await api.patch(`/${recipesId}/comment/${comment.id}`, {
+    await api.patch(`/recipes/${recipesId}/comment/${comment.id}`, {
       content
+    }, {
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      withCredentials: true
     })
     .then((res) => {
       setPage('list')
+      window.location.reload()
     })
   }
 
   const deleteComment = async () => {
-    await api.delete(`/${recipesId}/comment/${comment.id}`)
+    await api.delete(`/recipes/${recipesId}/comment/${comment.id}`, {
+      withCredentials: true
+    })
+    .then((res) => window.location.reload())
   }
 
   return (

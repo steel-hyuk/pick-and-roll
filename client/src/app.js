@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React from 'react'
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 import GlogbalStyle from './globalStyle/globalStyle'
 import Info from './page/info'
@@ -13,7 +13,6 @@ import NavbarComponent from './component/navbarComponent'
 import FooterComponent from './component/footerComponent';
 
 function App() {
-  const [recipeInfo, setRecipeInfo] = useState({})
   return (
     <div>
       <GlogbalStyle />
@@ -26,7 +25,7 @@ function App() {
           <Route exact path="/write" component={Write} />
           <Route exact path="/recipe" component={Recipe} />
           <Route exact path="/search/:id" component={Search} />
-          <Route exact path="/recipe/:id" render={()=><Posts recipeInfo={recipeInfo} setRecipeInfo={setRecipeInfo}></Posts>} />
+          <Route exact path="/recipe/:id" component={Posts} />
           <Route exact path="/oauth/kakao" component={Redirect}/>
         </Switch>
       </Router>

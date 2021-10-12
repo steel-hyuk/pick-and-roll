@@ -9,26 +9,29 @@ const CommentComponent = ({ recipesId, comments }) => {
   const _content = useRef()
 
   const writeComment = async () => {
-    await api.post(`/${recipesId}/comment`, {
+    await api.post(`/recipes/${recipesId}/comment`, {
       content
     }, {
-      'Content-Type': 'application/json'
+      headers : {
+        'Content-Type': 'application/json'
+      },
+      withCredentials: true
     })
+    .then((res) => window.location.reload())
   }
 
   return (
     <Wrapper>
-        {`${comments.length}개의 댓글`}
+        {`${comments && comments.length}개의 댓글`}
         <WriteWrapper>
           <Input type="text" placeholder="댓글을 작성하세요" ref={_content} onChange={(e) => { 
             setContent(e.target.value)
-            e.target.value=''
           }} />
           <SubmitBtn onClick={writeComment}>댓글 작성</SubmitBtn>
         </WriteWrapper>
       <div>
         { 
-          comments.map((comment) => {
+          comments && comments.map((comment) => {
             return (
               <CommentListComponent recipesId={recipesId} comment={comment} />
             )
