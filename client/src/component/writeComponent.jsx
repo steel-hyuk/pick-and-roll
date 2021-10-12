@@ -379,7 +379,7 @@ const Textarea = styled.textarea`
     outline: none;
   }
   ::placeholder {
-    font-size: 20px;
+    font-size: 15px;
     text-align: left;
     line-height: 1.5;
     color: #b5b5b5;
