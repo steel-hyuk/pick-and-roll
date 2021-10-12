@@ -4,10 +4,8 @@ import InfiniteScroll from 'react-infinite-scroll-component'
 import api from '../api'
 import ImageComponent from './imageComponent'
 import LoadingComponent from './loadingComponent'
-import Posts from '../page/posts'
 
 function GetImagesComponent({ isValue, selectCategory }) {
-  const [images, setImages] = useState([])
   const [offset, setOffset] = useState(1) // 데이터를 받으면 then에서 offset +1
   const [infos, setInfos] = useState([])
   const [division, setDivision] = useState('createdAt')
@@ -23,11 +21,9 @@ function GetImagesComponent({ isValue, selectCategory }) {
       )
       .then((res) => {
         setInfos([...infos, ...res.data])
-        console.log(...res.data)
         setOffset(offset + 1)
       })
   }
-
   useEffect(() => {
     fetchImages()
   }, [])
