@@ -12,9 +12,14 @@ const {
   isAuthorized,
   checkRefeshToken
 } = require('../controllers/token/tokenController')
-const { everyScoreSum } = require('../controllers/function/function')
+const {
+  everyScoreSum,
+  generateRandomPassword
+} = require('../controllers/function/function')
 const axios = require('axios')
 const dotenv = require('dotenv')
+const smtpTransport = require('../config/mailConfig')
+
 dotenv.config()
 
 module.exports = {
@@ -25,15 +30,17 @@ module.exports = {
         .status(422)
         .send({ message: '회원가입에 필요한 정보를 모두 입력하세요!' })
     }
-    try{    
-    let checkEmail = await User.findOne({ where: { email }})
-    let checkNick = await User.findOne({ where: { nickname }})
-    if(checkEmail.dataValues || checkNick.dataValues) {
-      return res.status(409).send('이미 동일한 데이터가 있습니다. 회원가입을 허락할 수 없습니다.')
+    try {
+      let checkEmail = await User.findOne({ where: { email } })
+      let checkNick = await User.findOne({ where: { nickname } })
+      if (checkEmail.dataValues || checkNick.dataValues) {
+        return res
+          .status(409)
+          .send('이미 동일한 데이터가 있습니다. 회원가입을 허락할 수 없습니다.')
+      }
+    } catch (err) {
+      console.log('회원가입 유효성 체크 오류')
     }
-  } catch (err) {
-    console.log('회원가입 유효성 체크 오류')
-  }
     User.findOrCreate({
       where: {
         email: email,
@@ -123,48 +130,48 @@ module.exports = {
     }
   },
   isAuth: async (req, res, next) => {
-    try{
-    const accessTokenData = isAuthorized(req)
-    const refreshToken = req.cookies.jwt
-    if (!accessTokenData) {
-      if (!refreshToken) {
-        res.status(403).send({
-          message: '로그인이 필요한 권한입니다.'
-        })
-      }
-      const refreshTokenData = checkRefeshToken(refreshToken)
-      if (!refreshTokenData) {
-        res.json({
-          data: null,
-          message: '권한이 확인되지 않습니다. 다시 로그인해주세요.'
-        })
-      }
-      const { email } = refreshTokenData
-      let findUser = await User.findOne({ where: { email } })
-      if (!findUser) {
-        res.json({
-          data: null,
-          message: 'refresh token has been tempered'
-        })
-      }
-      delete findUser.dataValues.password
+    try {
+      const accessTokenData = isAuthorized(req)
+      const refreshToken = req.cookies.jwt
+      if (!accessTokenData) {
+        if (!refreshToken) {
+          res.status(403).send({
+            message: '로그인이 필요한 권한입니다.'
+          })
+        }
+        const refreshTokenData = checkRefeshToken(refreshToken)
+        if (!refreshTokenData) {
+          res.json({
+            data: null,
+            message: '권한이 확인되지 않습니다. 다시 로그인해주세요.'
+          })
+        }
+        const { email } = refreshTokenData
+        let findUser = await User.findOne({ where: { email } })
+        if (!findUser) {
+          res.json({
+            data: null,
+            message: 'refresh token has been tempered'
+          })
+        }
+        delete findUser.dataValues.password
 
-      const newAccessToken = generateAccessToken(findUser.dataValues)
-      resendAccessToken(res, newAccessToken, findUser.dataValues)
-    }
-    const { email } = accessTokenData
-    User.findOne({
-      where: { email }
-    })
-      .then((user) => {
-        let userData = user.dataValues
-        delete userData.password
-        res.send({ userData })
+        const newAccessToken = generateAccessToken(findUser.dataValues)
+        resendAccessToken(res, newAccessToken, findUser.dataValues)
+      }
+      const { email } = accessTokenData
+      User.findOne({
+        where: { email }
       })
-      .catch((err) => {
-        console.log('isAuth error!')
-        next(err)
-      })
+        .then((user) => {
+          let userData = user.dataValues
+          delete userData.password
+          res.send({ userData })
+        })
+        .catch((err) => {
+          console.log('isAuth error!')
+          next(err)
+        })
     } catch (err) {
       console.log(`${err.message}`)
     }
@@ -385,18 +392,77 @@ module.exports = {
   },
   kakao: async (req, res, next) => {
     const code = req.query.code
-    if(code !== undefined) {
+    if (code !== undefined) {
       requestToken(code)
-        .then( async ({data}) => {
+        .then(async ({ data }) => {
           console.log('requestToken!!:', data)
           let kakaoUserData = await axios({
-            method:'get',
-            url:'https://kapi.kakao.com/v2/user/me',
-            headers: { Authorization: `Bearer ${data.access_token}`,
-            "Content-Type": "application/x-www-form-urlencoded;charset=utf-8"},
+            method: 'get',
+            url: 'https://kapi.kakao.com/v2/user/me',
+            headers: {
+              Authorization: `Bearer ${data.access_token}`,
+              'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'
+            },
             withCredentials: true
           })
-          console.log(kakaoUserData.data)
+
+          if (kakaoUserData) {
+            let accountData = kakaoUserData.data.kakao_account
+            let userKakaoEmail = accountData.email
+            let userKakaoNick = accountData.profile.nickname
+
+            let findUser = await User.findOne({
+              where: { email: userKakaoEmail }
+            })
+
+            if (!findUser) {
+              User.create({
+                email: userKakaoEmail,
+                password: generateRandomPassword(),
+                nickname: userKakaoNick,
+                description:
+                  'Pick&Roll 가입을 환영합니다!!\n자기소개를 입력해주세요.'
+              })
+                .then(async (user) => {
+                  let userData = user.dataValues
+                  const CLIENTDOMAIN = process.env.CLIENT_DOMAIN || 'http://localhost:3000'
+                  const emailOptions = {
+                    from: process.env.GMAIL_ID,
+                    to: userData.email,
+                    subject: `환영해요 ${userData.nickname}님 Pick&Roll 입니다!`,
+                    text: `안녕하세요. ${userData.nickname}님 Pick&Roll 가입을 진심으로 감사드립니다.
+                    \n임시 비밀번호를 다음과 같이 발급해드렸습니다.
+                    \n임시비밀번호: ${userData.password}
+                    \n\n${userData.nickname}님만의 레시피를 공유해주세요!!
+                    \n${CLIENTDOMAIN} :^)`
+                  }
+                  await smtpTransport.sendMail(emailOptions, (err, res) => {
+                    if (err) {
+                      console.log(`메일발송 에러 발생: ${err.message}`)
+                    } else {
+                      console.log('메일 발송이 성공적으로 완료!!')
+                    }
+                    smtpTransport.close()
+                  })
+
+                  delete userData.password
+                  const accessToken = generateAccessToken(userData)
+                  const refreshToken = generateRefreshToken(userData)
+                  sendRefreshToken(res, refreshToken) //access보다 위에 있어야 한다
+                  sendAccessToken(res, accessToken, userData)
+                })
+                .catch((err) => {
+                  console.log(err.message)
+                })
+            } else if (findUser) {
+              let userData = findUser.dataValues
+              delete userData.password
+              const accessToken = generateAccessToken(userData)
+              const refreshToken = generateRefreshToken(userData)
+              sendRefreshToken(res, refreshToken) //access보다 위에 있어야 한다
+              sendAccessToken(res, accessToken, userData)
+            }
+          }
         })
         .catch((err) => {
           console.log(err.message)
@@ -404,11 +470,12 @@ module.exports = {
     }
 
     function requestToken(code) {
+      const CLIENTDOMAIN = process.env.CLIENT_DOMAIN || 'http://localhost:3000'
       const JS_APP_KEY = process.env.KAKAO_CLIENT_ID
-      const REDIRECT_URI = "http://localhost:3000/oauth/kakao"
-      const makeFormData = params => {
+      const REDIRECT_URI = `${CLIENTDOMAIN}/oauth/kakao`
+      const makeFormData = (params) => {
         const searchParams = new URLSearchParams()
-        Object.keys(params).forEach(key => {
+        Object.keys(params).forEach((key) => {
           searchParams.append(key, params[key])
         })
         return searchParams
@@ -418,7 +485,7 @@ module.exports = {
         url: 'https://kauth.kakao.com/oauth/token',
         headers: {
           'content-type': 'application/x-www-form-urlencoded;charset=utf-8'
-        }, 
+        },
         withCredentials: true,
         data: makeFormData({
           code,

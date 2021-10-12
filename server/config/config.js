@@ -16,7 +16,7 @@ const config = {
     host: process.env.DB_HOST,
     port: process.env.DB_PORT,
     dialect: 'mysql'
-  },
+  }
 }
 
 const nodeEnv = process.env.NODE_ENV || 'development'
