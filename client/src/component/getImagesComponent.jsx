@@ -23,11 +23,9 @@ function GetImagesComponent({ isValue, selectCategory }) {
       )
       .then((res) => {
         setInfos([...infos, ...res.data])
+        console.log(...res.data)
         setOffset(offset + 1)
       })
-    const imgUrls = infos.map((el) => el.mainImg)
-    setImages(...images, ...imgUrls)
-    console.log(imgUrls)
   }
 
   useEffect(() => {
@@ -38,15 +36,15 @@ function GetImagesComponent({ isValue, selectCategory }) {
     <div>
       <Wrapper>
         <InfiniteScroll
-          dataLength={images.length}
+          dataLength={infos.length}
           next={fetchImages}
-          hasMore={images.length >= 10}
+          hasMore={infos.length >= 10}
           loader={<LoadingComponent />}
         >
           <WrapperImage>
-            {images.map((image, idx) => (
+            {infos.map((image, idx) => (
               <div className="img-wrapper" key={idx}>
-                <ImageComponent url={image} info={infos[idx]} />
+                <ImageComponent url={image.mainImg} info={image} />
               </div>
             ))}
           </WrapperImage>
