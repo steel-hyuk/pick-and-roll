@@ -87,7 +87,7 @@ module.exports = {
                     { model: TasteScore, attributes: ['score'] },
                     { model: EasyScore, attributes: ['score'] }
                   ],
-                  order: ['createdAt']
+                  order: [['createdAt', 'DESC']]
                 }
               : {
                   offset: Number(offset),
@@ -96,7 +96,7 @@ module.exports = {
                     { model: TasteScore, attributes: ['score'] },
                     { model: EasyScore, attributes: ['score'] }
                   ],
-                  order: ['createdAt'],
+                  order: [['createdAt', 'DESC']],
                   where: { category: category }
                 }
           )

@@ -1,8 +1,9 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
 import { FaAngleDown } from 'react-icons/fa'
-const Dropdown = ({ selected, setSelected }) => {
+const Dropdown = ({ handleChangeDivision }) => {
   const [isActive, setIsActive] = useState(false)
+  const [showDivision, setShowDivision] = useState('최신')
 
   const options = ['최신', '맛', '간편성']
   return (
@@ -12,7 +13,7 @@ const Dropdown = ({ selected, setSelected }) => {
           className={!isActive ? 'show' : null}
           onClick={() => setIsActive(!isActive)}
         >
-          {selected}
+          {showDivision}
           <FaAngleDown />
         </DropdownBtn>
         {isActive && (
@@ -20,7 +21,8 @@ const Dropdown = ({ selected, setSelected }) => {
             {options.map((option) => (
               <Item
                 onClick={() => {
-                  setSelected(option)
+                  handleChangeDivision(option)
+                  setShowDivision(option)
                   setIsActive(false)
                 }}
               >
