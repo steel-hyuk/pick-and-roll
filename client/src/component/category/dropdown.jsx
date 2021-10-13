@@ -35,6 +35,7 @@ const Dropdown = ({ selected, setSelected }) => {
 }
 
 const Container = styled.div`
+  position : static;
   z-index: 50;
   margin-top: 7px;
   margin-right: 100px;
@@ -84,6 +85,7 @@ const Item = styled.div`
   padding: 10px;
 
   :hover {
+    z-index: 500;
     background: #fcfcfc;
   }
 `

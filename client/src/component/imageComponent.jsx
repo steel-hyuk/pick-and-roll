@@ -115,6 +115,7 @@ const Background = styled.div`
   :hover {
     opacity: 1;
     box-shadow: 5px 5px 6px 6px rgba(155, 150, 150, 0.6);
+    z-index : 0;
   }
 `
 
