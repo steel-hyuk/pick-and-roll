@@ -1,14 +1,10 @@
 import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
-import InfiniteScroll from 'react-infinite-scroll-component'
 import api from '../../api/index'
-import LoadingComponent from '../loadingComponent'
 import ImageComponent from '../imageComponent'
 
 const MyRecipeComponent = () => {
-  const [myRecipe, setMyRecipe] = useState('')
   const [infos, setInfos] = useState([])
-  const [offset, setOffset] = useState(1)
 
   const showMyRecipe = async () => {
     await api
@@ -20,7 +16,6 @@ const MyRecipeComponent = () => {
       })
       .then((res) => {
         setInfos([...infos, ...res.data])
-        setOffset(offset + 1)
       })
   }
 
@@ -33,12 +28,6 @@ const MyRecipeComponent = () => {
       <TitleWrap>
         <Title>나의 레시피</Title>
       </TitleWrap>
-      <InfiniteScroll
-        dataLength={infos.length}
-        next={showMyRecipe}
-        hasMore={infos.length >= 10}
-        loader={<LoadingComponent />}
-      >
         <WrapperImage>
           {infos.map((image) => (
             <div className="img-wrapper" key={image.id}>
@@ -46,7 +35,6 @@ const MyRecipeComponent = () => {
             </div>
           ))}
         </WrapperImage>
-      </InfiniteScroll>
     </Contents>
   )
 }
@@ -68,8 +56,7 @@ const Title = styled.p`
   width: 200px;
   align-items: center;
   text-align: center;
-  font-family: 'Noto Sans KR', sans-serif;
-  margin: 5px 300px;
+  margin: 10px 87px 10px 0px;
   font-size: 20px;
   font-weight: 900;
   height: 30px;
@@ -79,7 +66,7 @@ const Title = styled.p`
 
 const WrapperImage = styled.section`
   max-width: 70rem;
-  margin: 3rem 7rem;
+  margin: 35px auto;
   display: grid;
   grid-gap: 2em;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
