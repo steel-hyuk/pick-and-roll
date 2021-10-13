@@ -87,15 +87,19 @@ module.exports = {
       where: { nickname: req.body.nickname }
     })
       .then((user) => {
-        console.log(user)
-        if(res.locals.userId === user.dataValues.id) {
-          return res.send({ message: '회원님이 사용하고 있는 닉네임입니다. 그대로 사용하시나요?'})
+        if (user) {
+          if (res.locals.userId === user.dataValues.id) {
+            return res.send({
+              message:
+                '회원님이 사용하고 있는 닉네임입니다. 그대로 사용하시나요?'
+            })
+          }
         } else {
-        if (!user) {
-          return res.send({ message: '✔ 사용 가능한 닉네임입니다!' })
+          if (!user) {
+            return res.send({ message: '✔ 사용 가능한 닉네임입니다!' })
+          }
+          res.send({ message: '동일한 닉네임이 존재합니다!' })
         }
-        res.send({ message: '동일한 닉네임이 존재합니다!' })
-      }
       })
       .catch((err) => {
         console.log('닉네임 유효성 검사 오류')
@@ -431,7 +435,8 @@ module.exports = {
               })
                 .then(async (user) => {
                   let userData = user.dataValues
-                  const CLIENTDOMAIN = process.env.CLIENT_DOMAIN || 'http://localhost:3000'
+                  const CLIENTDOMAIN =
+                    process.env.CLIENT_DOMAIN || 'http://localhost:3000'
                   const emailOptions = {
                     from: process.env.GMAIL_ID,
                     to: userData.email,
