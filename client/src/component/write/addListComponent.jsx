@@ -1,4 +1,4 @@
-import React, { useCallback, useRef, useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import styled from 'styled-components'
 
 const AddListContent = ({
@@ -111,7 +111,7 @@ export const AddListingredients = ({
             type="text"
             placeholder="재료"
             onChange={(e) => {
-              console.log(obj.ingredient)
+              // console.log(obj.ingredient)
               onChangeIngredient(obj, e.target.value, idx)
             }}
             ref={ingredientsRef}

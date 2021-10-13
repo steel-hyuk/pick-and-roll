@@ -33,7 +33,7 @@ const ContentImgsComponent = ({
       const getUrl = await getDownloadURL(imgRef).then((res) => {
         url = res
       })
-      console.log(url)
+      // console.log(url)
 
       const updatedList = [...contentImgs, url]
       setContentImgs(updatedList)
