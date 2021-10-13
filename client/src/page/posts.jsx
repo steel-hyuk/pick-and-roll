@@ -349,7 +349,7 @@ const TitleArea = styled.div`
 `
 
 const MainImage = styled.div`
-  height: 400px;
+  height: 600px;
   background-color: black;
   background-size: 100% 100%;
 `
