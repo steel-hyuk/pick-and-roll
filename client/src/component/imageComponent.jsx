@@ -10,7 +10,6 @@ const ImageComponent = ({ url, info }) => {
   const history = useHistory()
   const { isLoggedIn, setIsLoggedIn } = useContext(AuthContext)
   const [openLogin, setOpenLogin] = useState(false)
-
   const {
     id,
     userId,

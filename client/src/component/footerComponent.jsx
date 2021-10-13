@@ -66,7 +66,7 @@ const Main = styled.div`
     position : absolute;
     width : 100%;
     top : 150px;
-    z-index: 999;
+    z-index: 3;
     background-color : white;
     border-top: solid 0.7mm #e7e9eb;
   }

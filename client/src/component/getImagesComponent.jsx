@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import styled from 'styled-components'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import api from '../api'
@@ -32,8 +32,8 @@ function GetImagesComponent({ isValue, selectCategory }) {
   }, [])
 
   return (
-    <div>
-      <Wrapper>
+    <Wrapper >
+      <Form>
         <InfiniteScroll
           dataLength={infos.length}
           next={fetchImages}
@@ -48,20 +48,27 @@ function GetImagesComponent({ isValue, selectCategory }) {
             ))}
           </WrapperImage>
         </InfiniteScroll>
-      </Wrapper>
-    </div>
+      </Form>
+    </Wrapper>
   )
 }
 
 const Wrapper = styled.div`
+position :relative;
+z-index: 5;
+`
+
+const Form = styled.div`
   margin: 0;
   padding: 0;
   margin-top: 130px;
+  position : relative;
+  z-index: 0;
 `
 
 const WrapperImage = styled.section`
   max-width: 70rem;
-  margin: 3rem 7rem;
+  margin: 35px auto;
   display: grid;
   grid-gap: 2em;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));

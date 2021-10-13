@@ -51,6 +51,7 @@ const LoginModal = ({ openLogin, setOpenLogin }) => {
           let user = { id, email, nickname, description, createdAt }
           setUserInfo(user)
           setIsLoggedIn(true)
+          setOpenLogin(false)
         })
         .catch((err) => {
           setMessageAuth('계정 정보를 확인해주세요!')

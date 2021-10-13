@@ -43,6 +43,8 @@ const Container = styled.div`
 
 const DropdownBox = styled.div`
   width: 100px;
+  position: relative;
+  z-index: 30;
 `
 
 const DropdownBtn = styled.div`
@@ -61,6 +63,8 @@ const DropdownBtn = styled.div`
 
 const Contents = styled.div`
   margin-top: -1px;
+  position : static;
+  z-index: 50;
   left: 0;
   padding: 10px;
   background: #fff;

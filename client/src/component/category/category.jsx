@@ -28,6 +28,7 @@ const Wrap = styled.div`
   justify-content: center;
   border-bottom: solid 1px rgb(243, 200, 18);
   background-color : white;
+  z-index: 50;
 `
 
 const ListWrap = styled.div`
