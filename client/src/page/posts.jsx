@@ -18,18 +18,19 @@ const Posts = () => {
   const [selected, setSelected] = useState(0)
 
   const getRecipeInfo = async () => {
-    await api.get(`/recipes?id=${recipeId}`, {
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      withCredentials: true
-    })
-    .then((res) => {
-      setRecipeInfo(res.data.recipeData)
-      const yymmdd = res.data.recipeData.createdAt.split('-')
-      const dd = yymmdd[2].split('T')[0]
-      setDate(`${yymmdd[0]}.${yymmdd[1]}.${dd}`)
-    })
+    await api
+      .get(`/recipes?id=${recipeId}`, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        withCredentials: true,
+      })
+      .then((res) => {
+        setRecipeInfo(res.data.recipeData)
+        const yymmdd = res.data.recipeData.createdAt.split('-')
+        const dd = yymmdd[2].split('T')[0]
+        setDate(`${yymmdd[0]}.${yymmdd[1]}.${dd}`)
+      })
   }
 
   useEffect(() => {
@@ -164,7 +165,12 @@ const Posts = () => {
             ) : (
               <>
                 <StarBtn onClick={giveTasteScore}>맛 별점주기</StarBtn>
-                <DropdownStar className="taste" color="blue" setSelected={setSelected} selected={selected} />
+                <DropdownStar
+                  className="taste"
+                  color="blue"
+                  setSelected={setSelected}
+                  selected={selected}
+                />
               </>
             )}
           </BoxGroup>
@@ -174,7 +180,12 @@ const Posts = () => {
             ) : (
               <>
                 <StarBtn onClick={giveEasyScore}>간편성 별점주기</StarBtn>
-                <DropdownStar className="simple" color="red" setSelected={setSelected} selected={selected} />
+                <DropdownStar
+                  className="simple"
+                  color="red"
+                  setSelected={setSelected}
+                  selected={selected}
+                />
               </>
             )}
           </BoxGroup>
@@ -296,7 +307,7 @@ const TextWrap = styled.div`
   display: flex;
   justify-content: space-between;
   .name {
-    font-weight : bold;
+    font-weight: bold;
   }
   .date {
   }
@@ -348,13 +359,13 @@ const ScoreWrap = styled.div`
   text-align: center;
   .favor {
     background-color: #b0adadf8;
-    border-radius : 10px;
-    color : white;
+    border-radius: 10px;
+    color: white;
   }
   .easy {
     background-color: #b0adadf8;
-    border-radius : 10px;
-    color : white;
+    border-radius: 10px;
+    color: white;
   }
 `
 
@@ -405,13 +416,13 @@ const BoxGroup = styled.div`
   width: 45%;
   .favor {
     background-color: #e3a41df8;
-    border-radius : 10px;
-    color : white;
+    border-radius: 10px;
+    color: white;
   }
   .easy {
     background-color: #e3a41df8;
-    border-radius : 10px;
-    color : white;
+    border-radius: 10px;
+    color: white;
   }
 `
 
@@ -473,8 +484,8 @@ const SubImage = styled.div`
   height: 400px;
   background-color: black;
   background-size: 100% 100%;
-  margin-bottom : 30px;
-  
+  margin-bottom: 30px;
+
   /* width : 50%;
 background-color : black;
 height : 300px;

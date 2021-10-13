@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
 import { FaAngleDown } from 'react-icons/fa'
-
 const Dropdown = ({ selected, setSelected }) => {
   const [isActive, setIsActive] = useState(false)
 
@@ -36,8 +35,7 @@ const Dropdown = ({ selected, setSelected }) => {
 }
 
 const Container = styled.div`
-  position : static;
-  z-index: 1000000;
+  z-index: 50;
   margin-top: 7px;
   margin-right: 100px;
 `
@@ -63,8 +61,6 @@ const DropdownBtn = styled.div`
 const Contents = styled.div`
   margin-top: -1px;
   left: 0;
-  position : static;
-  z-index: 1000;
   padding: 10px;
   background: #fff;
   box-shadow: 3px 3px 10px 1px rgba(0, 0, 0, 0.06);

@@ -130,13 +130,13 @@ const ImgInput = styled.div`
     margin-bottom: 20px;
   }
   @media (max-width: 750px) {
-    height : 200px;
+    height: 200px;
   }
 `
 
 const LoadedList = styled.div`
   display: flex;
-  position : relative;
+  position: relative;
   margin-bottom: 10px;
   background-color: #857d7d2f;
   padding: 15px;
@@ -144,7 +144,7 @@ const LoadedList = styled.div`
   height: 40px;
   img {
     width: 40px;
-    border-radius :4px;
+    border-radius: 4px;
   }
   p {
     font-size: 15px;
@@ -152,8 +152,8 @@ const LoadedList = styled.div`
     padding-top: 3px;
   }
   .delete {
-    position : absolute;
-    right : 10px;
+    position: absolute;
+    right: 10px;
     background-color: rgb(110, 174, 233);
     width: 25px;
     height: 20px;

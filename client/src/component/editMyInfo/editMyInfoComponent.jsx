@@ -19,7 +19,6 @@ const EditMyInfoComponent = () => {
   const _nick = useRef()
   const _des = useRef()
 
-
   const history = useHistory()
 
   // 닉네임 형식을 체크하는 정규 표현식
@@ -39,11 +38,15 @@ const EditMyInfoComponent = () => {
       return
     }
     await api
-      .post('users/signup/nick-check', {
-        nickname: changeNickname,
-      },{
-        withCredentials: true
-      })
+      .post(
+        'users/signup/nick-check',
+        {
+          nickname: changeNickname,
+        },
+        {
+          withCredentials: true,
+        }
+      )
       .then((res) => {
         setMessageNickname(res.data.message)
         if (res.data.message === '동일한 닉네임이 존재합니다!') {
@@ -61,13 +64,13 @@ const EditMyInfoComponent = () => {
       })
   }
 
-const DesCheck = () => {
-  if (changeDescription === '') {
-    _des.current.focus()
-    setMessageDescription('자기소개를 입력해주세요!')
-    return
+  const DesCheck = () => {
+    if (changeDescription === '') {
+      _des.current.focus()
+      setMessageDescription('자기소개를 입력해주세요!')
+      return
+    }
   }
-}
 
   const editDone = async () => {
     if (changeNickname === '' || !nickname_Reg.test(changeNickname)) {
@@ -83,12 +86,16 @@ const DesCheck = () => {
       return
     }
     await api
-      .patch('/users', {
-        nickname: changeNickname,
-        description: changeDescription,
-      }, {
-        withCredentials: true
-      })
+      .patch(
+        '/users',
+        {
+          nickname: changeNickname,
+          description: changeDescription,
+        },
+        {
+          withCredentials: true,
+        }
+      )
       .then((res) => {
         let { id, email, createdAt } = res.data.userData
         setUserInfo({

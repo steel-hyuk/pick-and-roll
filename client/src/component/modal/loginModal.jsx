@@ -31,18 +31,22 @@ const LoginModal = ({ openLogin, setOpenLogin }) => {
       })
     } else {
       await api
-        .post('/users/signin', { email, password }, { 
+        .post(
+          '/users/signin',
+          { email, password },
+          {
             headers: {
-              'Content-Type': 'application/json' 
-            }, 
-            withCredentials: true }
-    
+              'Content-Type': 'application/json',
+            },
+            withCredentials: true,
+          }
         )
         .then((res) => {
           api.defaults.headers.common[
             'Authorization'
           ] = `Bearer ${res.data.accessToken}`
-          let { id, email, nickname, description, createdAt } = res.data.userData
+          let { id, email, nickname, description, createdAt } =
+            res.data.userData
           createdAt = createdAt.substring(0, 10)
           let user = { id, email, nickname, description, createdAt }
           setUserInfo(user)
