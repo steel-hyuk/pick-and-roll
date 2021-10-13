@@ -38,11 +38,15 @@ const EditMyInfoComponent = () => {
       return
     }
     await api
-      .post('users/signup/nick-check', {
-        nickname: nickname,
-      },{
-        withCredentials: true
-      })
+      .post(
+        'users/signup/nick-check',
+        {
+          nickname: nickname,
+        },
+        {
+          withCredentials: true,
+        }
+      )
       .then((res) => {
         setMessageNickname(res.data.message)
         if (res.data.message === '동일한 닉네임이 존재합니다!') {
@@ -65,28 +69,33 @@ const EditMyInfoComponent = () => {
       _des.current.focus()
       setMessageDescription('자기소개를 입력해주세요!')
       return
-  }
-
-  const editDone = async () => {
-    if (nickname === '' || !nickname_Reg.test(nickname)) {
-      _nick.current.focus()
-      setMessageNickname(
-        '닉네임은 한글, 영문, 숫자만 가능하며 2-10자리까지 가능합니다!'
-      )
-      return
     }
-    if (description === '') {
-      _des.current.focus()
-      setMessageDescription('자기소개를 입력해주세요!')
-      return
+
+    const editDone = async () => {
+      if (nickname === '' || !nickname_Reg.test(nickname)) {
+        _nick.current.focus()
+        setMessageNickname(
+          '닉네임은 한글, 영문, 숫자만 가능하며 2-10자리까지 가능합니다!'
+        )
+        return
+      }
+      if (description === '') {
+        _des.current.focus()
+        setMessageDescription('자기소개를 입력해주세요!')
+        return
+      }
     }
     await api
-      .patch('/users', {
-        nickname: nickname,
-        description: description,
-      }, {
-        withCredentials: true
-      })
+      .patch(
+        '/users',
+        {
+          nickname: nickname,
+          description: description,
+        },
+        {
+          withCredentials: true,
+        }
+      )
       .then((res) => {
         let { id, email, createdAt } = res.data.userData
         setUserInfo({
