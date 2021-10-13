@@ -116,7 +116,8 @@ const SubTitle = styled.p`
 
 const BtnWrap = styled.div`
   display: flex;
-  justify-content: flex-start;
+  justify-content: flex-end;
+  margin-right : 11px;
 `
 
 const ImgWrap = styled.div`

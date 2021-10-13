@@ -251,6 +251,7 @@ const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   margin-top: 70px;
+  margin-bottom : 150px;
   align-items: center;
 `
 
@@ -293,6 +294,7 @@ const FormGroup = styled.div`
   text-align: center;
   margin-bottom: 50px;
 `
+
 const BoxGroup = styled.div`
   display: block;
   text-align: center;
@@ -339,6 +341,7 @@ const BoxWrap = styled.div`
   justify-content: space-around;
   margin-bottom: 70px;
 `
+
 const Input = styled.input`
   width: 100%;
   height: 60px;

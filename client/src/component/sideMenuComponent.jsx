@@ -49,9 +49,9 @@ const SideMenuComponent = () => {
 
 const Wrap = styled.div`
   position: relative;
-  height: 700px;
   display: flex;
   top: 70px;
+  z-index: 0;
   justify-content: flex-end;
   @media (max-width: 1200px) {
     flex-direction: column;
@@ -78,14 +78,14 @@ const Wrap = styled.div`
 `
 
 const Menu = styled.div`
-  z-index: 50;
+  z-index: -1;
   left: 0;
   transform: translateX(-100%);
   position: fixed;
   margin: 0;
   border: 0;
   padding: 0;
-  height: 700px;
+  height: 100%;
   width: 273px;
   background-color: #f3c811;
   color: white;

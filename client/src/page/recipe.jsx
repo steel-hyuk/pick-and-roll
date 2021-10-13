@@ -12,5 +12,7 @@ const Recipe = () => {
 
 const Wrap = styled.div`
 position : static;
+margin-top: 200px;
 `
+
 export default Recipe

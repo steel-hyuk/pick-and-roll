@@ -15,7 +15,7 @@ import FooterComponent from './component/footerComponent';
 
 function App() {
   return (
-    <div>
+    <>
       <GlogbalStyle />
       <Router>
         <NavbarComponent />    
@@ -30,9 +30,9 @@ function App() {
           <Route exact path="/recipe/:id" component={Posts} />
           <Route exact path="/oauth/kakao" component={Redirect}/>
         </Switch>
+        <FooterComponent />
       </Router>
-      <FooterComponent />
-    </div>
+    </>
   )
 }
 

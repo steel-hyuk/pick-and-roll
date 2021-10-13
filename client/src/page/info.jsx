@@ -1,4 +1,5 @@
 import React from 'react'
+import styled from 'styled-components'
 import InfoComponent from '../component/info'
 
 const Info = () => {
@@ -26,10 +27,14 @@ const Info = () => {
   }
 
   return (
-    <>
+    <Wrapper>
       <InfoComponent data={data1}></InfoComponent>
       <InfoComponent data={data2}></InfoComponent>
-    </>
+    </Wrapper>
   )
 }
+
+const Wrapper = styled.div`
+margin-bottom : 200px;
+`
 export default Info

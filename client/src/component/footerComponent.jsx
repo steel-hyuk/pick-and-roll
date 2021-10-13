@@ -57,16 +57,18 @@ const FooterComponent = () => {
 }
 
 const Main = styled.div`
-  position: relative;
+  position: fixed;
+  right : 0;
+  left : 0;
+  bottom : 0;
   display: flex;
   min-height: 20vh;
   flex-direction: column;
-
+  justify-content: flex-end;
   .container {
     position : absolute;
     width : 100%;
-    top : 150px;
-    z-index: 999;
+    z-index: 3;
     background-color : white;
     border-top: solid 0.7mm #e7e9eb;
   }

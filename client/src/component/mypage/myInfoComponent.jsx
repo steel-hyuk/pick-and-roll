@@ -91,6 +91,7 @@ const Contents = styled.div`
   flex-direction: column;
   margin: 0;
   padding: 0;
+  margin-bottom: 200px;
 `
 
 const TitleWrap = styled.div`

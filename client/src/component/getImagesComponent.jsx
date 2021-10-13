@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
+import { FaAngleDoubleDown } from 'react-icons/fa'
 import api from '../api'
 import ImageComponent from './imageComponent'
 import Category from '../component/category/category'
@@ -26,27 +27,27 @@ function GetImagesComponent() {
 
   const paginationImages = async () => {
     await api
-    .get(
-      `/recipes?category=${category}&division=${division}&offset=${offset}&limit=4`,
-      {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        withCredentials: true,
-      }
-    )
-    .then((res) => {
-      if(res.data.length !== 0) {
-        if(res.data.length < 4) {
-          setMoreViewMessage('더 이상 레시피가 없어요!')
-          setInfos([...infos, ...res.data])            
-        } else { 
-          setInfos([...infos, ...res.data])
+      .get(
+        `/recipes?category=${category}&division=${division}&offset=${offset}&limit=4`,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          withCredentials: true,
         }
-      } else if (res.data.length === 0) {
-        setMoreViewMessage('더 이상 레시피가 없어요!')        
-      }
-    })
+      )
+      .then((res) => {
+        if (res.data.length !== 0) {
+          if (res.data.length < 4) {
+            setMoreViewMessage('더 이상 레시피가 없어요!')
+            setInfos([...infos, ...res.data])
+          } else {
+            setInfos([...infos, ...res.data])
+          }
+        } else if (res.data.length === 0) {
+          setMoreViewMessage('더 이상 레시피가 없어요!')
+        }
+      })
   }
 
   const fetchImages = async () => {
@@ -61,7 +62,7 @@ function GetImagesComponent() {
         }
       )
       .then((res) => {
-        if(res.data.length < 4) {
+        if (res.data.length < 4) {
           setMoreViewMessage('더 이상 레시피가 없어요!')
         }
         setInfos([...res.data])
@@ -81,34 +82,67 @@ function GetImagesComponent() {
 
   return (
     <div>
-      <Category handleChangeCategory={handleChangeCategory} handleChangeDivision={handleChangeDivision}/>   
+      <Category
+        handleChangeCategory={handleChangeCategory}
+        handleChangeDivision={handleChangeDivision}
+      />
       <Wrapper>
-          <WrapperImage>
-            {infos.map((image, idx) => (
-              <div className="img-wrapper" key={idx}>
-                <ImageComponent url={image.mainImg} info={image} />
-              </div>
-            ))}
-          </WrapperImage>
-          <Pagination onClick={handleChangeOffset}>{moreViewMessage}</Pagination> 
+        <WrapperImage>
+          {infos.map((image, idx) => (
+            <div className="img-wrapper" key={idx}>
+              <ImageComponent url={image.mainImg} info={image} />
+            </div>
+          ))}
+        </WrapperImage>
+        <TextWrap>
+          <Pagination className="show" onClick={handleChangeOffset}>
+            {moreViewMessage}
+          </Pagination>
+          <PaWrap className="icon">
+            <FaAngleDoubleDown />
+          </PaWrap>
+        </TextWrap>
       </Wrapper>
     </div>
   )
 }
 
-const Pagination = styled.div`
+const TextWrap = styled.div`
+  display: flex;
+  justify-content: center;
+  :hover {
+    .show {
+      color: #858585;
+      font-weight: bold;
+    }
+    .icon {
+      color: white;
+      z-index: -1;
+    }
+  }
 `
 
+const PaWrap = styled.div`
+  font-size: 30px;
+  position: relative;
+  left: -103px;
+  color: #e68e23;
+`
+
+const Pagination = styled.div`
+  color: white;
+  text-align: center;
+  align-items: center;
+`
 
 const Wrapper = styled.div`
-  margin: 0;
-  padding: 0;
-  margin-top: 130px;
+  position: relative;
+  z-index: 5;
 `
 
 const WrapperImage = styled.section`
   max-width: 70rem;
-  margin: 3rem 7rem;
+  margin: 35px auto;
   display: grid;
   grid-gap: 2em;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
