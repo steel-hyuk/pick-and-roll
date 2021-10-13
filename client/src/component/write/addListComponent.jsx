@@ -7,7 +7,6 @@ const AddListContent = ({
   contentsRef,
   setMessageContents,
 }) => {
-  const [contentValue, setContentValue] = useState()
   const addList = () => {
     setContents([...contents, ''])
   }

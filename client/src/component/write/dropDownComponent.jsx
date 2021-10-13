@@ -4,7 +4,7 @@ import styled from 'styled-components'
 export const DropDownCategory = ({ category, setCategory, categoryRef }) => {
   const onChangeCategory = useCallback((event) => {
     setCategory(event.target.value)
-  }, [])
+  })
 
   return (
     <Wrapper>
