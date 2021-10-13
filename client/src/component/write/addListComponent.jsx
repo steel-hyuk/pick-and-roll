@@ -159,7 +159,7 @@ const InlineBox = styled.div`
     @media (max-width: 750px) {
       font-size: 10px;
       margin-top: 20px;
-  }
+    }
   }
 `
 
