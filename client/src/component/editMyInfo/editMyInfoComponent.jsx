@@ -38,11 +38,15 @@ const EditMyInfoComponent = () => {
       return
     }
     await api
-      .post('users/signup/nick-check', {
-        nickname: nickname,
-      },{
-        withCredentials: true
-      })
+      .post(
+        'users/signup/nick-check',
+        {
+          nickname: nickname,
+        },
+        {
+          withCredentials: true,
+        }
+      )
       .then((res) => {
         setMessageNickname(res.data.message)
         if (res.data.message === '동일한 닉네임이 존재합니다!') {
@@ -65,6 +69,7 @@ const EditMyInfoComponent = () => {
       _des.current.focus()
       setMessageDescription('자기소개를 입력해주세요!')
       return
+    }
   }
 
   const editDone = async () => {
@@ -81,12 +86,16 @@ const EditMyInfoComponent = () => {
       return
     }
     await api
-      .patch('/users', {
-        nickname: nickname,
-        description: description,
-      }, {
-        withCredentials: true
-      })
+      .patch(
+        '/users',
+        {
+          nickname: nickname,
+          description: description,
+        },
+        {
+          withCredentials: true,
+        }
+      )
       .then((res) => {
         let { id, email, createdAt } = res.data.userData
         setUserInfo({
