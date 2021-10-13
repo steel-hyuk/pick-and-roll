@@ -65,6 +65,7 @@ const EditMyInfoComponent = () => {
       _des.current.focus()
       setMessageDescription('자기소개를 입력해주세요!')
       return
+    }
   }
 
   const editDone = async () => {
