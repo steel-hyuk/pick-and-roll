@@ -1,14 +1,10 @@
 import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
-import InfiniteScroll from 'react-infinite-scroll-component'
 import api from '../../api/index'
-import LoadingComponent from '../loadingComponent'
 import ImageComponent from '../imageComponent'
 
 const MyFavoriteComponent = () => {
-  const [favoriteInfo, setFavoriteInfo] = useState('')
   const [infos, setInfos] = useState([])
-  const [offset, setOffset] = useState(1)
 
   const showFavorite = async () => {
     await api
@@ -19,11 +15,11 @@ const MyFavoriteComponent = () => {
         withCredentials: true,
       })
       .then((res) => {
-        setInfos([...infos, ...res.data])
-        setOffset(offset + 1)
+        if (res.data.message !== '즐겨찾기 레시피가 없습니다!') {
+        setInfos([...res.data])
+        }
       })
   }
-
   useEffect(() => {
     showFavorite()
   }, [])
@@ -33,12 +29,6 @@ const MyFavoriteComponent = () => {
       <TitleWrap>
         <Title>즐겨찾기</Title>
       </TitleWrap>
-      <InfiniteScroll
-        dataLength={infos.length}
-        next={showFavorite}
-        hasMore={infos.length >= 10}
-        loader={<LoadingComponent />}
-      >
         <WrapperImage>
           {infos.map((image) => (
             <div className="img-wrapper" key={image.id}>
@@ -46,7 +36,6 @@ const MyFavoriteComponent = () => {
             </div>
           ))}
         </WrapperImage>
-      </InfiniteScroll>
     </Contents>
   )
 }

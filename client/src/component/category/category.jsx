@@ -2,17 +2,17 @@ import React from 'react'
 import styled from 'styled-components'
 import Dropdown from './dropdown'
 
-const Category = ({ selected, setSelected, setSelectCateogry }) => {
+const Category = ({ handleChangeCategory, handleChangeDivision }) => {
   return (
     <>
     <Wrap>
-      <Dropdown selected={selected} setSelected={setSelected} />
+      <Dropdown handleChangeDivision={handleChangeDivision} />
       <ListWrap>
-        <List onClick={() => {setSelectCateogry('korean')}}>Korean</List>
-        <List onClick={() => {setSelectCateogry('Western')}}>Western</List>
-        <List onClick={() => {setSelectCateogry('Chinese')}}>Chinese</List>
-        <List onClick={() => {setSelectCateogry('Japanese')}}>Japanese</List>
-        <List onClick={() => {setSelectCateogry('etc')}}>etc</List>
+        <List onClick={() => {handleChangeCategory('korean')}}>Korean</List>
+        <List onClick={() => {handleChangeCategory('western')}}>Western</List>
+        <List onClick={() => {handleChangeCategory('chinese')}}>Chinese</List>
+        <List onClick={() => {handleChangeCategory('japanese')}}>Japanese</List>
+        <List onClick={() => {handleChangeCategory('etc')}}>etc</List>
       </ListWrap>
     </Wrap>
   </>
