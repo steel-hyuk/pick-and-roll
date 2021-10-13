@@ -19,8 +19,15 @@ const MyRecipeComponent = () => {
         withCredentials: true,
       })
       .then((res) => {
+<<<<<<< HEAD
         setInfos([...infos, ...res.data])
         setOffset(offset + 1)
+=======
+        // console.log(res.data)
+        // let { id, email, nickname, description, createdAt } = res.data
+        // createdAt = createdAt.substring(0, 10)
+        // let user = { id, email, nickname, description, createdAt }
+>>>>>>> 7949b2367d881eb603060f5b41e31a40edb8fa61
       })
   }
 

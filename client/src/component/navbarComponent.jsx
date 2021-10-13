@@ -1,7 +1,6 @@
 import React, { useContext, useState } from 'react'
 import styled from 'styled-components'
-import { NavLink as NavLinkLogo } from 'react-router-dom'
-import { NavLink as NavLinkElement } from 'react-router-dom'
+import { NavLink as NavLinkLogo, NavLink as NavLinkElement } from 'react-router-dom'
 import { FaAlignJustify } from 'react-icons/fa'
 import LoginModal from './modal/loginModal'
 import SearchBoxModal from './modal/searchBoxModal'
@@ -10,7 +9,7 @@ import { AuthContext } from '../context/authContext'
 import { UserContext } from '../context/userContext'
 import MenuModal from './modal/menuModal'
 
-const NavbarComponent = ({ handleLogin }) => {
+const NavbarComponent = () => {
   const { isLoggedIn, setIsLoggedIn } = useContext(AuthContext)
   const { userInfo, setUserInfo } = useContext(UserContext)
   const [openLogin, setOpenLogin] = useState(false)
@@ -54,7 +53,6 @@ const NavbarComponent = ({ handleLogin }) => {
           <Modal>
             {openLogin ? (
               <LoginModal
-                handleLogin={handleLogin}
                 openLogin={openLogin}
                 setOpenLogin={setOpenLogin}
               />

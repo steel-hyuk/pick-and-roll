@@ -1,10 +1,16 @@
-import React from 'react'
+import React, { useState, useContext } from 'react'
 import { useHistory } from 'react-router-dom'
 import styled from 'styled-components'
 import { ImStarFull } from 'react-icons/im'
 
+import LoginModal from './modal/loginModal'
+import { AuthContext } from '../context/authContext'
+
 const ImageComponent = ({ url, info }) => {
   const history = useHistory()
+  const { isLoggedIn, setIsLoggedIn } = useContext(AuthContext)
+  const [openLogin, setOpenLogin] = useState(false)
+
   const {
     id,
     userId,
@@ -19,7 +25,12 @@ const ImageComponent = ({ url, info }) => {
   const totalScore = (tasteAvg + easyAvg) / 2
 
   const toPost = () => {
-    history.push(`/recipe/id=${id}`)
+    if (isLoggedIn) {
+      history.push(`/recipe/id=${id}`)
+    }
+    else {
+      setOpenLogin(!openLogin)
+    }
   }
 
   return (
@@ -35,6 +46,14 @@ const ImageComponent = ({ url, info }) => {
         <div className="instruction">{introduction}</div>
       </Background>
       <BackImg style={{ backgroundImage: `url(${url})` }}></BackImg>
+      <Modal>
+          {openLogin ? (
+            <LoginModal
+              openLogin={openLogin}
+              setOpenLogin={setOpenLogin}
+            />
+          ) : null}
+      </Modal>
     </>
   )
 }
@@ -108,4 +127,9 @@ const ScoreWrap = styled.div`
   top: 20px;
   right: 16px;
 `
+
+const Modal = styled.div`
+  position: absolute;
+`
+
 export default ImageComponent

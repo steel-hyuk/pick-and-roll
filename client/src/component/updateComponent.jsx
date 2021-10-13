@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react'
+import React, { useRef, useState, useEffect } from 'react'
 import { useHistory } from 'react-router'
 import styled from 'styled-components'
 import Swal from 'sweetalert2'
@@ -9,8 +9,9 @@ import DropDownTime, { DropDownCategory } from './write/dropDownComponent'
 import ContentImgComponent from './ImgEncoding/contentImgsComponent'
 import MainImgComponent from './ImgEncoding/mainImgComponent'
 
-const WriteComponent = () => {
+const UpdateComponent = () => {
   const history = useHistory()
+  const recipeId = history.location.pathname.split('=')[1]
 
   const [title, setTitle] = useState('')
   const [introduction, setIntroduction] = useState('')
@@ -44,7 +45,29 @@ const WriteComponent = () => {
   const _contentImgs = useRef()
   const _ingredients = useRef()
 
-  const postInfoSubmit = async (event) => {
+  const getRecipeInfo = async () => {
+    await api.get(`/recipes?id=${recipeId}`, {
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      withCredentials: true
+    })
+    .then((res) => {
+      // console.log(res.data.recipeData)
+      const info = res.data.recipeData
+      setTitle(info.title)
+      setIntroduction(info.introduction)
+      // setMainImg(info.mainImg)
+      setCategory(info.category)
+      setRequiredTime(info.requiredTime)
+    })
+  }
+
+  useEffect(() => {
+    getRecipeInfo()
+  }, [])
+
+  const updateInfoSubmit = async (event) => {
     if (title === '') {
       _title.current.focus()
       setMessageTitle('title을 입력해주세요')
@@ -88,17 +111,17 @@ const WriteComponent = () => {
     )
     let finalIngredients = ingred.join('@')
 
-    await api.post(
-      '/recipes',
+    await api.patch(
+      `/recipes/${recipeId}`,
       {
         title: title,
         introduction: introduction,
-        mainImg: mainImg,
         category: category,
         requiredTime: requiredTime,
-        ingredients: finalIngredients,
         content: content,
-        contentImg: contentImgs.join(',')
+        mainImg: mainImg,
+        contentImg: contentImgs.join(','),
+        ingredients: finalIngredients
       },
       {
         'Content-Type': 'application/json',
@@ -130,7 +153,7 @@ const WriteComponent = () => {
             <Input
               className="title"
               type="text"
-              placeholder="제목을 입력해주세요"
+              value={title}
               onChange={(e) => setTitle(e.target.value)}
               ref={_title}
             />
@@ -142,7 +165,7 @@ const WriteComponent = () => {
             </Labal>
             <Textarea
               type="text"
-              placeholder="요리에 대한 설명을 해주세요!"
+              value={introduction}
               onChange={(e) => setIntroduction(e.target.value)}
               ref={_introduction}
             />
@@ -220,7 +243,7 @@ const WriteComponent = () => {
             <CheckText>{messageContentImgs}</CheckText>
           </FormGroup>
           <FormGroup>
-            <Enroll onClick={(e) => postInfoSubmit(e)}>등록하기</Enroll>
+            <Enroll onClick={(e) => updateInfoSubmit(e)}>수정하기</Enroll>
           </FormGroup>
         </Form>
       </Wrapper>
@@ -390,4 +413,4 @@ const Textarea = styled.textarea`
   }
 `
 
-export default WriteComponent
+export default UpdateComponent

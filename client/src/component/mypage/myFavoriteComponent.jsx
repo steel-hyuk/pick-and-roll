@@ -12,6 +12,7 @@ const MyFavoriteComponent = () => {
 
   const showFavorite = async () => {
     await api
+<<<<<<< HEAD
       .get('/users/favorite', {
         headers: {
           'Content-Type': 'application/json',
@@ -21,6 +22,16 @@ const MyFavoriteComponent = () => {
       .then((res) => {
         setInfos([...infos, ...res.data])
         setOffset(offset + 1)
+=======
+      .get('/users/favorite', { 
+          headers : { 
+            'Content-Type': 'application/json' 
+          },
+          withCredentials: true }        
+      )
+      .then((res) => {
+        // console.log(res)
+>>>>>>> 7949b2367d881eb603060f5b41e31a40edb8fa61
       })
   }
 

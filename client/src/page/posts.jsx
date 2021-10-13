@@ -18,20 +18,18 @@ const Posts = () => {
   const [selected, setSelected] = useState(0)
 
   const getRecipeInfo = async () => {
-    await api
-      .get(`/recipes?id=${recipeId}`, {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        withCredentials: true,
-      })
-      .then((res) => {
-        console.log(res.data.recipeData)
-        setRecipeInfo(res.data.recipeData)
-        const yymmdd = res.data.recipeData.createdAt.split('-')
-        const dd = yymmdd[2].split('T')[0]
-        setDate(`${yymmdd[0]}.${yymmdd[1]}.${dd}`)
-      })
+    await api.get(`/recipes?id=${recipeId}`, {
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      withCredentials: true
+    })
+    .then((res) => {
+      setRecipeInfo(res.data.recipeData)
+      const yymmdd = res.data.recipeData.createdAt.split('-')
+      const dd = yymmdd[2].split('T')[0]
+      setDate(`${yymmdd[0]}.${yymmdd[1]}.${dd}`)
+    })
   }
 
   useEffect(() => {
@@ -63,7 +61,9 @@ const Posts = () => {
       .then((res) => window.location.reload())
   }
 
-  const updateRecipe = async () => {}
+  const updateRecipe = () => {
+    history.push(`/update/id=${recipeId}`)
+  }
 
   const deleteRecipe = async () => {
     await api
