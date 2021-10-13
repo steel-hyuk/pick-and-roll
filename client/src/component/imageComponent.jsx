@@ -16,13 +16,13 @@ const ImageComponent = ({ url, info }) => {
     userId,
     title,
     introduction,
+    userNickName,
     category,
     mainImg,
     tasteAvg,
     easyAvg,
     createdAt,
   } = info
-  const totalScore = (tasteAvg + easyAvg) / 2
 
   const toPost = () => {
     if (isLoggedIn) {
@@ -36,11 +36,15 @@ const ImageComponent = ({ url, info }) => {
     <>
       <Background className="back" onClick={toPost}>
         <ScoreWrap>
-          <span className="score">{totalScore}</span>
+          <span className="score">간편성: &nbsp;{easyAvg}</span>
+          <ImStarFull className="icon" />
+        </ScoreWrap>
+        <ScoreWrap>
+          <span className="score">맛: &nbsp;{tasteAvg}</span>
           <ImStarFull className="icon" />
         </ScoreWrap>
         <p className="title">{title}</p>
-        <div className="editor">작성자 : {userId}</div>
+        <div className="editor">작성자 : {userNickName}</div>
         <p className="date">게시일 : {createdAt.substring(0, 10)}</p>
         <div className="instruction">{introduction}</div>
       </Background>
@@ -95,9 +99,6 @@ const Background = styled.div`
     font-weight: bold;
     padding-bottom: 15px;
   }
-  .icon {
-    color: rgb(247, 215, 36);
-  }
   .editor {
     color: white;
   }
@@ -115,14 +116,18 @@ const Background = styled.div`
   :hover {
     opacity: 1;
     box-shadow: 5px 5px 6px 6px rgba(155, 150, 150, 0.6);
-    z-index : 0;
+    z-index: 0;
   }
 `
 
 const ScoreWrap = styled.div`
-  position: absolute;
+  position: relative;
   top: 20px;
   right: 16px;
+  .icon {
+    color: rgb(247, 215, 36);
+    margin-left: 100%;
+  }
 `
 
 const Modal = styled.div`
