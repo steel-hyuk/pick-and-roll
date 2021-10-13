@@ -40,7 +40,7 @@ const CommentListComponent = ({ recipesId, comment }) => {
       <WriteWrapper>
         <SpaceWrapper>
           <Nickname>{comment.nickname}</Nickname>
-          <CreatedAt>{comment.createdAt}</CreatedAt>
+          <CreatedAt>{comment.createdAt.substring(0, 10)}</CreatedAt>
         </SpaceWrapper>
         { 
           userInfo.id === comment.userId ? (

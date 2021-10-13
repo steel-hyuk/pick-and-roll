@@ -4,12 +4,10 @@ import { FaAngleDown } from 'react-icons/fa'
 import { ImStarHalf } from 'react-icons/im'
 import { ImStarFull } from 'react-icons/im'
 
-const DropdownStar = ({ color }) => {
+const DropdownStar = ({ selected, setSelected, color }) => {
   const [isActive, setIsActive] = useState(false)
-  const [selected, setSelected] = useState(2)
 
   const starClick = (e) => {
-    console.log(e.target)
     setSelected(e.target.value)
     setIsActive(false)
   }
@@ -27,9 +25,15 @@ const DropdownStar = ({ color }) => {
         {isActive && (
           <Contents className={color}>
             <Item
-              value="5"
+              value="선택"
               onClick={(e) => {
                 starClick(e)
+              }}
+            />
+            <Item
+              value="5점"
+              onClick={(e) => {
+                setSelected(5)
               }}
             >
               <ImStarFull />
@@ -134,13 +138,13 @@ const DropdownStar = ({ color }) => {
 }
 
 const Container = styled.div`
-  position : relative;
+  position: relative;
   z-index: 50;
 `
 
 const DropdownBox = styled.div`
   width: 50px;
-  margin-left : 10px;
+  margin-left: 10px;
   .show_red,
   .red {
     background-color: #eee9e8f8;
@@ -152,9 +156,9 @@ const DropdownBox = styled.div`
 `
 
 const DropdownBtn = styled.div`
-  height : 15px;
+  height: 15px;
   padding: 10px;
-  width: 140px;
+  width: 160px;
   //margin-left: 200px;
   //background: #fff;
   box-shadow: 3px 3px 10px 6px rgba(0, 0, 0, 0.06);
@@ -166,16 +170,16 @@ const DropdownBtn = styled.div`
 `
 
 const Contents = styled.div`
-  position : absolute;
+  position: absolute;
   margin-top: -1px;
-  left: 0;
+  left: 30;
   padding: 10px;
   background-color: #1e6add;
   box-shadow: 3px 3px 10px 1px rgba(0, 0, 0, 0.06);
   border-radius: 0 0 10% 10%;
   font-weight: 500;
   color: #333;
-  width: 140px;
+  width: 160px;
   animation: box 0.3s ease-in;
   animation-fill-mode: forwards;
   @keyframes box {
@@ -191,6 +195,7 @@ const Contents = styled.div`
 const Item = styled.div`
   padding: 4px;
   padding-left: 20px;
+  font-size: 20px;
   display: flex;
   flex-wrap: wrap;
   gap: 10px 7px;

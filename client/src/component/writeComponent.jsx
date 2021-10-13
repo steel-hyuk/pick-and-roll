@@ -102,6 +102,7 @@ const WriteComponent = (props) => {
       },
       {
         'Content-Type': 'application/json',
+        withCredentials: true
       }
     )
 

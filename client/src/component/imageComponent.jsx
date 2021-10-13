@@ -58,6 +58,7 @@ const Background = styled.div`
   position: absolute;
   width: 268px;
   height: 301px;
+  z-index: 1;
   background: #2e2e2e92;
   border-radius: 15%;
   padding: 20px;
