@@ -83,10 +83,21 @@ const WriteComponent = () => {
 
     let content = contents.join('@')
     // regex
-    let ingred = ingredients.map(
-      (el) => `${el.ingredient},${el.amount}`
-    )
+    let ingred = ingredients.map((el) => `${el.ingredient},${el.amount}`)
     let finalIngredients = ingred.join('@')
+
+    let categoryEng
+    if (category === '한식') {
+      categoryEng = 'korean'
+    } else if (category === '일식') {
+      categoryEng = 'japanese'
+    } else if (category === '중식') {
+      categoryEng = 'chinese'
+    } else if (category === '기타') {
+      categoryEng = 'etc'
+    } else if (category === '양식') {
+      categoryEng = 'western'
+    }
 
     await api.post(
       '/recipes',
@@ -94,15 +105,15 @@ const WriteComponent = () => {
         title: title,
         introduction: introduction,
         mainImg: mainImg,
-        category: category,
+        category: categoryEng,
         requiredTime: requiredTime,
         ingredients: finalIngredients,
         content: content,
-        contentImg: contentImgs.join(',')
+        contentImg: contentImgs.join(','),
       },
       {
         'Content-Type': 'application/json',
-        withCredentials: true
+        withCredentials: true,
       }
     )
 
@@ -188,7 +199,9 @@ const WriteComponent = () => {
           </BoxWrap>
           <FormGroup>
             <Labal>
-            <div className='center'>요리 재료 <span className="require">*</span></div>
+              <div className="center">
+                요리 재료 <span className="require">*</span>
+              </div>
             </Labal>
             <AddListingredients
               ingredients={ingredients}
@@ -200,7 +213,9 @@ const WriteComponent = () => {
           </FormGroup>
           <FormGroup>
             <Labal>
-            <div className='center'>요리 방법 <span className="require">*</span></div>
+              <div className="center">
+                요리 방법 <span className="require">*</span>
+              </div>
             </Labal>
             <AddListContent
               contents={contents}
@@ -300,9 +315,9 @@ const Labal = styled.div`
   margin-bottom: 3px;
   font-size: 25px;
   .center {
-    margin-left : 25px;
+    margin-left: 25px;
     @media (max-width: 750px) {
-      margin-left : 15px;
+      margin-left: 15px;
     }
   }
   .require {
@@ -342,7 +357,7 @@ const Input = styled.input`
     line-height: 1.5;
     color: #b5b5b5;
     @media (max-width: 750px) {
-    font-size: 11px;
+      font-size: 11px;
     }
   }
   .title {
@@ -363,7 +378,7 @@ const Enroll = styled.button`
   font-size: 25px;
   font-weight: bold;
   @media (max-width: 750px) {
-    height : 40px;
+    height: 40px;
     font-size: 15px;
   }
 `
@@ -387,7 +402,7 @@ const Textarea = styled.textarea`
     line-height: 1.5;
     color: #b5b5b5;
     @media (max-width: 750px) {
-    font-size: 11px;
+      font-size: 11px;
     }
   }
 `
