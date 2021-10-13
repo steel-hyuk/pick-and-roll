@@ -27,8 +27,7 @@ const ImageComponent = ({ url, info }) => {
   const toPost = () => {
     if (isLoggedIn) {
       history.push(`/recipe/id=${id}`)
-    }
-    else {
+    } else {
       setOpenLogin(!openLogin)
     }
   }
@@ -47,12 +46,9 @@ const ImageComponent = ({ url, info }) => {
       </Background>
       <BackImg style={{ backgroundImage: `url(${url})` }}></BackImg>
       <Modal>
-          {openLogin ? (
-            <LoginModal
-              openLogin={openLogin}
-              setOpenLogin={setOpenLogin}
-            />
-          ) : null}
+        {openLogin ? (
+          <LoginModal openLogin={openLogin} setOpenLogin={setOpenLogin} />
+        ) : null}
       </Modal>
     </>
   )
@@ -77,6 +73,7 @@ const Background = styled.div`
   position: absolute;
   width: 268px;
   height: 301px;
+  z-index: 1;
   background: #2e2e2e92;
   border-radius: 15%;
   padding: 20px;
@@ -118,6 +115,7 @@ const Background = styled.div`
   :hover {
     opacity: 1;
     box-shadow: 5px 5px 6px 6px rgba(155, 150, 150, 0.6);
+    z-index : 0;
   }
 `
 

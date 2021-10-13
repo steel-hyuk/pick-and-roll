@@ -14,7 +14,8 @@ const ChangePasswordComponent = () => {
   const [messagePwCheck, setMessagePwCheck] = useState('')
 
   // 비밀번호 형식을 체크하는 정규 표현식
-  const password_Reg = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&])[A-Za-z\d$@$!%*?&]{8,15}/
+  const password_Reg =
+    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&])[A-Za-z\d$@$!%*?&]{8,15}/
 
   // focus 이벤트를 주기 위한 Ref
   const _pw = useRef()

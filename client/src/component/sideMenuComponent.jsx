@@ -51,7 +51,7 @@ const Wrap = styled.div`
   position: relative;
   height: 700px;
   display: flex;
-  top : 70px;
+  top: 70px;
   justify-content: flex-end;
   @media (max-width: 1200px) {
     flex-direction: column;
@@ -103,7 +103,7 @@ const ContentWapper = styled.div`
   width: calc(100% - 273px);
   @media (max-width: 1200px) {
     width: 100%;
-    margin-top : 75px;
+    margin-top: 75px;
   }
 `
 

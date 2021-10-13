@@ -68,7 +68,7 @@ const Wrapper = styled.div`
     height: 100vh;
     top: 0;
     left: 0;
-    opacity : 50%;
+    opacity: 50%;
     z-index: 10000000;
   }
   .modal:before {
@@ -102,8 +102,8 @@ const Wrapper = styled.div`
     top: -100%;
     z-index: 1100000000;
     width: 500px;
-    height : 70px;
-    box-sizing : border-box;
+    height: 70px;
+    box-sizing: border-box;
     box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
     -webkit-transform: translate(0, -500%);
     -ms-transform: translate(0, -500%);
@@ -122,21 +122,21 @@ const Wrapper = styled.div`
     padding: 8px;
     color: #888;
     outline: 0;
-    background-color : #e1e1e1;
+    background-color: #e1e1e1;
     font-size: 14px;
     font-weight: bold;
     border: none;
     border-right: 0px;
     border-top: 0px;
-    border-radius : 30px;
+    border-radius: 30px;
   }
   .icon {
     width: 15px;
     height: 15px;
     position: absolute;
-    right : 100px;
-    color : #888;
-    top : 29px;
+    right: 100px;
+    color: #888;
+    top: 29px;
   }
   .icon:hover {
     color: #888;
@@ -149,12 +149,12 @@ const Wrapper = styled.div`
 const Button = styled.button`
   position: absolute;
   top: 5px;
-  right :1px;
-  border :none;
-  z-index : 100000;
-  opacity : 0.5;
-  background-color : white;
-  color : #999;
+  right: 1px;
+  border: none;
+  z-index: 100000;
+  opacity: 0.5;
+  background-color: white;
+  color: #999;
 `
 
 export default SearchBoxModal

@@ -118,30 +118,32 @@ const ImgInput = styled.div`
 `
 
 const LoadedList = styled.div`
-  display: flex;
+ display: flex;
+  position : relative;
+  margin-bottom: 10px;
   background-color: #857d7d2f;
   padding: 15px;
   border-radius: 20px;
-  width: 400px;
-  height: 6pc;
-
+  height: 40px;
   img {
-    width: 100px;
-    height: 100px;
+    width: 40px;
+    border-radius :4px;
   }
   p {
     font-size: 15px;
-    position: relative;
-    margin-left: 30px;
-    margin-top: 50px;
+    margin: 5px 5px 5px 15px;
+    padding-top: 3px;
   }
   .delete {
+    position : absolute;
+    right : 10px;
     background-color: rgb(110, 174, 233);
-    width: 40px;
-    height: 40px;
+    width: 25px;
+    height: 20px;
     border-radius: 50%;
     display: flex;
     align-items: center;
+    text-align: right;
     justify-content: center;
     margin-top: -7px;
     margin-left: 5px;

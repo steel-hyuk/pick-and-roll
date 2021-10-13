@@ -29,7 +29,7 @@ const CommentComponent = ({ recipesId, comments }) => {
           }} />
           <SubmitBtn onClick={writeComment}>댓글 작성</SubmitBtn>
         </WriteWrapper>
-      <div>
+      <div className= 'content'>
         { 
           comments && comments.map((comment) => {
             return (

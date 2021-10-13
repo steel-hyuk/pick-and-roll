@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react'
 import { useHistory } from 'react-router-dom'
 import styled from 'styled-components'
-import { FaRegBookmark, FaCog, FaRegTrashAlt } from 'react-icons/fa'
+import { FaRegBookmark, FaCog, FaRegTrashAlt, FaBookmark } from 'react-icons/fa'
 
 import api from '../api'
 import { UserContext } from '../context/userContext'
@@ -15,43 +15,51 @@ const Posts = () => {
   const { userInfo, setUserInfo } = useContext(UserContext)
   const [recipeInfo, setRecipeInfo] = useState({})
   const [date, setDate] = useState('')
+  const [selected, setSelected] = useState(0)
 
   const getRecipeInfo = async () => {
-    await api.get(`/recipes?id=${recipeId}`, {
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      withCredentials: true
-    })
-    .then((res) => {
-      setRecipeInfo(res.data.recipeData)
-      const yymmdd = res.data.recipeData.createdAt.split('-')
-      const dd = yymmdd[2].split('T')[0]
-      setDate(`${yymmdd[0]}.${yymmdd[1]}.${dd}`)
-    })
+    await api
+      .get(`/recipes?id=${recipeId}`, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        withCredentials: true,
+      })
+      .then((res) => {
+        setRecipeInfo(res.data.recipeData)
+        const yymmdd = res.data.recipeData.createdAt.split('-')
+        const dd = yymmdd[2].split('T')[0]
+        setDate(`${yymmdd[0]}.${yymmdd[1]}.${dd}`)
+      })
   }
-  
+
   useEffect(() => {
     getRecipeInfo()
   }, [])
 
   const addFavorite = async () => {
-    await api.post(`/users/favorite/${recipeId}`, {}, {
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      withCredentials: true
-    })
-    .then((res) => {
-      window.location.reload()
-    })
+    await api
+      .post(
+        `/users/favorite/${recipeId}`,
+        {},
+        {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          withCredentials: true,
+        }
+      )
+      .then((res) => {
+        window.location.reload()
+      })
   }
 
   const deleteFavorite = async () => {
-    await api.delete(`/users/favorite/${recipeId}`, {
-      withCredentials:true
-    })
-    .then((res) => window.location.reload())
+    await api
+      .delete(`/users/favorite/${recipeId}`, {
+        withCredentials: true,
+      })
+      .then((res) => window.location.reload())
   }
 
   const updateRecipe = () => {
@@ -59,98 +67,127 @@ const Posts = () => {
   }
 
   const deleteRecipe = async () => {
-    await api.delete(`/recipes/${recipeId}`, {
-      withCredentials: true
-    })
-    .then((res) =>{
-      history.push('/recipe')
-    })
+    await api
+      .delete(`/recipes/${recipeId}`, {
+        withCredentials: true,
+      })
+      .then((res) => {
+        history.push('/recipe')
+      })
   }
 
   const giveTasteScore = async () => {
-    await api.post(`/recipes/${recipeId}/taste-score`, {
-      score: 5
-    }, {
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      withCredentials: true
-    })
-    .then((res) => window.location.reload())
+    await api
+      .post(
+        `/recipes/${recipeId}/taste-score`,
+        {
+          score: selected,
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          withCredentials: true,
+        }
+      )
+      .then((res) => window.location.reload())
   }
 
   const giveEasyScore = async () => {
-    await api.post(`/recipes/${recipeId}/easy-score`, {
-      score: 5
-    }, {
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      withCredentials: true
-    })
-    .then((res) => window.location.reload())
+    await api
+      .post(
+        `/recipes/${recipeId}/easy-score`,
+        {
+          score: selected,
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          withCredentials: true,
+        }
+      )
+      .then((res) => window.location.reload())
   }
 
   return (
     <Wrapper>
       <Form>
-        <TitleArea> 
+        <TitleArea>
           <Favorite>
-            { recipeInfo.isMyFavorite ? (
-              <button onClick={deleteFavorite}>해제</button>
+            {recipeInfo.isMyFavorite ? (
+              <button className="yellow" onClick={deleteFavorite}>
+                <FaBookmark />
+              </button>
             ) : (
-              <FaRegBookmark onClick={addFavorite}/>
+              <FaRegBookmark onClick={addFavorite} />
             )}
           </Favorite>
           <Title>{recipeInfo.title}</Title>
           <TextWrap>
-            <Category>{`총 소요 시간 : ${recipeInfo.requiredTime}`}</Category>
-            <Editor>작성자</Editor>
+            <CategoryWrap>
+              <Category>총 소요 시간 : </Category>
+              <Category className="time">{recipeInfo.requiredTime}</Category>
+            </CategoryWrap>
+            <Editor className="name">작성자 : {recipeInfo.userNickName}</Editor>
           </TextWrap>
           <TextWrap>
-            <Category>{`카테고리 : ${recipeInfo.category}`}</Category>
+            <CategoryWrap>
+              <Category>카테고리 : </Category>
+              <Category className="cate">{recipeInfo.category}</Category>
+            </CategoryWrap>
             <Editor className="date">{recipeInfo.createdAt && date}</Editor>
           </TextWrap>
-          { recipeInfo.userId === userInfo.id ? (
+          {recipeInfo.userId === userInfo.id ? (
             <>
               <TitleIcon1>
+                <IconText className="fixed">게시글 수정</IconText>
                 <FaCog onClick={updateRecipe} />
               </TitleIcon1>
               <TitleIcon2>
+                <IconText className="fixed">게시글 삭제</IconText>
                 <FaRegTrashAlt onClick={deleteRecipe} />
               </TitleIcon2>
             </>
-          ) : null }
+          ) : null}
         </TitleArea>
         <ScoreWrap>
-          <ScoreContent>{`맛 ${recipeInfo.tasteAvg}`}</ScoreContent>
-          <ScoreContent>{`간편성 ${recipeInfo.easyAvg}`}</ScoreContent>
+          <ScoreContent className="favor">{`맛 ${recipeInfo.tasteAvg}`}</ScoreContent>
+          <ScoreContent className="easy">{`간편성 ${recipeInfo.easyAvg}`}</ScoreContent>
         </ScoreWrap>
-        <MainImage style={{backgroundImage: `url('${recipeInfo.mainImg}')`}}/>
+        <MainImage
+          style={{ backgroundImage: `url('${recipeInfo.mainImg}')` }}
+        />
         <BoxWrap>
           <BoxGroup>
-            {
-              recipeInfo.isVoteTaste ? (
-                <div>이미 투표</div>
-              ) : (
-                <>
-                  <StarBtn onClick={giveTasteScore}>맛 별점주기</StarBtn>
-                  <DropdownStar className="taste" color="blue" />
-                </>
-              )
-            }
+            {recipeInfo.isVoteTaste ? (
+              <VoteText className="favor">선택 완료</VoteText>
+            ) : (
+              <>
+                <StarBtn onClick={giveTasteScore}>맛 별점주기</StarBtn>
+                <DropdownStar
+                  className="taste"
+                  color="blue"
+                  setSelected={setSelected}
+                  selected={selected}
+                />
+              </>
+            )}
           </BoxGroup>
           <BoxGroup>
-            {
-              recipeInfo.isVoteEasy ? (
-                <div>이미 투표</div>
-              ) : (
-                <>
-                  <StarBtn onClick={giveEasyScore}>간편성 별점주기</StarBtn>
-                  <DropdownStar className="simple" color="red" />
-                </>
-              )
-            }
+            {recipeInfo.isVoteEasy ? (
+              <VoteText className="easy">선택 완료</VoteText>
+            ) : (
+              <>
+                <StarBtn onClick={giveEasyScore}>간편성 별점주기</StarBtn>
+                <DropdownStar
+                  className="simple"
+                  color="red"
+                  setSelected={setSelected}
+                  selected={selected}
+                />
+              </>
+            )}
           </BoxGroup>
         </BoxWrap>
         <Labal>요리소개</Labal>
@@ -160,13 +197,10 @@ const Posts = () => {
           <Labal>재료</Labal>
           <Contents>
             <ul>
-              {
-                recipeInfo.ingredients && recipeInfo.ingredients.map((el) => {
-                  return (
-                    <li>{`${el[0]} : ${el[1]}`}</li>
-                  )
-                })
-              }
+              {recipeInfo.ingredients &&
+                recipeInfo.ingredients.map((el) => {
+                  return <li className="list">{`${el[0]} : ${el[1]}`}</li>
+                })}
             </ul>
           </Contents>
         </ContentWrap>
@@ -175,27 +209,26 @@ const Posts = () => {
           <Labal>요리 방법</Labal>
           <Contents>
             <ol>
-              {
-                recipeInfo.content && recipeInfo.content.map((el) => {
-                  return (
-                    <li>{el}</li>
-                  )
-                })
-              }
+              {recipeInfo.content &&
+                recipeInfo.content.map((el) => {
+                  return <li className="list">{el}</li>
+                })}
             </ol>
           </Contents>
         </ContentWrap>
         <Labal>요리 사진</Labal>
         <SubWrap>
-          {
-            recipeInfo.contentImg && recipeInfo.contentImg.map((el) => {
-              return (
-                <SubImage style={{backgroundImage: `url('${el}')`}}/>
-              )
-            })
-          }
+          {recipeInfo.contentImg &&
+            recipeInfo.contentImg.map((el) => {
+              return <SubImage style={{ backgroundImage: `url('${el}')` }} />
+            })}
         </SubWrap>
-        <CommentComponent recipesId={recipeId} comments={recipeInfo.commentData}/>
+        <CommentWrap>
+          <CommentComponent
+            recipesId={recipeId}
+            comments={recipeInfo.commentData}
+          />
+        </CommentWrap>
       </Form>
     </Wrapper>
   )
@@ -233,6 +266,7 @@ const Title = styled.h3`
 
 const TitleIcon1 = styled.div`
   position: absolute;
+  display: flex;
   top: 10px;
   right: 5px;
   font-size: 15px;
@@ -240,11 +274,15 @@ const TitleIcon1 = styled.div`
   :hover {
     color: #f3c811;
     font-size: 18px;
+    .fixed {
+      display: block;
+    }
   }
 `
 
 const TitleIcon2 = styled.div`
   position: absolute;
+  display: flex;
   top: 35px;
   right: 5px;
   font-size: 15px;
@@ -252,12 +290,27 @@ const TitleIcon2 = styled.div`
   :hover {
     color: #f3c811;
     font-size: 18px;
+    .fixed {
+      display: block;
+    }
   }
+`
+
+const IconText = styled.div`
+  font-size: 11px;
+  margin-right: 10px;
+  display: none;
+  color: rgb(243, 200, 18);
 `
 
 const TextWrap = styled.div`
   display: flex;
   justify-content: space-between;
+  .name {
+    font-weight: bold;
+  }
+  .date {
+  }
 `
 
 const Editor = styled.p`
@@ -269,6 +322,23 @@ const Category = styled.p`
   font-size: 15px;
   margin: 5px 0;
 `
+const CategoryWrap = styled.div`
+  display: flex;
+  .time {
+    color: white;
+    background-color: #7eba1e;
+    padding: 0 10px;
+    border-radius: 10px;
+    margin-left: 10px;
+  }
+  .cate {
+    color: white;
+    background-color: #7eba1e;
+    padding: 0 10px;
+    border-radius: 10px;
+    margin-left: 10px;
+  }
+`
 
 const TitleArea = styled.div`
   position: relative;
@@ -279,13 +349,24 @@ const TitleArea = styled.div`
 `
 
 const MainImage = styled.div`
-  height: 400px;
+  height: 600px;
   background-color: black;
+  background-size: 100% 100%;
 `
 
 const ScoreWrap = styled.div`
   display: flex;
   text-align: center;
+  .favor {
+    background-color: #b0adadf8;
+    border-radius: 10px;
+    color: white;
+  }
+  .easy {
+    background-color: #b0adadf8;
+    border-radius: 10px;
+    color: white;
+  }
 `
 
 const ScoreContent = styled.div`
@@ -306,7 +387,18 @@ const Favorite = styled.div`
   color: #e9b83a;
   font-size: 25px;
   top: 1px;
-  opacity: 0.7;
+  .yellow {
+    margin: 0;
+    padding: 0;
+
+    background-color: #ffffff;
+    color: #f4ba28;
+    opacity: 1;
+    height: 25px;
+    width: 25px;
+    font-size: 25px;
+    border: none;
+  }
 `
 
 const BoxWrap = styled.div`
@@ -322,6 +414,16 @@ const BoxGroup = styled.div`
   display: flex;
   text-align: center;
   width: 45%;
+  .favor {
+    background-color: #e3a41df8;
+    border-radius: 10px;
+    color: white;
+  }
+  .easy {
+    background-color: #e3a41df8;
+    border-radius: 10px;
+    color: white;
+  }
 `
 
 const StarBtn = styled.button`
@@ -357,16 +459,13 @@ const Contents = styled.div`
   align-items: center;
   border-radius: 8px;
   border: solid 2px #d2d2d2;
-  :focus {
-    border: solid 2px rgb(243, 200, 18);
-    outline: none;
-  }
-  ::placeholder {
-    font-size: 15px;
+  .list {
     text-align: left;
-    line-height: 1.5;
-    color: #b5b5b5;
   }
+`
+
+const VoteText = styled.p`
+  width: 30%;
 `
 
 const ContentWrap = styled.div`
@@ -376,17 +475,26 @@ const ContentWrap = styled.div`
 `
 
 const SubWrap = styled.div`
-  display: flex;
   width: 100%;
+  border-bottom: solid 1px rgb(138, 138, 138);
 `
 
 const SubImage = styled.div`
   width: 100%;
   height: 400px;
   background-color: black;
+  background-size: 100% 100%;
+  margin-bottom: 30px;
+
   /* width : 50%;
 background-color : black;
 height : 300px;
 margin : 3px; */
 `
+
+const CommentWrap = styled.div`
+  width: 100%;
+  text-align: left;
+`
+
 export default Posts

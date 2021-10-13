@@ -19,7 +19,6 @@ const EditMyInfoComponent = () => {
   const _nick = useRef()
   const _des = useRef()
 
-
   const history = useHistory()
 
   // 닉네임 형식을 체크하는 정규 표현식
@@ -61,13 +60,12 @@ const EditMyInfoComponent = () => {
       })
   }
 
-const DesCheck = () => {
-  if (description === '') {
-    _des.current.focus()
-    setMessageDescription('자기소개를 입력해주세요!')
-    return
+  const DesCheck = () => {
+    if (description === '') {
+      _des.current.focus()
+      setMessageDescription('자기소개를 입력해주세요!')
+      return
   }
-}
 
   const editDone = async () => {
     if (nickname === '' || !nickname_Reg.test(nickname)) {

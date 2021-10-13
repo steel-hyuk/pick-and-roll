@@ -11,7 +11,7 @@ const MenuModal = ({
   openLogin,
   setOpenLogin,
   setShowSearchBox,
-  logout
+  logout,
 }) => {
   const { userInfo } = useContext(UserContext)
   const { isLoggedIn } = useContext(AuthContext)
@@ -43,7 +43,9 @@ const MenuModal = ({
             <SearchBoxModal />
             <List to="/write">새 글 작성</List>
             <List to={`/mypage/${userInfo.email}`}>{userInfo.nickname}님</List>
-            <List to="/" onClick={logout}>로그아웃</List>
+            <List to="/" onClick={logout}>
+              로그아웃
+            </List>
           </Container>
         </Form>
       )}
