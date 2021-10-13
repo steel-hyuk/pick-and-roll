@@ -240,6 +240,7 @@ const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   margin-top: 150px;
+  margin-bottom : 200px;
   align-items: center;
 `
 
@@ -322,6 +323,7 @@ const Category = styled.p`
   font-size: 15px;
   margin: 5px 0;
 `
+
 const CategoryWrap = styled.div`
   display: flex;
   .time {
@@ -485,11 +487,6 @@ const SubImage = styled.div`
   background-color: black;
   background-size: 100% 100%;
   margin-bottom: 30px;
-
-  /* width : 50%;
-background-color : black;
-height : 300px;
-margin : 3px; */
 `
 
 const CommentWrap = styled.div`

@@ -5,6 +5,8 @@ import ImageComponent from '../imageComponent'
 
 const MyFavoriteComponent = () => {
   const [infos, setInfos] = useState([])
+  const [favoriteeMessage, setFavoriteeMessage] = useState('')
+  const [favorite, setFavorite] = useState(true)
 
   const showFavorite = async () => {
     await api
@@ -15,10 +17,16 @@ const MyFavoriteComponent = () => {
         withCredentials: true,
       })
       .then((res) => {
-        setInfos([...infos, ...res.data])
+        if (res.data.message !== '즐겨찾기 레시피가 없습니다!') {
+          setInfos([...res.data])
+          setFavorite(true)
+          return
+        }
+        setFavoriteeMessage('레시피를 즐겨찾기 하세요!')
+        setFavorite(false)
       })
   }
-
+  
   useEffect(() => {
     showFavorite()
   }, [])
@@ -28,6 +36,7 @@ const MyFavoriteComponent = () => {
       <TitleWrap>
         <Title>즐겨찾기</Title>
       </TitleWrap>
+      {favorite ? (
         <WrapperImage>
           {infos.map((image) => (
             <div className="img-wrapper" key={image.id}>
@@ -35,6 +44,11 @@ const MyFavoriteComponent = () => {
             </div>
           ))}
         </WrapperImage>
+      ) : (
+        <TitleWrap>
+          <Title className="message">{favoriteeMessage}</Title>
+        </TitleWrap>
+      )}
     </Contents>
   )
 }
@@ -43,6 +57,7 @@ const Contents = styled.div`
   flex-direction: column;
   margin: 0;
   padding: 0;
+  margin-bottom: 200px;
 `
 
 const TitleWrap = styled.div`
@@ -50,6 +65,10 @@ const TitleWrap = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  .message {
+    margin-top: 150px;
+    font-size: 14px;
+  }
 `
 
 const Title = styled.p`

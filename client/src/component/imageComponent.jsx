@@ -89,7 +89,7 @@ const Background = styled.div`
   .score {
     position: absolute;
     bottom: 1.5px;
-    right: 23px;
+    right: 10px;
     color: white;
   }
   .title {

@@ -5,7 +5,9 @@ import ImageComponent from '../imageComponent'
 
 const MyRecipeComponent = () => {
   const [infos, setInfos] = useState([])
-
+  const [recipeMessage, setRecipeMessage] = useState('')
+  const [myRecipe, setMyRecipe] = useState(true)
+  
   const showMyRecipe = async () => {
     await api
       .get('/users/myrecipe', {
@@ -15,7 +17,13 @@ const MyRecipeComponent = () => {
         withCredentials: true,
       })
       .then((res) => {
-        setInfos([...infos, ...res.data])
+        if (res.data !== '작성한 레시피가 없습니다!') {
+          setInfos([...res.data])
+          setMyRecipe(true)
+          return
+        }
+        setRecipeMessage('자기만의 레시피를 작성해보세요!')
+        setMyRecipe(false)
       })
   }
 
@@ -28,6 +36,7 @@ const MyRecipeComponent = () => {
       <TitleWrap>
         <Title>나의 레시피</Title>
       </TitleWrap>
+      {myRecipe ? (
         <WrapperImage>
           {infos.map((image) => (
             <div className="img-wrapper" key={image.id}>
@@ -35,6 +44,11 @@ const MyRecipeComponent = () => {
             </div>
           ))}
         </WrapperImage>
+      ) : (
+        <TitleWrap>
+          <Title className='message'>{recipeMessage}</Title>
+        </TitleWrap>
+      )}
     </Contents>
   )
 }
@@ -43,6 +57,7 @@ const Contents = styled.div`
   flex-direction: column;
   margin: 0;
   padding: 0;
+  margin-bottom : 200px;
 `
 
 const TitleWrap = styled.div`
@@ -50,6 +65,10 @@ const TitleWrap = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  .message {
+      margin-top : 150px;
+      font-size : 14px;
+    }
 `
 
 const Title = styled.p`

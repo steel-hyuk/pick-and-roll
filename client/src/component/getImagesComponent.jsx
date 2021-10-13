@@ -1,19 +1,34 @@
-import React, { useState, useEffect, useContext } from 'react'
+import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
-import InfiniteScroll from 'react-infinite-scroll-component'
+import { FaAngleDoubleDown } from 'react-icons/fa'
 import api from '../api'
 import ImageComponent from './imageComponent'
-import LoadingComponent from './loadingComponent'
+import Category from '../component/category/category'
 
-function GetImagesComponent({ isValue, selectCategory }) {
+function GetImagesComponent() {
   const [offset, setOffset] = useState(1) // 데이터를 받으면 then에서 offset +1
   const [infos, setInfos] = useState([])
   const [division, setDivision] = useState('createdAt')
+  const [category, setCategory] = useState('all')
+  const [moreViewMessage, setMoreViewMessage] = useState('더보기')
 
-  const fetchImages = async () => {
+  const handleChangeCategory = (category) => {
+    setCategory(category)
+  }
+  const handleChangeDivision = (division) => {
+    if (division === '최신') setDivision('createdAt')
+    else if (division === '맛') setDivision('taste')
+    else if (division === '간편성') setDivision('easy')
+  }
+  const handleChangeOffset = async () => {
+    let offsetNum = offset + 1
+    setOffset(offsetNum)
+  }
+
+  const paginationImages = async () => {
     await api
       .get(
-        `/recipes?category=${selectCategory}&division=${division}&offset=${offset}&limit=10`,
+        `/recipes?category=${category}&division=${division}&offset=${offset}&limit=4`,
         {
           headers: {
             'Content-Type': 'application/json',
@@ -22,48 +37,107 @@ function GetImagesComponent({ isValue, selectCategory }) {
         }
       )
       .then((res) => {
-        // console.log(res)
-        setInfos([...infos, ...res.data])
-        setOffset(offset + 1)
+        if (res.data.length !== 0) {
+          if (res.data.length < 4) {
+            setMoreViewMessage('더 이상 레시피가 없어요!')
+            setInfos([...infos, ...res.data])
+          } else {
+            setInfos([...infos, ...res.data])
+          }
+        } else if (res.data.length === 0) {
+          setMoreViewMessage('더 이상 레시피가 없어요!')
+        }
       })
   }
+
+  const fetchImages = async () => {
+    await api
+      .get(
+        `/recipes?category=${category}&division=${division}&offset=${offset}&limit=4`,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          withCredentials: true,
+        }
+      )
+      .then((res) => {
+        if (res.data.length < 4) {
+          setMoreViewMessage('더 이상 레시피가 없어요!')
+        }
+        setInfos([...res.data])
+      })
+  }
+
   useEffect(() => {
+    paginationImages()
+  }, [offset])
+
+  useEffect(() => {
+    setMoreViewMessage('더보기')
+    setInfos([])
     fetchImages()
-  }, [])
+    setOffset(1)
+  }, [category, division])
 
   return (
-    <Wrapper >
-      <Form>
-        <InfiniteScroll
-          dataLength={infos.length}
-          next={fetchImages}
-          hasMore={infos.length >= 10}
-          loader={<LoadingComponent />}
-        >
-          <WrapperImage>
-            {infos.map((image, idx) => (
-              <div className="img-wrapper" key={idx}>
-                <ImageComponent url={image.mainImg} info={image} />
-              </div>
-            ))}
-          </WrapperImage>
-        </InfiniteScroll>
-      </Form>
-    </Wrapper>
+    <div>
+      <Category
+        handleChangeCategory={handleChangeCategory}
+        handleChangeDivision={handleChangeDivision}
+      />
+      <Wrapper>
+        <WrapperImage>
+          {infos.map((image, idx) => (
+            <div className="img-wrapper" key={idx}>
+              <ImageComponent url={image.mainImg} info={image} />
+            </div>
+          ))}
+        </WrapperImage>
+        <TextWrap>
+          <Pagination className="show" onClick={handleChangeOffset}>
+            {moreViewMessage}
+          </Pagination>
+          <PaWrap className="icon">
+            <FaAngleDoubleDown />
+          </PaWrap>
+        </TextWrap>
+      </Wrapper>
+    </div>
   )
 }
 
-const Wrapper = styled.div`
-position :relative;
-z-index: 5;
+const TextWrap = styled.div`
+  display: flex;
+  justify-content: center;
+  :hover {
+    .show {
+      color: #858585;
+      font-weight: bold;
+    }
+    .icon {
+      color: white;
+      z-index: -1;
+    }
+  }
 `
 
-const Form = styled.div`
-  margin: 0;
-  padding: 0;
-  margin-top: 130px;
-  position : relative;
-  z-index: 0;
+const PaWrap = styled.div`
+  font-size: 30px;
+  position: relative;
+  left: -103px;
+  color: #e68e23;
+`
+
+const Pagination = styled.div`
+  color: white;
+  text-align: center;
+  align-items: center;
+`
+
+const Wrapper = styled.div`
+  position: relative;
+  z-index: 5;
 `
 
 const WrapperImage = styled.section`
