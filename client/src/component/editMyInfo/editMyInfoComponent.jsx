@@ -70,20 +70,20 @@ const EditMyInfoComponent = () => {
       setMessageDescription('자기소개를 입력해주세요!')
       return
     }
+  }
 
-    const editDone = async () => {
-      if (nickname === '' || !nickname_Reg.test(nickname)) {
-        _nick.current.focus()
-        setMessageNickname(
-          '닉네임은 한글, 영문, 숫자만 가능하며 2-10자리까지 가능합니다!'
-        )
-        return
-      }
-      if (description === '') {
-        _des.current.focus()
-        setMessageDescription('자기소개를 입력해주세요!')
-        return
-      }
+  const editDone = async () => {
+    if (nickname === '' || !nickname_Reg.test(nickname)) {
+      _nick.current.focus()
+      setMessageNickname(
+        '닉네임은 한글, 영문, 숫자만 가능하며 2-10자리까지 가능합니다!'
+      )
+      return
+    }
+    if (description === '') {
+      _des.current.focus()
+      setMessageDescription('자기소개를 입력해주세요!')
+      return
     }
     await api
       .patch(
