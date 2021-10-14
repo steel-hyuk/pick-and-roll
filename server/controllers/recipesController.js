@@ -309,7 +309,7 @@ module.exports = {
 
         //* 레시피 만든 사용자 닉네임 정보 보내기 *//
         let findUserNickName = await User.findOne({
-          where: { id: res.locals.userId }
+          where: { id: userId }
         })
         let userNickName = findUserNickName.dataValues.nickname
 

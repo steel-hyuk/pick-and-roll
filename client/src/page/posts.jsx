@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext } from 'react'
 import { useHistory } from 'react-router-dom'
 import styled from 'styled-components'
 import { FaRegBookmark, FaCog, FaRegTrashAlt, FaBookmark } from 'react-icons/fa'
+import Swal from 'sweetalert2'
 
 import api from '../api'
 import { UserContext } from '../context/userContext'
@@ -68,13 +69,27 @@ const Posts = () => {
   }
 
   const deleteRecipe = async () => {
-    await api
-      .delete(`/recipes/${recipeId}`, {
-        withCredentials: true,
-      })
-      .then((res) => {
-        history.push('/recipe')
-      })
+    Swal.fire({
+      title: '게시글을 삭제를 원하시나요?',
+      showCancelButton: true,
+      confirmButtonText: 'yes',
+      confirmButtonColor: '#dfaa25',
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        Swal.fire({
+          title: '삭제되었습니다!',
+          confirmButtonColor: '#dfaa25',
+          confirmButtonText: '확인',
+        })
+        await api
+          .delete(`/recipes/${recipeId}`, {
+            withCredentials: true,
+          })
+          .then((res) => {
+            history.push('/recipe')
+          })
+      }
+    })
   }
 
   const giveTasteScore = async () => {
@@ -193,7 +208,6 @@ const Posts = () => {
         </BoxWrap>
         <Labal>요리소개</Labal>
         <Textarea value={recipeInfo.introduction} />
-
         <ContentWrap>
           <Labal>재료</Labal>
           <Contents>
@@ -205,7 +219,6 @@ const Posts = () => {
             </ul>
           </Contents>
         </ContentWrap>
-
         <ContentWrap>
           <Labal>요리 방법</Labal>
           <Contents>
