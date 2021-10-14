@@ -7,7 +7,7 @@ const MyRecipeComponent = () => {
   const [infos, setInfos] = useState([])
   const [recipeMessage, setRecipeMessage] = useState('')
   const [myRecipe, setMyRecipe] = useState(true)
-  
+
   const showMyRecipe = async () => {
     await api
       .get('/users/myrecipe', {
@@ -57,7 +57,8 @@ const Contents = styled.div`
   flex-direction: column;
   margin: 0;
   padding: 0;
-  margin-bottom : 200px;
+  margin-bottom : 300px;
+  min-height: 50vw;
 `
 
 const TitleWrap = styled.div`

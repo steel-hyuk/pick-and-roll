@@ -26,7 +26,7 @@ const MyFavoriteComponent = () => {
         setFavorite(false)
       })
   }
-  
+
   useEffect(() => {
     showFavorite()
   }, [])
@@ -58,6 +58,7 @@ const Contents = styled.div`
   margin: 0;
   padding: 0;
   margin-bottom: 200px;
+  min-height: 50vw;
 `
 
 const TitleWrap = styled.div`
