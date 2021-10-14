@@ -29,9 +29,10 @@ const sessionOption = {
   saveUninitialized: false,
   secret: process.env.COOKIE_SECRET,
   cookie: {
-    httpOnly: true,
+    httpOnly: false,
     secure: false,
-    maxAge: 24 * 6 * 60 * 10000
+    maxAge: 24 * 6 * 60 * 10000,
+    domain: prod && '.pick-and-roll.link'
   },
   name: 'session-cookie'
 }
