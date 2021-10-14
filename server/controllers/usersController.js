@@ -107,7 +107,6 @@ module.exports = {
   },
   signIn: (req, res, next) => {
     const { email, password } = req.body
-    console.log(email, password)
     User.findOne({
       where: { email, password }
     })
@@ -230,7 +229,6 @@ module.exports = {
       let userId = res.locals.userId
       delete res.locals.isAuth
       let userData = await User.findOne({ where: { id: userId } })
-      console.log(userData)
       if (changePasswordData === userData.dataValues.password) {
         return res.send({
           message: '이전 비밀번호와 동일합니다. 다른 비밀번호로 변경해주세요.'
@@ -353,8 +351,9 @@ module.exports = {
             }
           })
         )
-        if (Data.length === 0)
+        if (Data.length === 0){
           res.status(200).send({ message: '즐겨찾기 레시피가 없습니다!' })
+        }
         res.send(Data)
       })
       .catch((err) => {
@@ -404,7 +403,6 @@ module.exports = {
     if (code !== undefined) {
       requestToken(code)
         .then(async ({ data }) => {
-          console.log('requestToken!!:', data)
           let kakaoUserData = await axios({
             method: 'get',
             url: 'https://kapi.kakao.com/v2/user/me',
