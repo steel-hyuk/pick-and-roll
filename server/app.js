@@ -15,7 +15,7 @@ const port =  process.env.PORT || 80
 
 if (process.env.NODE_ENV === 'production') {
   app.use(morgan('combined'))
-  app.use(helmet())
+  app.use(helmet({ contentSecurityPolicy: false }))
   app.use(hpp())
   app.use(
     cors({
