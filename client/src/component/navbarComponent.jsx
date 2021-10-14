@@ -1,6 +1,9 @@
 import React, { useContext, useState } from 'react'
 import styled from 'styled-components'
-import { NavLink as NavLinkLogo, NavLink as NavLinkElement } from 'react-router-dom'
+import {
+  NavLink as NavLinkLogo,
+  NavLink as NavLinkElement,
+} from 'react-router-dom'
 import { useHistory } from 'react-router-dom'
 import Swal from 'sweetalert2'
 import { FaAlignJustify } from 'react-icons/fa'
@@ -99,9 +102,7 @@ const NavbarComponent = () => {
             <NavElement to={`/mypage/${userInfo.email}`}>
               {userInfo.nickname}님
             </NavElement>
-            <ChangeClick onClick={logout}>
-              로그아웃
-            </ChangeClick>
+            <ChangeClick onClick={logout}>로그아웃</ChangeClick>
           </MenuLinks>
           <MenuIcon onClick={changeMenu}>
             <FaAlignJustify />
