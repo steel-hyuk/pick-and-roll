@@ -1,5 +1,6 @@
 import React, { useContext, useState, useEffect } from 'react'
 import styled from 'styled-components'
+import { FaAngleDoubleDown } from 'react-icons/fa'
 import { SearchValueContext } from '../context/searchValueContext'
 import ImageComponent from './imageComponent'
 import api from '../api'
@@ -29,13 +30,13 @@ const SearchComponent = () => {
     .then((res) => {
       if(res.data.length !== 0) {
         if(res.data.length < 4) {
-          setMoreViewMessage('더 이상 레시피가 없어요!')
+          setMoreViewMessage('fin.')
           setInfos([...infos, ...res.data])            
         } else { 
           setInfos([...infos, ...res.data])
         }
       } else if (res.data.length === 0) {
-        setMoreViewMessage('더 이상 레시피가 없어요!')        
+        setMoreViewMessage('fin.')        
       }
     })
   }
@@ -74,30 +75,62 @@ const SearchComponent = () => {
               </div>
             ))}
           </WrapperImage>
-          <Pagination onClick={handleChangeOffset}>{moreViewMessage}</Pagination>      
+          <TextWrap>
+          <Pagination className="show" onClick={handleChangeOffset}>
+            {moreViewMessage}
+          </Pagination>
+          <PaWrap className="icon">
+            <FaAngleDoubleDown />
+          </PaWrap>
+        </TextWrap>    
       </Wrapper>
     </>
   )
 }
 
+const TextWrap = styled.div`
+  display: flex;
+  justify-content: center;
+  position: relative;
+  :hover {
+    .show {
+      color: #858585;
+      font-weight: bold;
+    }
+    .icon {
+      color: white;
+      z-index: -1;
+    }
+  }
+`
+
+const PaWrap = styled.div`
+  font-size: 30px;
+  position: absolute;
+  left: 50%;
+  color: #e68e23;
+`
+
 const Pagination = styled.div`
+  font-size: 15px;
+  position: absolute;
+  left: 50%;
+  color: white;
+  text-align: center;
+  align-items: center;
 `
 
 const Header = styled.div`
-  margin-top: 70px;
+  margin-top: 100px;
   display: flex;
   justify-content: center;
 `
 
 const Wrapper = styled.div`
-  * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-  }
-  body {
-    font-family: sans-serif;
-  }
+  position: relative;
+  z-index: 5;
+  margin-bottom : 150px;
+  min-height: 40vh;
 `
 
 const WrapperImage = styled.section`

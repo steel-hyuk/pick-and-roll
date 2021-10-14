@@ -39,13 +39,13 @@ function GetImagesComponent() {
       .then((res) => {
         if (res.data.length !== 0) {
           if (res.data.length < 4) {
-            setMoreViewMessage('더 이상 레시피가 없어요!')
+            setMoreViewMessage('fin.')
             setInfos([...infos, ...res.data])
           } else {
             setInfos([...infos, ...res.data])
           }
         } else if (res.data.length === 0) {
-          setMoreViewMessage('더 이상 레시피가 없어요!')
+          setMoreViewMessage('fin.')
         }
       })
   }
@@ -63,7 +63,7 @@ function GetImagesComponent() {
       )
       .then((res) => {
         if (res.data.length < 4) {
-          setMoreViewMessage('더 이상 레시피가 없어요!')
+          setMoreViewMessage('fin.')
         }
         setInfos([...res.data])
       })
@@ -110,6 +110,7 @@ function GetImagesComponent() {
 const TextWrap = styled.div`
   display: flex;
   justify-content: center;
+  position: relative;
   :hover {
     .show {
       color: #858585;
@@ -124,20 +125,25 @@ const TextWrap = styled.div`
 
 const PaWrap = styled.div`
   font-size: 30px;
-  position: relative;
-  left: -103px;
+  position: absolute;
+  left: 50%;
   color: #e68e23;
 `
 
 const Pagination = styled.div`
+  font-size: 15px;
+  position: absolute;
+  left: 50%;
   color: white;
   text-align: center;
   align-items: center;
 `
 
 const Wrapper = styled.div`
+  min-height: 40vh;
   position: relative;
   z-index: 5;
+  margin-bottom : 150px;
 `
 
 const WrapperImage = styled.section`
