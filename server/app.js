@@ -32,7 +32,7 @@ const sessionOption = {
     httpOnly: false,
     secure: false,
     maxAge: 24 * 6 * 60 * 10000,
-    domain: prod && '.pick-and-roll.link'
+    domain: prod && '.pickandroll.link'
   },
   name: 'session-cookie'
 }
