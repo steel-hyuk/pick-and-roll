@@ -21,6 +21,11 @@ const NavbarComponent = () => {
       setIsLoggedIn(false)
       setUserInfo({})
       setOpenLogin(false)
+    }, {
+      headers: {
+        'Content-Type': 'application/json',
+        withcredentials: true
+      }
     })
   }
 
