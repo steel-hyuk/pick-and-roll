@@ -17,8 +17,22 @@ if (process.env.NODE_ENV === 'production') {
   app.use(morgan('combined'))
   app.use(helmet())
   app.use(hpp())
+  app.use(
+    cors({
+      origin: 'https://pick-and-roll.link',
+      methods: ['GET', 'POST', 'PUT', 'PATCH','DELETE'],
+      credentials: true
+    })
+  )
 } else {
   app.use(morgan('dev'))
+  app.use(
+    cors({
+      origin: true,
+      methods: ['GET', 'POST', 'PUT', 'PATCH','DELETE'],
+      credentials: true
+    })
+  )
 }
 
 app.use(express.json())
@@ -48,14 +62,6 @@ db.sequelize
     console.log('db 연결 성공')
   })
   .catch(console.error)
-
-app.use(
-  cors({
-    origin: true,
-    methods: ['GET', 'POST', 'PUT', 'PATCH','DELETE'],
-    credentials: true
-  })
-)
 
 app.use('/', router)
 
