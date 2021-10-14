@@ -130,8 +130,8 @@ module.exports = {
                 mainImg,
                 introduction,
                 category,
-                tasteAvg: tasteAvg.toFixed(2),
-                easyAvg: easyAvg.toFixed(2),
+                tasteAvg: tasteAvg.toFixed(1),
+                easyAvg: easyAvg.toFixed(1),
                 createdAt,
                 updatedAt
               }
@@ -186,8 +186,8 @@ module.exports = {
                 mainImg,
                 introduction,
                 category,
-                tasteAvg: tasteAvg.toFixed(2),
-                easyAvg: easyAvg.toFixed(2),
+                tasteAvg: tasteAvg.toFixed(1),
+                easyAvg: easyAvg.toFixed(1),
                 createdAt,
                 updatedAt
               }
@@ -247,8 +247,8 @@ module.exports = {
               mainImg,
               introduction,
               category,
-              tasteAvg: tasteAvg.toFixed(2),
-              easyAvg: easyAvg.toFixed(2),
+              tasteAvg: tasteAvg.toFixed(1),
+              easyAvg: easyAvg.toFixed(1),
               createdAt,
               updatedAt
             }
@@ -366,8 +366,8 @@ module.exports = {
           content: seperateWords,
           createdAt,
           updatedAt,
-          tasteAvg: tasteAvg.toFixed(2),
-          easyAvg: easyAvg.toFixed(2),
+          tasteAvg: tasteAvg.toFixed(1),
+          easyAvg: easyAvg.toFixed(1),
           mainImg,
           contentImg: seperateContentImg,
           ingredients: seperateIngredients2,
