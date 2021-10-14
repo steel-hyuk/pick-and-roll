@@ -1,4 +1,5 @@
 import React, { useState, useContext, useEffect } from 'react'
+import { useHistory } from 'react-router-dom'
 import axios from 'axios'
 import { AuthContext } from '../../context/authContext'
 import { UserContext } from '../../context/userContext'
@@ -8,6 +9,8 @@ dotenv.config()
 const Redirect = (props) => {
   const { isLoggedIn, setIsLoggedIn } = useContext(AuthContext)
   const { userInfo, setUserInfo } = useContext(UserContext)
+
+  const history = useHistory()
 
   let SERVERURL = process.env.REACT_APP_API_URL || 'http://localhost:80'
   let code = new URL(window.location.href).searchParams.get('code')
@@ -23,6 +26,7 @@ const Redirect = (props) => {
       let user = { id, email, nickname, description, createdAt }
       setUserInfo(user)
       setIsLoggedIn(true)
+      history.push('/')
     })
     .catch(err => {
       console.log(err.message)
