@@ -46,7 +46,7 @@ const sessionOption = {
     httpOnly: true,
     secure: false,
     maxAge: 24 * 6 * 60 * 10000,
-    domain: process.env.NODE_ENV && '.pick-and-roll.link'
+    domain: process.env.NODE_ENV && '.pickandroll.link'
   },
   name: 'session-cookie'
 }

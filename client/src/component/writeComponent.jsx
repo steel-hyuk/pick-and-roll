@@ -111,10 +111,11 @@ const WriteComponent = () => {
         content: content,
         contentImg: contentImgs.join(','),
       },
-      {
-        'Content-Type': 'application/json',
-        withCredentials: true,
-      }
+      { 
+        headers : { 
+          'Content-Type': 'application/json' 
+        }, 
+        withCredentials: true}
     )
 
     Swal.fire({
