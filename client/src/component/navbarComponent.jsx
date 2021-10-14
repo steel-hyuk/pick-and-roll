@@ -1,9 +1,6 @@
 import React, { useContext, useState } from 'react'
 import styled from 'styled-components'
-import {
-  NavLink as NavLinkLogo,
-  NavLink as NavLinkElement,
-} from 'react-router-dom'
+import { NavLink as NavLinkLogo, NavLink as NavLinkElement } from 'react-router-dom'
 import { useHistory } from 'react-router-dom'
 import Swal from 'sweetalert2'
 import { FaAlignJustify } from 'react-icons/fa'
