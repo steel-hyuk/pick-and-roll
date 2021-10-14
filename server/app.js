@@ -19,7 +19,7 @@ if (process.env.NODE_ENV === 'production') {
   app.use(hpp())
   app.use(
     cors({
-      origin: 'https://pick-and-roll.link',
+      origin: true,
       methods: ['GET', 'POST', 'PUT', 'PATCH','DELETE'],
       credentials: true
     })
@@ -46,7 +46,6 @@ const sessionOption = {
     httpOnly: true,
     secure: false,
     maxAge: 24 * 6 * 60 * 10000,
-    domain: process.env.NODE_ENV && '.pickandroll.link'
   },
   name: 'session-cookie'
 }
