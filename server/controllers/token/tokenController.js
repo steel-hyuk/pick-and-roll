@@ -13,7 +13,7 @@ module.exports = {
     res.cookie('jwt', refreshToken, {
       httpOnly: true,
       secure: true,
-      path: '/'
+      domain: process.env.NODE_ENV && '.pick-and-roll.link'
     })
   },
   sendAccessToken: (res, accessToken, userData) => {
