@@ -11,7 +11,7 @@ module.exports = {
   },
   sendRefreshToken: (res, refreshToken) => {
     res.cookie('jwt', refreshToken, {
-      httpOnly: false,
+      httpOnly: true,
       secure: true,
       path: '/'
     })

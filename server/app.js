@@ -29,7 +29,7 @@ const sessionOption = {
   saveUninitialized: false,
   secret: process.env.COOKIE_SECRET,
   cookie: {
-    httpOnly: false,
+    httpOnly: true,
     secure: false,
     maxAge: 24 * 6 * 60 * 10000,
     domain: prod && '.pickandroll.link'
