@@ -28,7 +28,7 @@ function GetImagesComponent() {
   const paginationImages = async () => {
     await api
       .get(
-        `/recipes?category=${category}&division=${division}&offset=${offset}&limit=4`,
+        `/recipes?category=${category}&division=${division}&offset=${offset}&limit=8`,
         {
           headers: {
             'Content-Type': 'application/json',
@@ -38,7 +38,7 @@ function GetImagesComponent() {
       )
       .then((res) => {
         if (res.data.length !== 0) {
-          if (res.data.length < 4) {
+          if (res.data.length < 8) {
             setMoreViewMessage('fin.')
             setInfos([...infos, ...res.data])
           } else {
@@ -53,7 +53,7 @@ function GetImagesComponent() {
   const fetchImages = async () => {
     await api
       .get(
-        `/recipes?category=${category}&division=${division}&offset=${offset}&limit=4`,
+        `/recipes?category=${category}&division=${division}&offset=${offset}&limit=8`,
         {
           headers: {
             'Content-Type': 'application/json',
@@ -62,7 +62,7 @@ function GetImagesComponent() {
         }
       )
       .then((res) => {
-        if (res.data.length < 4) {
+        if (res.data.length < 8) {
           setMoreViewMessage('fin.')
         }
         setInfos([...res.data])

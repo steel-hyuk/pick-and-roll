@@ -124,7 +124,7 @@ const WriteComponent = () => {
       confirmButtonColor: '#d6d6d6',
       confirmButtonText: '확인',
     })
-    history.push('/')
+    history.push('/recipe')
   }
 
   return (
