@@ -19,7 +19,7 @@ const SearchComponent = () => {
   const paginationImages = async () => {
     await api
     .get(
-      `/recipes??searchName=${isValue}&offset=${offset}&limit=4`,
+      `/recipes??searchName=${isValue}&offset=${offset}&limit=8`,
       {
         headers: {
           'Content-Type': 'application/json',
@@ -29,7 +29,7 @@ const SearchComponent = () => {
     )
     .then((res) => {
       if(res.data.length !== 0) {
-        if(res.data.length < 4) {
+        if(res.data.length < 8) {
           setMoreViewMessage('fin.')
           setInfos([...infos, ...res.data])            
         } else { 
@@ -43,7 +43,7 @@ const SearchComponent = () => {
   
   const fetchImages = async () => {
     await api
-      .get(`/recipes?searchName=${isValue}&offset=${offset}&limit=4`, {
+      .get(`/recipes?searchName=${isValue}&offset=${offset}&limit=8`, {
         headers: { 'Content-Type': 'application/json' },
         withCredentials: true,
       })
