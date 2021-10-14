@@ -10,7 +10,10 @@ module.exports = {
     return sign(data, process.env.REFRESH_SECRET, { expiresIn: '30d' })
   },
   sendRefreshToken: (res, refreshToken) => {
-    res.cookie('jwt', refreshToken)
+    res.cookie('jwt', refreshToken, {
+      httpOnly: true,
+      path: '/'
+    })
   },
   sendAccessToken: (res, accessToken, userData) => {
     res.json({accessToken, userData})
