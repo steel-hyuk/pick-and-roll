@@ -82,7 +82,6 @@ module.exports = {
   },
   nickCheck: (req, res, next) => {
     isAuth(req, res)
-    console.log(req.body.nickname)
     User.findOne({
       where: { nickname: req.body.nickname }
     })
