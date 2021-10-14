@@ -17,7 +17,11 @@ const NavbarComponent = () => {
   const [openMenu, setOpenMenu] = useState(false)
 
   const logout = async () => {
-    await api.post('/users/logout').then((res) => {
+    await api.post('/users/logout',{},{ 
+      headers : { 
+        'Content-Type': 'application/json' 
+      }, 
+      withCredentials: true }).then((res) => {
       setIsLoggedIn(false)
       setUserInfo({})
       setOpenLogin(false)
