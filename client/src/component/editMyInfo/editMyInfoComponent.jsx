@@ -127,7 +127,7 @@ const EditMyInfoComponent = () => {
           onChange={(e) => {
             setNickname(e.target.value)
           }}
-          placeholder={nickname}
+          value={nickname}
           ref={_nick}
           onBlur={checkNickname}
         />

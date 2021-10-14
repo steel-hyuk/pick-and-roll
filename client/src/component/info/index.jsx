@@ -1,7 +1,13 @@
 import React from 'react'
+import { useHistory } from 'react-router'
 import styled from 'styled-components'
 
 const InfoComponent = ({ data }) => {
+  const history = useHistory()
+
+  const move = () => {
+    history.push('/recipe')
+  }
   return (
     <>
       <Container id={data.id} bgColor={data.bgColor}>
@@ -18,7 +24,7 @@ const InfoComponent = ({ data }) => {
                 }
                 { data.btnLabel ? 
                   <BtnWrap>
-                    <Button>{data.btnLabel}</Button>
+                    <Button onClick={move}>{data.btnLabel}</Button>
                   </BtnWrap> : null
                 }
               </TextWrapper>

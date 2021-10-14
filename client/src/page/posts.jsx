@@ -15,7 +15,8 @@ const Posts = () => {
   const { userInfo, setUserInfo } = useContext(UserContext)
   const [recipeInfo, setRecipeInfo] = useState({})
   const [date, setDate] = useState('')
-  const [selected, setSelected] = useState(0)
+  const [tasteSelected, setTasteSelected] = useState(0)
+  const [easySelected, setEasySelected] = useState(0)
 
   const getRecipeInfo = async () => {
     await api
@@ -81,7 +82,7 @@ const Posts = () => {
       .post(
         `/recipes/${recipeId}/taste-score`,
         {
-          score: selected,
+          score: tasteSelected,
         },
         {
           headers: {
@@ -98,7 +99,7 @@ const Posts = () => {
       .post(
         `/recipes/${recipeId}/easy-score`,
         {
-          score: selected,
+          score: easySelected,
         },
         {
           headers: {
@@ -168,8 +169,8 @@ const Posts = () => {
                 <DropdownStar
                   className="taste"
                   color="blue"
-                  setSelected={setSelected}
-                  selected={selected}
+                  setSelected={setTasteSelected}
+                  selected={tasteSelected}
                 />
               </>
             )}
@@ -183,8 +184,8 @@ const Posts = () => {
                 <DropdownStar
                   className="simple"
                   color="red"
-                  setSelected={setSelected}
-                  selected={selected}
+                  setSelected={setEasySelected}
+                  selected={easySelected}
                 />
               </>
             )}
