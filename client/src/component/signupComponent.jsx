@@ -240,6 +240,7 @@ const Wrapper = styled.div`
   align-items: center;
   text-align: center;
   position: relative;
+  margin-bottom : 100px;
   top: 70px;
 `
 
