@@ -1,6 +1,8 @@
 import React, { useContext, useState } from 'react'
 import styled from 'styled-components'
 import { NavLink as NavLinkLogo, NavLink as NavLinkElement } from 'react-router-dom'
+import { useHistory } from 'react-router-dom'
+import Swal from 'sweetalert2'
 import { FaAlignJustify } from 'react-icons/fa'
 import LoginModal from './modal/loginModal'
 import SearchBoxModal from './modal/searchBoxModal'
@@ -15,16 +17,28 @@ const NavbarComponent = () => {
   const [openLogin, setOpenLogin] = useState(false)
   const [showSearchBox, setShowSearchBox] = useState(false)
   const [openMenu, setOpenMenu] = useState(false)
+  const history = useHistory()
 
   const logout = async () => {
-    await api.post('/users/logout',{},{ 
-      headers : { 
-        'Content-Type': 'application/json' 
-      }, 
-      withCredentials: true }).then((res) => {
-      setIsLoggedIn(false)
-      setUserInfo({})
-      setOpenLogin(false)
+    Swal.fire({
+      title: '로그아웃을 원하시나요?',
+      showCancelButton: true,
+      confirmButtonText: 'yes',
+      confirmButtonColor: '#dfaa25',
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        Swal.fire({
+          title: '로그아웃되었습니다!',
+          confirmButtonColor: '#dfaa25',
+          confirmButtonText: '확인',
+        })
+        await api.post('/users/logout').then((res) => {
+          setIsLoggedIn(false)
+          setUserInfo({})
+          setOpenLogin(false)
+          history.push('/')
+        })
+      }
     })
   }
 
@@ -56,10 +70,7 @@ const NavbarComponent = () => {
           </Modal>
           <Modal>
             {openLogin ? (
-              <LoginModal
-                openLogin={openLogin}
-                setOpenLogin={setOpenLogin}
-              />
+              <LoginModal openLogin={openLogin} setOpenLogin={setOpenLogin} />
             ) : null}
           </Modal>
           <MenuIcon onClick={changeMenu}>
@@ -88,9 +99,7 @@ const NavbarComponent = () => {
             <NavElement to={`/mypage/${userInfo.email}`}>
               {userInfo.nickname}님
             </NavElement>
-            <NavElement to="/" onClick={logout}>
-              로그아웃
-            </NavElement>
+            <ChangeClick onClick={logout}>로그아웃</ChangeClick>
           </MenuLinks>
           <MenuIcon onClick={changeMenu}>
             <FaAlignJustify />
@@ -215,20 +224,6 @@ const MenuIcon = styled.div`
     display: inline-block;
     color: rgb(243, 200, 18);
     font-size: 25px;
-  }
-`
-
-const TestBtn = styled.button`
-  border: solid, 1px, gray;
-  text-decoration: none;
-  background-color: rgb(235, 235, 235);
-  height: 25px;
-  margin-top: 8px;
-  color: rgb(243, 200, 18);
-  border: 1px solid transparent;
-  padding: 5px 12px;
-  .testbtn:hover {
-    cursor: pointer;
   }
 `
 
