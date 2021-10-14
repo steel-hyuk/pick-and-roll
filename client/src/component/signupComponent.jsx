@@ -237,7 +237,6 @@ const SignupComponent = () => {
 const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
-  margin-bottom: 300px;
   align-items: center;
   text-align: center;
   position: relative;

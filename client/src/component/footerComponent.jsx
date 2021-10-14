@@ -57,12 +57,12 @@ const FooterComponent = () => {
 }
 
 const Main = styled.div`
-  position: fixed;
+  position: relative;
   right : 0;
   left : 0;
   bottom : 0;
   display: flex;
-  min-height: 20vh;
+  min-height: 25vh;
   flex-direction: column;
   justify-content: flex-end;
   .container {
@@ -106,7 +106,6 @@ const Main = styled.div`
   }
   .social li a {
     color: #1f1818;
-    border: 1px solid #ccc;
     padding: 3px;
   }
 `

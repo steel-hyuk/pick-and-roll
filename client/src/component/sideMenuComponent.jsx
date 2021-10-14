@@ -85,7 +85,7 @@ const Menu = styled.div`
   margin: 0;
   border: 0;
   padding: 0;
-  height: 100%;
+  height: 90%;
   width: 273px;
   background-color: #f3c811;
   color: white;
